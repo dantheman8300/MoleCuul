@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "draw-shape-reactjs": "^1.0.2",
+    "react-octagon": "^15.5.3"
+  }
+}

@@ -1,0 +1,7 @@
+.octagon {
+    left: '500px';
+    height: '100vh';
+    width: '50vw';
+    position: 'relative';
+    background-color: red;
+}
