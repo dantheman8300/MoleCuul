@@ -1,12 +1,11 @@
 import React from "react";
-import Octagon from "./Octagon";
-const xVal = 180;
-const yVal = 160;
-const len = 100;
+import ElementTile from "./ElementTile";
+import ElementTool from "./ElementTool";
 function MoleCuul() {
     return (
         <div className="container">
-            <Octagon xCoord = {xVal} yCoord = {yVal} lengthOctagon = {len}/>
+            <ElementTile />
+            <ElementTool />
         </div>
     );
 }

@@ -1,7 +1,51 @@
-.octagon {
-    left: '500px';
-    height: '100vh';
-    width: '50vw';
-    position: 'relative';
-    background-color: red;
+
+
+.elementTile {
+    position: absolute;
+    left: 300px;
+    top: 300px;
+}
+
+.octa {
+    transform: rotate(22.5deg);
+    text-shadow: 0px 2px 3px rgba(255,255,255,0.5);
+    -webkit-background-clip: text;
+       -moz-background-clip: text;
+            background-clip: text;
+
+}
+
+#elementName {
+    
+    position: absolute;
+    right:40%;
+    top: 50%;
+    bottom: 50%;
+
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 400%;
+    line-height: 37px;
+
+    /* or 132% */
+    display: flex;
+    align-items: center;
+    text-align: center;
+
+    color: black;
+
+}
+
+.elementTool {
+    position: absolute;
+    width: 88px;
+    height: 88px;
+    left: 90px;
+    top: 496px;
+
+    filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+
+    background: #DEF7FE;
+    border-radius: 6px;
 }
