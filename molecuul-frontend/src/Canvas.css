@@ -1,0 +1,46 @@
+.canvas {
+  box-sizing: border-box;
+
+  position: relative;
+  width: 720px;
+  height: 512px;
+
+  background: #A9C9DD;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+.grid-icons {
+  grid-column-start: 1;
+  grid-column-end: 2;
+  grid-row-start: 1;
+  grid-row-end: 2;
+  background-color: aqua;
+}
+
+.iconBox {
+  width: 50px;
+  height: 80px;
+  display: flex;
+  flex-direction: column;
+}
+
+.iconRow {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+}
+
+.icon {
+  width: 25px;
+  height: 25px;
+}
+
+.icon:hover {
+  width: 26px;
+  height: 26px;
+}
+
+.grid-canvas {
+
+}
+
