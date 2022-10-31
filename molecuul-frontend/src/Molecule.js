@@ -6,7 +6,7 @@ var idGen = 0;
 // lStructure refers to an array representing the lewis structure and bonds is an array of elements it is bonded with
 const Element = (id, name, lStructure, neighbors) => { return {id: id, name: name, lStructure: lStructure, neighbors: neighbors } }
 
-function Molecule(elements) {
+function Molecule() {
     const [elements, setElements] = useState([]);
 
 
@@ -37,7 +37,7 @@ function removeElement(id) {
  */
 function addElement(elementName, lStructure, bondedElemId, pos) {
     // Creates an empty element
-	const element = Element(idGen, elementName, lStructure, [...Array(4)]);
+	const element = Element(idGen, elementName, lStructure, [...Array(8)]);
 	idGen += 1;
 
 	// Adds neighbor to new element's neighbor list
@@ -50,7 +50,7 @@ function addElement(elementName, lStructure, bondedElemId, pos) {
 	const newMolecule = elements.map(obj => {
         if(obj.id === bondedElemId) {
 			let newNeighbors = [...obj.neighbors];
-			newNeighbors[(pos + 2) % 4] = element.id;
+			newNeighbors[(pos + 4) % 8] = element.id;
 			return {...obj, neighbors: newNeighbors};
 		}
 
@@ -62,12 +62,14 @@ function addElement(elementName, lStructure, bondedElemId, pos) {
 }
 
 
-// return (
-//     <div className="container">
-//       <MoleculeTile molecule={elements} />
-//     </div>
-// )
+
+
+return (
+    <div className="container">
+		
+    </div>
+)
 
 }
 
-
+export default Molecule;
