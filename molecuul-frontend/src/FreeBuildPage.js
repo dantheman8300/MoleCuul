@@ -1,19 +1,20 @@
 import React from "react";
 import './FreeBuildPage.css'
-import Canvas from "./Canvas";
 
 
-function FreeBuildPage () {
+
+function FreeBuildPage (props) {
+
   return (
     <div className="page" style={{height: '100vh'}}> 
       <div className='header'>
-        header
+        {props.header}
       </div>
       <div className='sidebar'>
-        sidebar
+        {props.sidebar}
       </div>
       <div className="builder">
-        <Canvas/>
+        {props.canvas}
       </div>
     </div>
   )

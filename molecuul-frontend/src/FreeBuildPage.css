@@ -8,7 +8,7 @@
   grid-column-start: 1;
   grid-row-start: 1;
   grid-column: span 3;
-  background: #CAF0F6;
+  /* background: #CAF0F6; */
 
   border: 3px solid black;
 }
@@ -17,7 +17,7 @@
   grid-column-start: 1;
   grid-row-start: 2;
   grid-row-start: span 2;
-  background: #677BAB;
+  /* background: #677BAB; */
   
   border-bottom: 3px solid black;
   border-left: 3px solid black;
@@ -30,7 +30,7 @@
   grid-row-start: 2;
   grid-column: span 2;
   grid-row: span 2;
-  background-color: #A9C9DD;
+  /* background-color: #A9C9DD; */
 
   border-bottom: 3px solid black;
   border-right: 3px solid black;
