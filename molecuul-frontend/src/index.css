@@ -181,25 +181,19 @@
     width: 200px;
     height: 300px;
     background-color: beige;
-    border: 1px black;
-    border-radius: 5%;
     top: 10px;
-    left: 10px  ;
+    
+    
+    border-radius: 6px;
+    border: 1px black;
+    
+    box-sizing: border-box;
+    left: 10px ;
 }
 
 
 .configMenu {
-    box-sizing: border-box;
-    left: 590px;
-    top: 190px;
-    position: relative;
-    width: 240px;
-    height: 300px;
-    background-color: beige;
 
-    
-    border-radius: 6px;
-    border: 1px;
 
     filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
 }

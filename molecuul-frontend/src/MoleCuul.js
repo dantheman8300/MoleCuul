@@ -1,6 +1,7 @@
 import React from "react";
 import ElementTile from "./ElementTile";
 import DoubleBond from "./DoubleBond";
+import ConfigurationMenu from "./ConfigurationMenu";
 
 function MoleCuul() {
     const octInfo = {
@@ -21,7 +22,9 @@ function MoleCuul() {
 
     return (
         <div className="container">
+            <ConfigurationMenu />
             <ElementTile info= {octInfo}/>
+
         </div>
         
         
