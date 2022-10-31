@@ -32,6 +32,11 @@
 }
 
 .icon:hover {
-  width: 26px;
-  height: 26px;
+  opacity: 0.5;
+}
+
+.molecule {
+  position: fixed; /* or absolute */
+  top: 50%;
+  left: 50%;
 }
