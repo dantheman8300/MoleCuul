@@ -1,16 +1,31 @@
 import React from "react";
 import ElementTile from "./ElementTile";
-import ElementTool from "./ElementTool";
-import ConfigurationMenu from "./ConfigurationMenu";
+import DoubleBond from "./DoubleBond";
 
 function MoleCuul() {
+    const octInfo = {
+        'color': '#DEF7FE',
+        'size': 100,
+        'atomicNum': 6,
+        'symbol': 'C',
+        'name': 'Carbon',
+        'configs': [
+            <DoubleBond />,
+            <DoubleBond />,
+            <DoubleBond />,
+            <DoubleBond />,
+        ]
+    };
+
+
+
     return (
         <div className="container">
-            <ElementTile />
-            <ElementTool />
-            <ConfigurationMenu />
+            <ElementTile info= {octInfo}/>
         </div>
-    );
+        
+        
+    )
 }
 
 export default MoleCuul;
