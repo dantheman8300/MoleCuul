@@ -35,13 +35,6 @@ function IconBox (props) {
   )
 }
 
-function MoleculeImage (props) {
-
-  return (
-    <img src={elementHex} alt='hydrogen' className='molecule' width={props.scale * 50} height={props.scale * 50}/>
-  )
-}
-
 function Canvas () {
 
    const [scale, setScale] = useState(1);
@@ -55,6 +48,15 @@ function Canvas () {
   const handleZoomIn = event => {
     setScale(scale +.2);
     console.log(`zooming in, ${scale}`)
+  }
+
+  const handleMouseMove = () => {
+    var e = window.event;
+
+    var posX = e.clientX;
+    var posY = e.clientY;
+
+    console.log(`(${posX}, ${posY})`)
   }
 
   /* Removes a single element at specified id from molecule and updates
@@ -110,7 +112,7 @@ function Canvas () {
 
 
   return (
-    <div className="canvas">
+    <div className="canvas" onMouseMove={handleMouseMove}>
       <IconBox zoomInHandler={handleZoomIn} zoomOutHandler={handleZoomOut}/>
       <div >
         <Molecule scale={scale} elements={elements}/>
@@ -120,15 +122,8 @@ function Canvas () {
 }
 
 function Molecule(props) {
-
-
-  
-
-
-
-
   return (
-      
+    <img src={elementHex} alt='hydrogen' className='molecule' width={props.scale * 50} height={props.scale * 50}/>
   )
 
 }
