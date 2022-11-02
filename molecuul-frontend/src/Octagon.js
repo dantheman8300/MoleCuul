@@ -3,7 +3,7 @@ import Polygon from 'react-polygon';
 
 function Octagon(props) {
     return ( 
-            <Polygon className='octagon OctagonInfo' n={8} fill={props.octFill} size={props.octSize}/> 
+            <Polygon className='octagon' n={8} fill={props.octFill} size={props.octSize}/> 
     )
 };
 
