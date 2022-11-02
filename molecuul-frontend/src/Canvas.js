@@ -39,8 +39,8 @@ function Canvas () {
 
   const [scale, setScale] = useState(1);
   const [elements, setElements] = useState([]);
-  const [mouseX, setMouseX] = useState();
-  const [mouseY, setMouseY] = useState();
+  const [mouseX, setMouseX] = useState(500);
+  const [mouseY, setMouseY] = useState(200);
 
 
   const handleZoomOut = event => {
@@ -121,7 +121,7 @@ function Canvas () {
     <div className="canvas" onMouseMove={handleMouseMove}>
       <IconBox zoomInHandler={handleZoomIn} zoomOutHandler={handleZoomOut}/>
       <div >
-        <Molecule scale={scale} elements={elements}/>
+        <Molecule scale={scale} elements={elements} mouseX={mouseX} mouseY={mouseY}/>
       </div>
     </div>
   );
@@ -129,7 +129,7 @@ function Canvas () {
 
 function Molecule(props) {
   return (
-    <img src={elementHex} alt='hydrogen' className='molecule' width={props.scale * 50} height={props.scale * 50}/>
+    <img src={elementHex} alt='hydrogen' width={props.scale * 50} height={props.scale * 50} style={{position: 'absolute', top: props.mouseY - (props.scale * 50 / 2), left: props.mouseX - (props.scale * 50 / 2)}}/>
   )
 
 }
