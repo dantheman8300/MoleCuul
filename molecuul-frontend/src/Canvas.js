@@ -65,6 +65,16 @@ function Canvas () {
     console.log(`(${mouseX}, ${mouseY})`)
   }
 
+  const handleMouseWheel = (event) => {
+    console.log(`${event.deltaY}`)
+
+    if(event.deltaY > 0) {
+      handleZoomIn();
+    } else {
+      handleZoomOut();
+    }
+  }
+
   /* Removes a single element at specified id from molecule and updates
   * neighboring elements
   */
@@ -118,7 +128,11 @@ function Canvas () {
 
 
   return (
-    <div className="canvas" onMouseMove={handleMouseMove}>
+    <div 
+      className="canvas" 
+      onMouseMove={handleMouseMove}
+      onWheel={handleMouseWheel}
+    >
       <IconBox zoomInHandler={handleZoomIn} zoomOutHandler={handleZoomOut}/>
       <div >
         <Molecule scale={scale} elements={elements} mouseX={mouseX} mouseY={mouseY}/>
@@ -128,8 +142,46 @@ function Canvas () {
 }
 
 function Molecule(props) {
+
+  const [dragX, setDragX] = useState(500);
+  const [dragY, setDragY] = useState(500);
+
+
+  const handleDrag = (event) => {
+    var e = window.event;
+
+    var posX = e.clientX;
+    var posY = e.clientY;
+
+    setDragX(posX);
+    setDragY(posY);
+
+    console.log(`Drag: (${posX}, ${posY})`)
+  }
+
+  const handleDragEnd = (event) => {
+    var e = window.event;
+
+    var posX = e.clientX;
+    var posY = e.clientY;
+
+    setDragX(posX);
+    setDragY(posY);
+
+    console.log(`Drag: (${posX}, ${posY})`)
+  }
+
   return (
-    <img src={elementHex} alt='hydrogen' width={props.scale * 50} height={props.scale * 50} style={{position: 'absolute', top: props.mouseY - (props.scale * 50 / 2), left: props.mouseX - (props.scale * 50 / 2)}}/>
+    <img 
+      src={elementHex} 
+      alt='hydrogen' 
+      draggable
+      onDrag={handleDrag}
+      onDragEnd={handleDragEnd}
+      width={props.scale * 50} 
+      height={props.scale * 50} 
+      style={{position: 'absolute', top: dragY - (props.scale * 50 / 2), left: dragX - (props.scale * 50 / 2)}}
+    />
   )
 
 }
