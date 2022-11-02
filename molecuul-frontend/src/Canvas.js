@@ -37,10 +37,13 @@ function IconBox (props) {
 
 function Canvas () {
 
-   const [scale, setScale] = useState(1);
-   const [elements, setElements] = useState([]);
+  const [scale, setScale] = useState(1);
+  const [elements, setElements] = useState([]);
+  const [mouseX, setMouseX] = useState();
+  const [mouseY, setMouseY] = useState();
 
-   const handleZoomOut = event => {
+
+  const handleZoomOut = event => {
     setScale(scale - .2);
     console.log(`zooming out, ${scale}`)
   }
@@ -56,7 +59,10 @@ function Canvas () {
     var posX = e.clientX;
     var posY = e.clientY;
 
-    console.log(`(${posX}, ${posY})`)
+    setMouseX(posX)
+    setMouseY(posY)
+
+    console.log(`(${mouseX}, ${mouseY})`)
   }
 
   /* Removes a single element at specified id from molecule and updates
