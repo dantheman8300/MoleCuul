@@ -1,27 +1,24 @@
-import React from 'react';
-import OctagonSymbol from "./OctagonSymbol";
-import OctagonLabel from "./OctagonLabel";
-import OctagonNum from "./OctagonNumber";
+import React, {useState} from 'react';
 import Octagon from "./Octagon";
+import OctagonSymbol from "./OctagonSymbol.js";
+import shadow from "./images/oct-shadow.svg";
 
+/* Element tile rendered on configuration menu */
 function ElementTile(props) {
-    const info = props.info;
-    const configs = props.info.configs;
+    const [isClicked, Active] = useState(false);
+    const image = props.image;
+    const symbol = props.symbol;
+
+
+    const handleClick = event => {
+        Active(current => !current);
+    }
+
     return (
-        <div className='Element'>
-            <Octagon octFill={info.color} octSize={info.size} />
-            <div className='OctagonInfo'>
-                <div id="configTop">{configs[0]}</div>
-                <OctagonNum octNum={info.atomicNum} />
-                
-                <div id="elemRL">
-                    <div id="configLeft">{configs[1]}</div>
-                    <OctagonSymbol octSym={info.symbol} />
-                    <div id="configRight">{configs[2]}</div>
-                </div>
-                <OctagonLabel octLabel={info.name} />
-                <div id="configBottom">{configs[3]}</div>
-            </div>
+        <div className='tile-and-symbol' onClick={handleClick}>
+            <Octagon image={image} alt={"image of" + image} />
+            <OctagonSymbol symbol={symbol}/>
+            {isClicked && <img className="oct-shadow" src={shadow} alt='octagon shadow' />}
         </div>
     )
 };

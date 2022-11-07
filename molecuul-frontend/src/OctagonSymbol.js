@@ -1,9 +1,9 @@
 import React from 'react';
 
-
+/* Symbol of Element rendered onto element tile */
 function OctagonSymbol(props) {
     return (
-        <div  id="octSym">{props.octSym}</div>
+        <div  id="octSym">{props.symbol}</div>
     )
 };
 

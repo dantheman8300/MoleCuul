@@ -1,218 +1,111 @@
-.Element {
-    position: relative;
-    justify-content: center;
-    align-content: center;
-}
-.octagonTile {
-    position: relative;
-    left: 200px;
+@font-face {
+  font-family: 'Roboto';
+  src: url("./fonts/Roboto-Regular.ttf");
 }
 
-.OctagonInfo {
+
+/* element tile + configuration menu */
+.ElementTool {
+    position: relative;
+    top: 50px;
+    left: 50px;
+    width: 300px;
+    display: flex;
+    flex-direction: row;
+}
+
+.configurationMenu {
+    position: relative;
+    width: 200px;
+    height: auto;
+    background-color: #D9D9D9;
+    
+    
+    box-sizing: border-box;
+    filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 5px;
+    
+    border-radius: 6px;
+    border: 1px solid grey;
+
+    margin: 5px;
+}
+
+.configurationMenu:hover {
+  filter: drop-shadow(0px 4px 2px rgba(0, 0, 0, .5));
+}
+
+
+#octSym {
+  /* Chemical Symbol */
+
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 40px;
+  line-height: 40px; 
+  
+  width: 60;
+  height: auto;
+  color: #317389;
+}
+
+/* octagon src image */
+.oct-img {
     position: relative;
     width: 100px;
     height: 100px;
-    text-align: center;
-    justify-content: center;
-    align-content: space-between;
-    display: flex;
-    flex-direction: column;
-}
-
-#octSym {
-    /* Chemical Symbol */
-    position: relative;
-
-    font-family: 'Roboto';
-    font-style: normal;
-    font-weight: 500;
-    font-size: 26px;
-    line-height: 30px; 
-    text-align: center;
-    
-    width: 50;
-    height: auto;
-    color: #317389;
-}
-
-
-#octLabel {
-    /* Chemical Name */
-
-    position: relative;
-
-    font-family: 'Roboto';
-    font-style: normal;
-    font-weight: 200;
-    font-size: 9px;
-    line-height: 14px;
-    width: 100;
-    height: auto;
-    text-align: center;
-
-
-    color: #317389;
-}
-
-#octNum {
-    /* Atomic Number */
-
-    position: relative;
-
-    font-family: 'Roboto';
-    font-style: normal;
-    font-weight: 600;
-    font-size: 10px;
-    line-height: 14px;
-    width: 100;
-    height: auto;
-    text-align: center;
-    color: #317389;
-}
-
-
-.octagon {
-    transform: rotate(22.5deg);
-    position: absolute;
-    left: 0px;
-}
-
-
-/* single bond flex box */
-.bond1 {
-    position: relative;
-    display: flex;
-    align-self: inherit; 
-}
-
-/* double bond flex box */
-.bond2 {
-    position: relative;
-    display: flex; 
-    flex-direction: inherit;  
-}
-
-/* triple bond flex box */
-.bond3 {
-    position: relative;
-    display: flex;   
-    flex-direction: inherit; 
-}
-
-/* lone pair flex box */
-.lone {
-    position: relative;
-    display: flex;
-    flex-direction: inherit; 
-    margin: 1px;
-    align-content: center;
-    justify-content: center;
-}
-
-/*  lone pair black circle */
-#circle1 {
-    position: relative;
-    width: 7px;
-    height: 7px;
-    margin: -.5px;
-    background: black;
-    
-    border-radius: 50%;
-    align-self: center;
-}
-
-/* other bond circle - white w dark border */
-#circle2 {
-    position: relative;
-    width: 6px;
-    height: 6px;
-    background: white;
-    margin: 1px;
-    border: 1px solid #3E374D;
-    border-radius: 50%;
-}
-
- .elemConfig {
-    display: flex;
-    width: 90px;
-    height: 90px;
     margin: 5px;
-    align-content: center;
-    flex-direction: column;
-} 
-
-#elemRL {
-    display: flex;
-    flex-direction: row;
-    width: 100px;
-    height: 90px;
-    justify-content: space-between;
-}
-
-#configRight {
-    display: flex;
-    flex-direction: column;
     align-self: center;
-    margin: 5px;
 }
 
-#configLeft {
-    display: flex;
-    flex-direction: column;
-    align-self: center;
-    margin: 5px;
+.oct-img:hover {
+  filter: drop-shadow(0px 4px 2px rgba(0, 0, 0, .5));
 }
 
-#configTop {
-    display: flex;
-    align-self: center;
-    justify-content: center;
-    flex-direction: row;
-    
-    margin: 5px 5px 5px 5px;
-    width: 90px;
-    height: 15px;
+.oct-img:active {
+  filter: drop-shadow(0px 0px 0px rgba(0, 0, 0, .5));
+
 }
 
-#configBottom {
-    display: flex;
-    align-self: center;
-
-    justify-content: center;
-    flex-direction: row;
-    
-    margin: 5px 5px 5px 5px;
-    width: 90px;
-    height: 15px;
+.tile-and-symbol {
+  position: relative;
+  text-align: center;
+  display: flex;
+  
 }
 
-
-.configMenu {
-    position: absolute;
-    width: 200px;
-    height: 300px;
-    background-color: beige;
-    top: 10px;
-    
-    
-    border-radius: 6px;
-    border: 1px black;
-    
-    box-sizing: border-box;
-    left: 10px ;
+.oct-shadow {
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  align-self: center;
+  justify-content: center;
+  left: 5px;
 }
 
-
-.configMenu {
-
-
-    filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+#elem-square {
+  position: relative;
+  width: 100px;
+  height: 100px;
+  margin: 5px;
 }
 
-.oct-img {
-    width: 300px;
-    height: 300px;
-    left: 100px;
-    position: relative;
-    margin: 0px;
+#elem-square:hover {
+  filter: drop-shadow(0px 4px 2px rgba(0, 0, 0, .5));
+}
+
+#elem-square:active {
+  filter: drop-shadow(0px 0px 0px rgba(0, 0, 0, .5));
+
 }

@@ -1,9 +1,11 @@
 import React from 'react';
-import Polygon from 'react-polygon';
 
+/* Element tile background rendered on config menu */
 function Octagon(props) {
+    const image = props.image;
+    const alt = props.alt;
     return ( 
-            <Polygon className='octagon' n={8} fill={props.octFill} size={props.octSize}/> 
+            <img className="oct-img" src={require(`./images/${image}.svg`)} alt={alt}/> 
     )
 };
 
