@@ -1,11 +1,11 @@
 import React from "react";
-import ElementTool from "./ElementTool";
+import Sidebar from "./Sidebar";
 
 function MoleCuul() {
 
     return (
         <div className="container">
-            <ElementTool />
+            <Sidebar />
         </div>
     )
 }
