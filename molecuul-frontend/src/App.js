@@ -2,13 +2,14 @@ import React from "react";
 import Sidebar from "./Sidebar";
 import FreeBuildPage from "./FreeBuildPage.js";
 import Canvas from "./Canvas";
+import Header from "./Header";
 
 function MoleCuul() {
 
     return (
         <div className="container">
             <FreeBuildPage 
-            header = {<h1>Header here</h1>}
+            header = {<Header/>}
             sidebar = {<Sidebar/>}
             canvas = {<Canvas/>}
             />
