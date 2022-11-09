@@ -13,13 +13,13 @@ const ElementSchema = new mongoose.Schema(
       trim: true,
     },
     elemNum: {
-        type: Number,
-        required: true,
-    }
+      type: Number,
+      required: true,
+    },
   },
   { collection: "elements" }
 );
 
-const Elements = mongoose.model("Elements", ElementSchema);
+const Element = mongoose.model("User", ElementSchema);
 
-module.exports = Elements;
+module.exports = Element;
