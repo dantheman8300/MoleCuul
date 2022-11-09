@@ -4,7 +4,7 @@ import FreeBuildPage from "./FreeBuildPage.js";
 import Canvas from "./Canvas";
 import Header from "./Header";
 
-function MoleCuul() {
+function App() {
 
     return (
         <div className="container">
@@ -17,4 +17,4 @@ function MoleCuul() {
     )
 }
 
-export default MoleCuul;
+export default App;
