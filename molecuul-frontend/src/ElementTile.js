@@ -1,13 +1,24 @@
-import React from 'react';
+import React, {useState} from 'react';
 import Octagon from "./Octagon";
+import OctagonSymbol from "./OctagonSymbol.js";
+import shadow from "./images/oct-shadow.svg";
 
-function ElementTile() {
-    const pColor = "#194dFF";
-    const pSize = 100;
+/* Element tile rendered on configuration menu */
+function ElementTile(props) {
+    const [isClicked, Active] = useState(false);
+    const image = props.image;
+    const symbol = props.symbol;
+
+
+    const handleClick = event => {
+        Active(current => !current);
+    }
+
     return (
-        <div className="elementTile">
-            <Octagon polyColor = {pColor} polySize = {pSize}/>
-            <span id="elementTileSym">C</span>
+        <div className='tile-and-symbol' onClick={handleClick}>
+            <Octagon image={image} alt={"image of" + image} />
+            <OctagonSymbol symbol={symbol}/>
+            {isClicked && <img className="oct-shadow" src={shadow} alt='octagon shadow' />}
         </div>
     )
 };
