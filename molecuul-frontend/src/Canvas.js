@@ -5,8 +5,9 @@ import iconPlus from './icons/icon-plus.png';
 import iconCursor from './icons/icon-navigation.png';
 import iconTrash from './icons/icon-trash.png';
 import elementHex from './icons/Element hex.png';
-import elementOct from './icons/Element-octagon.png';
-import elementUnk from './icons/Element-Unknown.png';
+import elementOct from './icons/Element-Carbon.png';
+import hollowElement from './icons/Element-Hollow.png';
+import hollowElementHighlight from './icons/Element-Hollow-Highlighted.png';
 
 var idGen = 0;
 
@@ -34,13 +35,17 @@ function IconBox (props) {
   )
 }
 
-function Canvas () {
+function Canvas (props) {
 
   const [scale, setScale] = useState(1);
   const [elements, setElements] = useState([]);
   const [mouseX, setMouseX] = useState(500);
   const [mouseY, setMouseY] = useState(200);
 
+  // if(props.newElement ) {
+  //   addElement();
+  // }
+  
   const handleZoomOut = event => {
     setScale(scale - .2);
     console.log(`zooming out, ${scale}`)
@@ -112,13 +117,11 @@ function Canvas () {
 
     // Adds neighbor to new element's neighbor list if neighbor exists
     if(element.parent === null) {
-      console.log(`Root element!!!!!!!`);
       setElements([element]);
     }
     // Finds bondedElemId in current molecule and updates its neighbor list if bondedElemId exists
     else {
       element.neighbors[pos] = bondedElemId;
-      console.log(`Another element in the chain!!!!!!!`);
 
       const newMolecule = elements.map(obj => {
           if(obj.id === bondedElemId) {
@@ -145,9 +148,9 @@ function Canvas () {
       onWheel={handleMouseWheel}
     >
       <IconBox zoomInHandler={handleZoomIn} zoomOutHandler={handleZoomOut}/>
-      <button onClick={() => addElement("Hydrogen-1", [1,0,0,0,0,0,0,0], null, 0)}>Add Element</button>
-      <button onClick={() => addElement("Hydrogen-2", [0,0,0,0,1,0,0,1], 0, 4)}>Add Another Element</button>
-      <button onClick={() => addElement("Hydrogen-3", [0,0,0,1,0,0,0,0], 1, 3)}>And a third</button>
+      <button onClick={() => addElement("Hydrogen-0", [1,0,0,0,1,0,0,0], null, 0)}>Add Element</button>
+      <button onClick={() => addElement("Hydrogen-1", [0,1,0,0,1,0,0,1], 0, 4)}>Add Another Element</button>
+      <button onClick={() => addElement("Hydrogen-2", [1,0,0,1,0,0,0,0], 0, 0)}>And a third</button>
       <div >
         <Molecule scale={scale} elements={elements} mouseX={mouseX} mouseY={mouseY}/>
       </div>
@@ -185,7 +188,7 @@ function Molecule(props) {
     console.log(`Drag: (${posX}, ${posY})`)
   }
 
-  function findRelativeCoord(pos, parent, boolAxis) {
+  function findRelativeCoord(pos, parent) {
     var x = parent.x;
     var y = parent.y;
     switch(pos) {
@@ -223,47 +226,41 @@ function Molecule(props) {
         break;
       default:
     }
-    if(boolAxis) {
-      return x;
-    }
-    else {
-      return y;
-    }
+    return {x: x, y: y};
   }
 
   function findRelativePos(parent, id) {
     // Find out if element is root of tree
-    let newX = dragX - (props.scale * 50 / 2);
-    let newY = dragY - (props.scale * 50 / 2);
+    let point = {x: dragX - (props.scale * 50 / 2), y:dragY - (props.scale * 50 / 2)};
     
     if(parent !== undefined) {
-      let pos = 0;
+      let pos = -1;
       // Finds the relative position of the element in regards to the parent
       for(let i = 0; i < parent.neighbors.length; i++) {
         if(parent.neighbors[i] === id) {
           pos = i;
         }
       }
-
-      newX = findRelativeCoord(pos, coord[parent.id], true);
-      newY = findRelativeCoord(pos, coord[parent.id], false);
+      if(pos === -1) {
+        pos = id
+      }
+      point = findRelativeCoord(pos, coord[parent.id]);
     }
-
-    coord.push({x: newX, y: newY})
+    return point
   }  
 
+  // Creates draws the current molecule according to the data in canvas
   const elementDisplay = props.elements.map(({id, elementName, parent, neighbors }) => {
-    findRelativePos(props.elements[parent], id);
+    coord.push(findRelativePos(props.elements[parent], id));
     console.log(`Element ${elementName} neighbor's list: ${neighbors}`);
     var source = elementOct;
-    if(elementName === null) {
-      source = elementUnk;
-    }
     return <img
         key={id} 
         src={source} 
         alt={elementName}
         draggable
+        onMouseOver={e => (e.currentTarget.height = e.currentTarget.width = props.scale * 55)} 
+        onMouseOut={e => (e.currentTarget.height = e.currentTarget.width = props.scale * 50)}
         onDrag={handleDrag}
         onDragEnd={handleDragEnd}
         width={props.scale * 50} 
@@ -271,6 +268,24 @@ function Molecule(props) {
         style={{position: 'absolute', top: coord[id].y, left: coord[id].x}} />
   });
 
+  // Adds hollow elements showing where elements can be placed
+  for(let j = 0; j < props.elements.length; j++) {
+    for(let k = 0; k < props.elements[j].lStructure.length; k++) {
+      if((props.elements[j].lStructure[k] > 0) && (props.elements[j].neighbors[k] === undefined)) {
+        let point = findRelativePos(props.elements[j], k)
+        elementDisplay.push(<img
+          key={Math.random()} 
+          src={hollowElement}
+          onMouseOver={e => (e.currentTarget.src = hollowElementHighlight)} 
+          alt={'open node'}
+          width={props.scale * 50} 
+          height={props.scale * 50} 
+          style={{position: 'absolute', top: point.y, left: point.x}}
+          />)
+      }
+    }
+  }
+  
   return (
     elementDisplay
   )
