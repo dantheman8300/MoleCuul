@@ -13,11 +13,9 @@
   border: 3px solid black;
 }
 
-.sidebar {
+.sidebar-section {
   grid-column-start: 1;
-  grid-row-start: 2;
   grid-row-start: span 2;
-  /* background: #677BAB; */
   
   border-bottom: 3px solid black;
   border-left: 3px solid black;

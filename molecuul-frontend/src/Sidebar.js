@@ -1,5 +1,6 @@
 import React from "react";
 import ElementTool from "./ElementTool";
+import "./Sidebar.css";
 
 function Sidebar (props) {
     
