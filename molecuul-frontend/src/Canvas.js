@@ -135,7 +135,7 @@ function Canvas (props) {
   */
   function addElement(elementName, lStructure, bondedElemId, pos) {
 
-    pos = (pos + 4) % 8; // you need to see pos to the pos opposite of the one you want to add ?
+    // pos = (pos + 4) % 8; 
 
     // Creates an empty element
     const element = {
@@ -161,7 +161,7 @@ function Canvas (props) {
       const newMolecule = elements.map(obj => {
           if(obj.id === bondedElemId) {
             let newNeighbors = [...obj.neighbors];
-            newNeighbors[(pos + 4) % 8] = element.id; // NOTE to Tyler: why is this pos + 4?
+            newNeighbors[(pos + 4) % 8] = element.id;
             console.log(`updated neighbor, ${obj.elementName}`)
             return {
               ...obj,
@@ -179,7 +179,7 @@ function Canvas (props) {
     console.log('adding element')
     // display add element params
     console.log(`name: ${props.selectedElement.name}, name: ${props.selectedElement.lStructure}, bondId: ${bondId}, posId: ${posId}`)
-    addElement("hydrogen-3", props.selectedElement.lStructure, bondId, posId);
+    addElement("hydrogen-3", props.selectedElement.lStructure, bondId, (posId + 4) % 8);
   }
 
   const handleRemoveElement = (id) => {

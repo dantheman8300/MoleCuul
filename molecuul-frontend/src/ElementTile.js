@@ -24,7 +24,7 @@ function ElementTile(props) {
         // Get element info from database based on id
         const elementInfo = { // Todo: get element info from database
             name: "Hydrogen-0", 
-            lStructure: [1,0,0,0,1,0,0,0]
+            lStructure: [1,0,2,0,1,0,2,0]
         };
         return elementInfo;
     }
