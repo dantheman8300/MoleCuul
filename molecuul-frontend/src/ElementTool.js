@@ -20,7 +20,7 @@ function ElementTool (props) {
     return (
         <div className='ElementTool'>
             <img id='elem-square' src={square} alt='element tile' onClick={handleClick} />
-            {isOpen && <ConfigurationMenu info={octInfo} handleDragStart={props.handleDragStart} handleDragEnd={props.handleDragEnd}/>}
+            {isOpen && <ConfigurationMenu info={octInfo} handleDragStart={props.handleDragStart}/>}
         </div>
     )
 }

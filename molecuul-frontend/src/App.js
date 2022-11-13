@@ -14,11 +14,6 @@ function App() {
         setSelectedElement(id);
     }
 
-    const handleElementDragEnd = () => {
-        console.log(`Drag ended`);
-        // setSelectedElement(null);
-    }
-
     return (
         <div className="container">
             <FreeBuildPage 
@@ -26,7 +21,6 @@ function App() {
             sidebar = {
                 <Sidebar 
                     handleDragStart={handleElementDragStart}
-                    handleDragEnd={handleElementDragEnd}
                 />
             }
             canvas = {<Canvas selectedElement={selectedElement}/>}

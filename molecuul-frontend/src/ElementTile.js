@@ -34,7 +34,6 @@ function ElementTile(props) {
             className='tile-and-symbol' 
             draggable 
             onDragStart={getElementInfo}
-            onDragEnd={props.handleDragEnd}
         >
             <Octagon image={image} alt={"image of" + image} />
             <OctagonSymbol symbol={symbol}/>
