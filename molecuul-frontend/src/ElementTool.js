@@ -3,13 +3,13 @@ import ConfigurationMenu from "./ConfigurationMenu";
 import square from "./images/square-carbon.svg"
 
 /* square element on sidebar */
-function ElementTool () {
+function ElementTool (props) {
     const [isOpen, Open] = useState(false);
     const octInfo = {
         'atomicNum': 6,
         'symbol': 'C',
         'name': 'Carbon',
-        'configs': [
+        'images': [
             "carbon22",
             "carbon31"
         ]
@@ -20,7 +20,7 @@ function ElementTool () {
     return (
         <div className='ElementTool'>
             <img id='elem-square' src={square} alt='element tile' onClick={handleClick} />
-            {isOpen && <ConfigurationMenu info={octInfo}/>}
+            {isOpen && <ConfigurationMenu info={octInfo} handleDragStart={props.handleDragStart} handleDragEnd={props.handleDragEnd}/>}
         </div>
     )
 }

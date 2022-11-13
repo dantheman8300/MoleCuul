@@ -5,7 +5,7 @@ function ConfigMenuTiles(props) {
     const symbol = props.symbol;
     const tiles = props.configs.map((image, index) =>{
         return (
-            <ElementTile key={index} image={image} symbol={symbol} handleDragStart={props.handleDragStart} handleDragEnd={props.handleDragEnd}/>
+            <ElementTile key={index} image={image} symbol={symbol} />
         )
     })
     return (
