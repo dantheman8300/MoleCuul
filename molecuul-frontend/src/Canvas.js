@@ -383,7 +383,38 @@ function Molecule(props) {
       }
     }
   }
-  
+
+  // Adds hollow elements when the molecule is empty
+  if (props.elements.length === 0) {
+    elementDisplay.push(<img
+      key={Math.random()}
+      src={
+        hollowElementHighlight
+      }
+      onDragOver={
+        (e) => {
+          e.stopPropagation();
+          e.preventDefault();
+          console.log("Drag Over");
+          (e.currentTarget.src = hollowElementHighlight)
+        }
+      }
+      onDrop={
+        (e) => {
+
+          console.log("Drop 7");
+          (e.currentTarget.src = hollowElement)
+          props.handleAddElement(undefined, undefined);
+        }
+      }
+      alt={'open node'}
+      width={props.scale * 50}
+      height={props.scale * 50}
+      style={{ position: 'absolute', top: dragY - (props.scale * 50 / 2), left: dragX - (props.scale * 50 / 2) }}
+    />)
+  }
+
+    
   return (
     elementDisplay
   )
