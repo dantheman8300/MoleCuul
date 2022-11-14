@@ -29,7 +29,7 @@ function IconBox (props) {
       </div>
       <div className='iconRow'>
         <img src={iconCursor} alt='cursor icon' className='icon' onClick={handleCursor}/>
-        <img src={iconTrash} alt='trash icon' className='icon' onClick={handleTrash}/>  
+        <img src={iconTrash} alt='trash icon' className='icon' onClick={props.trashHandler}/>  
       </div>
     </div>
   )
@@ -57,6 +57,12 @@ function Canvas (props) {
     setScale(scale +.2);
     console.log(`zooming in, ${scale}`)
   }
+
+  const handleTrash = event => {
+    // Remove all elements in the molecule
+    setElements([]);
+  }
+
 
   const handleMouseMove = () => {
     var e = window.event;
@@ -208,7 +214,10 @@ function Canvas (props) {
         }
       }
     >
-      <IconBox zoomInHandler={handleZoomIn} zoomOutHandler={handleZoomOut}/>
+      <IconBox 
+        zoomInHandler={handleZoomIn} zoomOutHandler={handleZoomOut}
+        trashHandler={handleTrash}
+      />
       <div >
         <Molecule 
           scale={scale} 
