@@ -158,21 +158,32 @@ function Canvas (props) {
     else {
       element.neighbors[pos] = bondedElemId;
 
+      // Add new element to bond element neighbor list
       const newMolecule = elements.map(obj => {
-          if(obj.id === bondedElemId) {
-            let newNeighbors = [...obj.neighbors];
-            newNeighbors[(pos + 4) % 8] = element.id;
-            console.log(`updated neighbor, ${obj.elementName}`)
-            return {
-              ...obj,
-              neighbors: newNeighbors
-            };
-          }
-          return obj;
-        });
-      // updates molecule
+        if(obj.id === bondedElemId) {
+          obj.neighbors[(pos + 4) % 8] = element.id;
+        }
+        return obj;
+      });
+
       setElements([...newMolecule, element]);
     }
+
+    //   const newMolecule = elements.map(obj => {
+    //       if(obj.id === bondedElemId) {
+    //         let newNeighbors = [...obj.neighbors];
+    //         newNeighbors[(pos + 4) % 8] = element.id;
+    //         console.log(`updated neighbor, ${obj.elementName}`)
+    //         return {
+    //           ...obj,
+    //           neighbors: newNeighbors
+    //         };
+    //       }
+    //       return obj;
+    //     });
+    //   // updates molecule
+    //   setElements([...newMolecule, element]);
+    // }
   }
 
   const handleAddElement = (bondId, posId) => {
@@ -198,10 +209,6 @@ function Canvas (props) {
       }
     >
       <IconBox zoomInHandler={handleZoomIn} zoomOutHandler={handleZoomOut}/>
-      <button onClick={() => addElement("Hydrogen-0", [1,0,0,0,1,0,0,0], null, 0)}>Add Element</button>
-      <button onClick={() => addElement("Hydrogen-1", [0,1,0,0,1,0,0,1], 0, 4)}>Add Another Element</button>
-      <button onClick={() => addElement("Hydrogen-2", [1,0,0,1,0,0,0,0], 0, 0)}>And a third</button>
-      <button onClick={() => removeElement(1)}>Remove the second one</button>
       <div >
         <Molecule 
           scale={scale} 
@@ -323,6 +330,7 @@ function Molecule(props) {
             // print source id
             console.log(`Element ${elementName} id: ${id}`);
             console.log(`Neighbors: ${neighbors}`);
+            console.log(`Bonds: ${props.elements[id].lStructure}`);
           }
         } 
         onMouseOut={e => (e.currentTarget.height = e.currentTarget.width = props.scale * 50)}
