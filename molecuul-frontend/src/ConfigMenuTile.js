@@ -11,7 +11,6 @@ function ConfigMenuTile(props) {
 
     return (
         <div className="configuration-single">
-            {console.log(symbol)}
             {tile}
         </div>
     )

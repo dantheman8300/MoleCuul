@@ -15,7 +15,7 @@ function Sidebar (props) {
         'tile': "square-carbon",
     },
     {
-        'atomicNum': 12,
+        'atomicNum': 8,
         'symbol': 'O',
         'name': 'Oxygen',
         'configs': [
@@ -34,24 +34,37 @@ function Sidebar (props) {
         'tile': "square-hydrogen",
     }];
 
-  
+    // const [isOpen, setOpen] = useState([])
+
+    // const handleChange = ((index) => {
+        // console.log(index);
+        // setOpen(isOpen.map((item, ind) => {
+        //     if(ind !== index) {
+        //         isOpen[ind] = false;
+        //     }
+        //     else {
+        //         isOpen[ind] = true;
+        //     }
+        // }))
+        // console.log(isOpen)
+    // });
+
+    // const handleClick = 
 
     const tools = elemInfo.map((item, index) => {
         return (
-            <ElementTool info={item} key={index} index={index}/>
+            <ElementTool info={item} key={index} ind={index}/>
             
-            // <ElementTool info={elemInfo} key={index} index={index}/>
         )
     });
 
+   
 
     return (
         <div className="sidebar">
             {tools}
         </div>
     )
-
-
 }
 
 export default Sidebar;

@@ -1,16 +1,21 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import ConfigurationMenu from "./ConfigurationMenu";
 
 /* square element on sidebar */
 function ElementTool (props) {
     const octInfo = props.info;
-    const [isOpen, Open] = useState(false);
+    const [isOpen, setOpen] = useState(false);
     // const index = props.index;
     const image = props.info.tile;
 
     const handleClick = event => {
-        Open(current => !current);
+        setOpen(current => !current);
     }
+
+    useEffect(() => {
+        // props.handleChange(props.ind);
+        console.log(isOpen)
+    });
 
     return (
         <div className='ElementTool'>
