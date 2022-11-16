@@ -2,8 +2,6 @@
   "dependencies": {
     "@material-ui/core": "^4.12.4",
     "draw-shape-reactjs": "^1.0.2",
-    "material-ui": "^0.20.2",
-    "react-octagon": "^15.5.3",
-    "react-polygon": "^0.2.0"
+    "material-ui": "^0.20.2"
   }
 }
