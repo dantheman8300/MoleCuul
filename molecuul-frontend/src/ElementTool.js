@@ -14,8 +14,8 @@ function ElementTool (props) {
 
     return (
         <div className='ElementTool'>
-            <img id='elem-square' src={require(`./images/${image}.svg`)} alt='element tile' onClick={handleClick} />
-            {isOpen && <ConfigurationMenu info={octInfo}/>}
+            <img id='elem-square' src={require(`./images/${image}.svg`)} alt='element tile' onClick={handleClick}  />
+            {isOpen && <ConfigurationMenu info={octInfo} handleDragStart={props.handleDragStart}/>}
         </div>
     )
 }

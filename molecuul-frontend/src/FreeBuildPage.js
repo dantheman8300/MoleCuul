@@ -10,7 +10,7 @@ function FreeBuildPage (props) {
       <div className='header'>
         {props.header}
       </div>
-      <div className='sidebar'>
+      <div className='sidebar-section'>
         {props.sidebar}
       </div>
       <div className="builder">
