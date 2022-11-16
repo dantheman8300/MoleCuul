@@ -120,8 +120,26 @@ function Canvas (props) {
     for (var i = 0; i < neighbors.length; i++) {
       for (var j = 0; j < neighbors[i].neighbors.length; j++) {
         if(neighbors[i].neighbors[j] === id) {
-          neighbors[i].neighbors[j] = null;
+          neighbors[i].neighbors[j] = undefined;
         }
+      }
+    }
+
+    // Replace the parent of the neighbors with another element if possible, otherwise null
+    for (var i = 0; i < neighbors.length; i++) {
+      if(neighbors[i].parent !== null) {
+        // Find the parent of the neighbor
+        const parent = newMolecule.find(obj => {
+          return obj.id === neighbors[i].parent;
+        });
+
+        // Find the index of the neighbor in the parent's neighbor list
+        const index = parent.neighbors.indexOf(neighbors[i].id);
+
+        // Find the first non-null neighbor of the neighbor
+        const newNeighbor = neighbors[i].neighbors.find(obj => {
+          return obj !== null;
+        });
       }
     }
 
@@ -340,6 +358,7 @@ function Molecule(props) {
             console.log(`Element ${elementName} id: ${id}`);
             console.log(`Neighbors: ${neighbors}`);
             console.log(`Bonds: ${props.elements[id].lStructure}`);
+            console.log(`Parent: ${parent}`);
           }
         } 
         onMouseOut={e => (e.currentTarget.height = e.currentTarget.width = props.scale * 50)}
@@ -361,8 +380,11 @@ function Molecule(props) {
   // Adds hollow elements showing where elements can be placed
   for(let j = 0; j < props.elements.length; j++) {
     for(let k = 0; k < props.elements[j].lStructure.length; k++) {
+      console.log(`Element ${j} has bond ${k} with ${props.elements[j].neighbors[k]} neighbors and ${props.elements[j].lStructure[k]} bonds`);
       if((props.elements[j].lStructure[k] > 0) && (props.elements[j].neighbors[k] === undefined)) {
+        console.log(`----Element ${j} has bond ${k} with ${props.elements[j].neighbors[k]} neighbors and ${props.elements[j].lStructure[k]} bonds`);
         let point = findRelativePos(props.elements[j], k)
+        console.log(`point: ${point.x}, ${point.y}`)
         elementDisplay.push(<img
           key={Math.random()} 
           src={hollowElement}
