@@ -3,14 +3,52 @@ import ElementTool from "./ElementTool";
 import "./Sidebar.css";
 
 function Sidebar (props) {
-    
+    const elemInfo = [{
+        'atomicNum': 6,
+        'symbol': 'C',
+        'name': 'Carbon',
+        'configs': [
+            "carbon22",
+            "carbon31",
+            "carbon1111"
+        ],   
+        
+        'tile': "square-carbon",
+    },
+    {
+        'atomicNum': 12,
+        'symbol': 'O',
+        'name': 'Oxygen',
+        'configs': [
+            "oxygen244",
+            "oxygen1144"
+        ],
+        'tile': "square-oxygen",
+    },
+    {
+        'atomicNum': 1,
+        'symbol': 'H',
+        'name': 'Hydrogen',
+        'configs': [
+            "hydrogen1"
+        ],
+        'tile': "square-hydrogen",
+    }];
+
+  
+
+    const tools = elemInfo.map((item, index) => {
+        return (
+            <ElementTool info={item} key={index} index={index} handleDragStart={props.handleDragStart}/>
+            
+            // <ElementTool info={elemInfo} key={index} index={index}/>
+        )
+    });
 
 
     return (
         <div className="sidebar">
-            <ElementTool handleDragStart={props.handleDragStart}/>
-            <ElementTool handleDragStart={props.handleDragStart}/>
-            <ElementTool handleDragStart={props.handleDragStart}/>
+            {tools}
         </div>
     )
 
