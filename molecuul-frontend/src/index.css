@@ -78,7 +78,7 @@
     display: flex;
     justify-content: center;
     align-items: baseline;
-    padding: 1em;
+    padding: 0em;
     margin-bottom: 2em;
     background-color: #CAF0F6;
     color: black;
@@ -86,9 +86,9 @@
 
   .Sidebar {
     position: absolute;
-    height: 80%;
-    top: 20%;
-    right: 0px;
+    height: 100%;
+    top: 14%;
+    left: 0px;
     box-sizing: border-box;
     width: 15%;
     display: flex;
@@ -96,7 +96,7 @@
     align-items: baseline;
     padding: 1em;
     margin-bottom: 2em;
-    background-color: #A9C9DD;
+    background-color: #677BAB;
     color: black;
   }
 
@@ -119,7 +119,7 @@
     width: 36px;
     height: 30px;
     right: 60px;
-    top: 36px;
+    top: 25px;
   }
   
   .bm-burger-bars {
@@ -155,7 +155,6 @@
     padding: 2em 1.25em 0;
     font-size: 1.25em;
   }
-  
   
 
   .bm-item-list {
