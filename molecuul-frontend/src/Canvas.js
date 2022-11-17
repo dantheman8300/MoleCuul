@@ -54,18 +54,6 @@ function Canvas (props) {
     setCenter({x: 500, y: 200});
   }
 
-  const handleMouseMove = () => {
-    var e = window.event;
-
-    var posX = e.clientX;
-    var posY = e.clientY;
-
-    setMouseX(posX)
-    setMouseY(posY)
-
-    // console.log(`(${mouseX}, ${mouseY})`)
-  }
-
   const handleDragStart = (event) => {
     var e = window.event;
 
@@ -82,10 +70,20 @@ function Canvas (props) {
     var posY = e.clientY - dragStart.y;
 
     setCenter({x: center.x + posX, y: center.y + posY});
+    handleDrop();
   }
 
   const handleCanvasMove = (event) => {
     setCenter({x: event.deltaX + center.x, y: event.deltaY + center.y});
+  }
+
+  const handleDrop = (event) => {
+    if(elements.length === 0) {
+      var e = window.event;
+      setCenter({x: e.clientX - 290, y: e.clientY - 150});
+      handleAddElement(undefined, undefined);
+      
+    }
   }
 
   /* Removes a single element at specified id from molecule and updates
@@ -210,13 +208,22 @@ function Canvas (props) {
     <div 
       className="canvas" 
       draggable
-      onDrop={event => {
-        console.log(`dropped ${props.selectedElement}`)
-        }
-      }
       onWheel={handleCanvasMove}
       onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
+      onDrop={
+        (e) => {
+          console.log(`dropped ${props.selectedElement}`);
+          handleDrop();
+        }
+      }
+      onDragOver={
+        (e) => {
+          e.stopPropagation();
+          e.preventDefault();
+        }
+      }
+      
     >
       <IconBox 
         zoomInHandler={handleZoomIn} zoomOutHandler={handleZoomOut}
@@ -379,35 +386,35 @@ function Molecule(props) {
     }
   }
 
-  // Adds hollow elements when the molecule is empty
-  if (props.elements.length === 0) {
-    elementDisplay.push(<img
-      key={Math.random()}
-      src={
-        hollowElementHighlight
-      }
-      onDragOver={
-        (e) => {
-          e.stopPropagation();
-          e.preventDefault();
-          console.log("Drag Over");
-          (e.currentTarget.src = hollowElementHighlight)
-        }
-      }
-      onDrop={
-        (e) => {
+  // // Adds hollow elements when the molecule is empty
+  // if (props.elements.length === 0) {
+  //   elementDisplay.push(<img
+  //     key={Math.random()}
+  //     src={
+  //       hollowElementHighlight
+  //     }
+  //     onDragOver={
+  //       (e) => {
+  //         e.stopPropagation();
+  //         e.preventDefault();
+  //         console.log("Drag Over");
+  //         (e.currentTarget.src = hollowElementHighlight)
+  //       }
+  //     }
+  //     onDrop={
+  //       (e) => {
 
-          console.log("Drop 7");
-          (e.currentTarget.src = hollowElement)
-          props.handleAddElement(undefined, undefined);
-        }
-      }
-      alt={'open node'}
-      width={props.scale * 50}
-      height={props.scale * 50}
-      style={{ position: 'absolute', top: props.center.y, left: props.center.x }}
-    />)
-  }
+  //         console.log("Drop 7");
+  //         (e.currentTarget.src = hollowElement)
+  //         props.handleAddElement(undefined, undefined);
+  //       }
+  //     }
+  //     alt={'open node'}
+  //     width={props.scale * 50}
+  //     height={props.scale * 50}
+  //     style={{ position: 'absolute', top: props.center.y, left: props.center.x }}
+  //   />)
+  // }
 
     
   return (
