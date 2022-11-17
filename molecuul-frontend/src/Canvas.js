@@ -12,15 +12,6 @@ import hollowElementHighlight from './icons/Element-Hollow-Highlighted.png';
 var idGen = 0;
 
 function IconBox (props) {
-
-  const handleTrash = event => {
-    console.log('trash')
-  }
-
-  const handleCursor = event => {
-    console.log('cursor')
-  }
-
   return (
     <div className="iconBox">
       <div className='iconRow'>
@@ -28,7 +19,7 @@ function IconBox (props) {
         <img src={iconPlus} alt='plus icon' className='icon' onClick={props.zoomInHandler}/>  
       </div>
       <div className='iconRow'>
-        <img src={iconCursor} alt='cursor icon' className='icon' onClick={handleCursor}/>
+        <img src={iconCursor} alt='cursor icon' className='icon' onClick={props.homeHandler}/>
         <img src={iconTrash} alt='trash icon' className='icon' onClick={props.trashHandler}/>  
       </div>
     </div>
@@ -41,13 +32,9 @@ function Canvas (props) {
   const [elements, setElements] = useState([]);
   const [mouseX, setMouseX] = useState(500);
   const [mouseY, setMouseY] = useState(200);
+  const [center, setCenter] = useState({x: 500, y: 200});
+  const [dragStart, setDragStart] = useState({x: 0, y: 0});
 
-  // console.log(props.selectedElement)
-
-  // if(props.newElement ) {
-  //   addElement();
-  // }
-  
   const handleZoomOut = event => {
     setScale(scale - .2);
     console.log(`zooming out, ${scale}`)
@@ -63,6 +50,9 @@ function Canvas (props) {
     setElements([]);
   }
 
+  const handleHome = event => {
+    setCenter({x: 500, y: 200});
+  }
 
   const handleMouseMove = () => {
     var e = window.event;
@@ -76,14 +66,38 @@ function Canvas (props) {
     // console.log(`(${mouseX}, ${mouseY})`)
   }
 
-  const handleMouseWheel = (event) => {
-    console.log(`${event.deltaY}`)
+  const handleDragStart = (event) => {
+    var e = window.event;
 
-    if(event.deltaY > 0) {
-      handleZoomIn();
-    } else {
-      handleZoomOut();
-    }
+    var posX = e.clientX;
+    var posY = e.clientY;
+
+    setDragStart({x: posX, y: posY});
+    console.log(`Picked up canvas`);
+  }
+
+  const handleDragEnd = (event) => {
+    var e = window.event;
+
+    var posX = e.clientX - dragStart.x;
+    var posY = e.clientY - dragStart.y;
+
+
+    setCenter({x: center.x + posX, y: center.y + posY});
+
+    console.log(`New Center at: (${center.x}, ${center.y})`);
+  }
+
+  const handleCanvasMove = (event) => {
+    let point = center;
+    point.y = Math.round(event.deltaY + point.y);
+    point.x = Math.round(event.deltaX + point.x);
+    // console.log(`New center position: (${point.x}, ${point.y})`)
+    
+    setCenter(point);
+
+    console.log(`New Center at: (${center.x}, ${center.y})`)
+
   }
 
   /* Removes a single element at specified id from molecule and updates
@@ -207,23 +221,26 @@ function Canvas (props) {
   return (
     <div 
       className="canvas" 
-      onMouseMove={handleMouseMove}
-      onWheel={handleMouseWheel}
+      draggable
       onDrop={event => {
         console.log(`dropped ${props.selectedElement}`)
         }
       }
+      onWheel={handleCanvasMove}
+      onDragStart={handleDragStart}
+      onDragEnd={handleDragEnd}
     >
       <IconBox 
         zoomInHandler={handleZoomIn} zoomOutHandler={handleZoomOut}
-        trashHandler={handleTrash}
+        trashHandler={handleTrash} homeHandler={handleHome}
       />
       <div >
         <Molecule 
           scale={scale} 
           elements={elements} 
           mouseX={mouseX} 
-          mouseY={mouseY} 
+          mouseY={mouseY}
+          center={center}
           handleAddElement={handleAddElement}
           handleRemoveElement={handleRemoveElement}   
         />
@@ -233,34 +250,7 @@ function Canvas (props) {
 }
 
 function Molecule(props) {
-
-  const [dragX, setDragX] = useState(500);
-  const [dragY, setDragY] = useState(500);
   const coord = []
-
-  // const handleDrag = (event) => {
-  //   var e = window.event;
-
-  //   var posX = e.clientX;
-  //   var posY = e.clientY;
-
-  //   setDragX(posX);
-  //   setDragY(posY);
-
-  //   console.log(`Drag: (${posX}, ${posY})`)
-  // }
-
-  const handleDragEnd = (event) => {
-    var e = window.event;
-
-    var posX = e.clientX;
-    var posY = e.clientY;
-
-    setDragX(posX);
-    setDragY(posY);
-
-    console.log(`Drag: (${posX}, ${posY})`)
-  }
 
   function findRelativeCoord(pos, parent) {
     var x = parent.x;
@@ -304,9 +294,9 @@ function Molecule(props) {
   }
 
   function findRelativePos(parent, id) {
-    // Find out if element is root of tree
-    let point = {x: dragX - (props.scale * 50 / 2), y:dragY - (props.scale * 50 / 2)};
+    let point = props.center;
     
+    // Find out if element is child of root
     if(parent !== undefined) {
       let pos = -1;
       // Finds the relative position of the element in regards to the parent
@@ -322,8 +312,8 @@ function Molecule(props) {
     }
     return point
   }  
-
-  // Creates draws the current molecule according to the data in canvas
+  
+  // Draws the current molecule according to the data in canvas
   const elementDisplay = props.elements.map(({id, elementName, parent, neighbors }) => {
     coord.push(findRelativePos(props.elements[parent], id));
     // console.log(`Element ${elementName} neighbor's list: ${neighbors}`);
@@ -348,7 +338,6 @@ function Molecule(props) {
             props.handleRemoveElement(id);
           }
         }
-        // onDragEnd={handleDragEnd}
         width={props.scale * 50} 
         height={props.scale * 50} 
         style={{position: 'absolute', top: coord[id].y, left: coord[id].x}} />
@@ -365,7 +354,7 @@ function Molecule(props) {
         let point = findRelativePos(props.elements[j], k)
         elementDisplay.push(<img
           key={Math.random()} 
-          src={hollowElement}
+          src={hollowElementHighlight}
           // onMouseOver={e => (e.currentTarget.src = hollowElementHighlight)} 
           onDragOver={
             (e) => {
@@ -427,7 +416,7 @@ function Molecule(props) {
       alt={'open node'}
       width={props.scale * 50}
       height={props.scale * 50}
-      style={{ position: 'absolute', top: dragY - (props.scale * 50 / 2), left: dragX - (props.scale * 50 / 2) }}
+      style={{ position: 'absolute', top: props.center.y, left: props.center.x }}
     />)
   }
 

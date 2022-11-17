@@ -12,6 +12,7 @@
     width: 300px;
     display: flex;
     flex-direction: row;
+    z-index: 10;
 }
 
 .configurationMenu {
