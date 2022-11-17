@@ -73,7 +73,6 @@ function Canvas (props) {
     var posY = e.clientY;
 
     setDragStart({x: posX, y: posY});
-    console.log(`Picked up canvas`);
   }
 
   const handleDragEnd = (event) => {
@@ -82,22 +81,11 @@ function Canvas (props) {
     var posX = e.clientX - dragStart.x;
     var posY = e.clientY - dragStart.y;
 
-
     setCenter({x: center.x + posX, y: center.y + posY});
-
-    console.log(`New Center at: (${center.x}, ${center.y})`);
   }
 
   const handleCanvasMove = (event) => {
-    let point = center;
-    point.y = Math.round(event.deltaY + point.y);
-    point.x = Math.round(event.deltaX + point.x);
-    // console.log(`New center position: (${point.x}, ${point.y})`)
-    
-    setCenter(point);
-
-    console.log(`New Center at: (${center.x}, ${center.y})`)
-
+    setCenter({x: event.deltaX + center.x, y: event.deltaY + center.y});
   }
 
   /* Removes a single element at specified id from molecule and updates
@@ -354,8 +342,9 @@ function Molecule(props) {
         let point = findRelativePos(props.elements[j], k)
         elementDisplay.push(<img
           key={Math.random()} 
-          src={hollowElementHighlight}
-          // onMouseOver={e => (e.currentTarget.src = hollowElementHighlight)} 
+          src={hollowElement}
+          // onMouseOver={e => (e.currentTarget.src = hollowElementHighlight)}
+          // onMouseOut={e => (e.currentTarget.src = hollowElement)} 
           onDragOver={
             (e) => {
               e.stopPropagation();
