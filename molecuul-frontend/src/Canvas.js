@@ -29,7 +29,7 @@ function IconBox (props) {
 function Canvas (props) {
 
   const [scale, setScale] = useState(1);
-  const [elements, setElements] = useState([]);
+  const [elements, setElements] = useState({});
   const [mouseX, setMouseX] = useState(500);
   const [mouseY, setMouseY] = useState(200);
   const [center, setCenter] = useState({x: 500, y: 200});
@@ -47,7 +47,7 @@ function Canvas (props) {
 
   const handleTrash = event => {
     // Remove all elements in the molecule
-    setElements([]);
+    setElements({});
   }
 
   const handleHome = event => {
@@ -78,9 +78,10 @@ function Canvas (props) {
   }
 
   const handleDrop = (event) => {
-    if(elements.length === 0) {
+    if(Object.keys(elements).length === 0 && props.selectedElement !== null) {
       var e = window.event;
       setCenter({x: e.clientX - 290, y: e.clientY - 150});
+      console.log(`Center at x:${center.x}, y:${center.y}`)
       handleAddElement(undefined, undefined);
       
     }
@@ -90,9 +91,10 @@ function Canvas (props) {
   * neighboring elements
   */
   function removeElement(id) {
-    
+    const newElementDict = elements;
+
     // Print the current molecule's current elements
-    for (var i = 0; i < elements.length; i++) {
+    for (let i = 0; i < elements.length; i++) {
       console.log(elements[i].id);
     }
 
@@ -109,28 +111,31 @@ function Canvas (props) {
     // });
 
     // Get elements that are neighbors with removed node
-    const neighbors = elements.filter(obj => {
-      return obj.neighbors.find(item => item === id) !== undefined;
-    });
-
-    // Remove the element from the molecule
-    const newMolecule = elements.filter((element, i) => { return element.id !== id });
+    // const neighbors = Object.entries(elements).filter(([key, value]) => {
+    //   return value.neighbors.find(item => item === id) !== undefined;
+    // });
 
     // Replace the id from the neighbors' neighbor list with null
-    for (var i = 0; i < neighbors.length; i++) {
-      for (var j = 0; j < neighbors[i].neighbors.length; j++) {
-        if(neighbors[i].neighbors[j] === id) {
-          neighbors[i].neighbors[j] = null;
+    for (let i = 0; i < newElementDict[id].neighbors.length; i++) {
+      let neighborId = newElementDict[id].neighbors[i];
+      if(neighborId !== undefined) {
+        for (let j = 0; j < newElementDict[neighborId].neighbors.length; j++) {
+          if(newElementDict[neighborId].neighbors[j] === id) {
+            newElementDict[neighborId].neighbors[j] = null;
+          }
         }
       }
     }
 
-    // Print the new molecule's new elements
-    for (var i = 0; i < newMolecule.length; i++) {
-      console.log(newMolecule[i].id);
-    }
+    // Remove the element from the molecule
+    delete newElementDict[id];
 
-    setElements(newMolecule);
+    // Print the new molecule's new elements
+    // for (var i = 0; i < newMolecule.length; i++) {
+    //   console.log(newMolecule[i].id);
+    // }
+
+    setElements(newElementDict);
   }
 
 
@@ -152,29 +157,28 @@ function Canvas (props) {
       parent: bondedElemId
     };
 
-    console.log(`adding element ${elementName} to ${bondedElemId} at position ${pos}`)
-
     idGen += 1;
 
-    // Adds neighbor to new element's neighbor list if neighbor exists
-    if(element.parent === null) {
-      setElements([element]);
-    }
-    // Finds bondedElemId in current molecule and updates its neighbor list if bondedElemId exists
-    else {
+    // Creates new element dictionary
+    let elemDict = {};
+
+    // Updates element's parent if parent exists
+    if(element.parent !== null) {
       element.neighbors[pos] = bondedElemId;
 
       // Add new element to bond element neighbor list
-      const newMolecule = elements.map(obj => {
-        if(obj.id === bondedElemId) {
-          obj.neighbors[(pos + 4) % 8] = element.id;
+      Object.entries(elements).map(([key, value]) => {
+        if(parseInt(key) === bondedElemId) {
+          value.neighbors[(pos + 4) % 8] = element.id;
         }
-        return obj;
+        elemDict[key] = value;
       });
-
-      setElements([...newMolecule, element]);
     }
 
+    // Adds element to new element dictionary
+    elemDict[element.id] = element;
+
+    setElements(elemDict);
     //   const newMolecule = elements.map(obj => {
     //       if(obj.id === bondedElemId) {
     //         let newNeighbors = [...obj.neighbors];
@@ -213,7 +217,7 @@ function Canvas (props) {
       onDragEnd={handleDragEnd}
       onDrop={
         (e) => {
-          console.log(`dropped ${props.selectedElement}`);
+          console.log(`dropped the element: ${props.selectedElement}`);
           handleDrop();
         }
       }
@@ -245,7 +249,7 @@ function Canvas (props) {
 }
 
 function Molecule(props) {
-  const coord = []
+  var coord = {};
 
   function findRelativeCoord(pos, parent) {
     var x = parent.x;
@@ -290,7 +294,6 @@ function Molecule(props) {
 
   function findRelativePos(parent, id) {
     let point = props.center;
-    
     // Find out if element is child of root
     if(parent !== undefined) {
       let pos = -1;
@@ -303,60 +306,59 @@ function Molecule(props) {
       if(pos === -1) {
         pos = id
       }
+      
       point = findRelativeCoord(pos, coord[parent.id]);
     }
-    return point
+    return point;
   }  
   
   // Draws the current molecule according to the data in canvas
-  const elementDisplay = props.elements.map(({id, elementName, parent, neighbors }) => {
-    coord.push(findRelativePos(props.elements[parent], id));
-    // console.log(`Element ${elementName} neighbor's list: ${neighbors}`);
+  const elementDisplay = Object.entries(props.elements).map(([key, value]) => {
+    coord[key] = (findRelativePos(props.elements[value.parent], parseInt(key)));
     var source = elementOct;
     return <img
-        key={id} 
+        key={key} 
         src={source} 
-        alt={elementName}
+        alt={value.elementName}
         draggable
         onMouseOver={
           (e) => {
             e.currentTarget.height = e.currentTarget.width = props.scale * 55;
             // print source id
-            console.log(`Element ${elementName} id: ${id}`);
-            console.log(`Neighbors: ${neighbors}`);
-            console.log(`Bonds: ${props.elements[id].lStructure}`);
+            console.log(`Element ${value.elementName} id: ${value.id}`);
+            console.log(`Neighbors: ${value.neighbors}`);
+            console.log(`Parent: ${value.parent}`);
           }
         } 
         onMouseOut={e => (e.currentTarget.height = e.currentTarget.width = props.scale * 50)}
         onDragStart={
           () => {
-            props.handleRemoveElement(id);
+            props.handleRemoveElement(key);
           }
         }
         width={props.scale * 50} 
         height={props.scale * 50} 
-        style={{position: 'absolute', top: coord[id].y, left: coord[id].x}} />
+        style={{position: 'absolute', top: coord[key].y, left: coord[key].x}} />
   });
 
-  const handleDragOver = (event) => {
-    console.log("Drag Over");
-  }
+  console.log(`Element Display: ${elementDisplay}`);
 
   // Adds hollow elements showing where elements can be placed
-  for(let j = 0; j < props.elements.length; j++) {
-    for(let k = 0; k < props.elements[j].lStructure.length; k++) {
-      if((props.elements[j].lStructure[k] > 0) && (props.elements[j].neighbors[k] === undefined)) {
-        let point = findRelativePos(props.elements[j], k)
+  for(let j = 0; j < Object.entries(props.elements).length; j++) {
+    let keys = Object.keys(props.elements);
+    for(let k = 0; k < props.elements[keys[j]].lStructure.length; k++) {
+      if((props.elements[keys[j]].lStructure[k] > 0) && (props.elements[keys[j]].neighbors[k] === undefined)) {
+        let point = findRelativePos(props.elements[j], k);
         elementDisplay.push(<img
           key={Math.random()} 
-          src={hollowElement}
+          src={hollowElementHighlight}
           // onMouseOver={e => (e.currentTarget.src = hollowElementHighlight)}
           // onMouseOut={e => (e.currentTarget.src = hollowElement)} 
           onDragOver={
             (e) => {
               e.stopPropagation();
               e.preventDefault();
-              console.log(`Drag Over, parent: ${props.elements[j].id}, posId: ${k}`);
+              console.log(`Drag Over, parent: ${props.elements[keys[j]].id}, posId: ${k}`);
               (e.currentTarget.src = hollowElementHighlight)
             }
           } 
@@ -372,9 +374,9 @@ function Molecule(props) {
             (e) => {
               console.log("Drop 6");
               (e.currentTarget.src = hollowElement)
-              console.log(`parent: ${props.elements[j].id}`);
+              console.log(`parent: ${props.elements[keys[j]].id}`);
               console.log(`bond position: ${k}`);
-              props.handleAddElement(props.elements[j].id, k);
+              props.handleAddElement(props.elements[keys[j]].id, k);
             }
           }
           alt={'open node'}
@@ -386,37 +388,6 @@ function Molecule(props) {
     }
   }
 
-  // // Adds hollow elements when the molecule is empty
-  // if (props.elements.length === 0) {
-  //   elementDisplay.push(<img
-  //     key={Math.random()}
-  //     src={
-  //       hollowElementHighlight
-  //     }
-  //     onDragOver={
-  //       (e) => {
-  //         e.stopPropagation();
-  //         e.preventDefault();
-  //         console.log("Drag Over");
-  //         (e.currentTarget.src = hollowElementHighlight)
-  //       }
-  //     }
-  //     onDrop={
-  //       (e) => {
-
-  //         console.log("Drop 7");
-  //         (e.currentTarget.src = hollowElement)
-  //         props.handleAddElement(undefined, undefined);
-  //       }
-  //     }
-  //     alt={'open node'}
-  //     width={props.scale * 50}
-  //     height={props.scale * 50}
-  //     style={{ position: 'absolute', top: props.center.y, left: props.center.x }}
-  //   />)
-  // }
-
-    
   return (
     elementDisplay
   )
