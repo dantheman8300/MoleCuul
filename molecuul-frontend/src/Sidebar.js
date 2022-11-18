@@ -1,49 +1,52 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 import ElementTool from "./ElementTool";
+import axios from 'axios';
 
-function Sidebar (props) {
-    const elemInfo = [{
-        'atomicNum': 6,
-        'symbol': 'C',
-        'name': 'Carbon',
-        'configs': [
-            "carbon22",
-            "carbon31",
-            "carbon1111"
-        ],   
-        
-        'tile': "square-carbon",
-    },
-    {
-        'atomicNum': 12,
-        'symbol': 'O',
-        'name': 'Oxygen',
-        'configs': [
-            "oxygen244",
-            "oxygen1144"
-        ],
-        'tile': "square-oxygen",
-    },
-    {
-        'atomicNum': 1,
-        'symbol': 'H',
-        'name': 'Hydrogen',
-        'configs': [
-            "hydrogen1"
-        ],
-        'tile': "square-hydrogen",
-    }];
+function Sidebar () {
 
-  
+ const [elements, setElements] = useState([]);
 
-    const tools = elemInfo.map((item, index) => {
+    useEffect(() => {
+
+        fetchAll().then( result => {
+           if (result) 
+            setElements(result);    
+         });
+     }, [] );
+
+     async function fetchAll(){
+        try {
+           const response = await axios.get("http://localhost:5000/elements");
+           console.log("response");
+           console.log(response.data.elements);
+           return response.data.elements;     
+        }
+        catch (error){
+           //We're not handling errors. Just logging into the console.
+           console.log("error"); 
+           return false;         
+        }
+     }
+
+    
+
+    seeElementConfigs();
+
+
+    const tools = elements.map((item, index) => {
+ 
         return (
             <ElementTool info={item} key={index} index={index}/>
             
-            // <ElementTool info={elemInfo} key={index} index={index}/>
         )
     });
 
+
+    function seeElementConfigs() {
+        for (let i = 0; i < elements.length; i++) {
+            console.log(elements[i]);
+        }
+    }
 
     return (
         <div className="sidebar">
@@ -53,5 +56,7 @@ function Sidebar (props) {
 
 
 }
+
+
 
 export default Sidebar;
