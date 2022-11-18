@@ -3,7 +3,7 @@ import ConfigMenuTile from "./ConfigMenuTile";
 import ConfigMenuTiles from "./ConfigMenuTiles";
 
 function ConfigurationMenu(props) {
-    const images = props.info.images;
+    const images = props.info.configs;
     const symbol = props.info.symbol;
     const singleConfig = (() => {
         if(images.length === 1) return true;

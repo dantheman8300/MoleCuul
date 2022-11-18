@@ -1,9 +1,10 @@
-// import InstructionTile from "./InstructionTile";
+import InstructionTile from "./InstructionTile";
 import React, {useState} from "react";
 import Sidebar from "./Sidebar";
 import FreeBuildPage from "./FreeBuildPage.js";
 import Canvas from "./Canvas";
 import Header from "./Header";
+import ValidateMolecule from "./ValidateMolecule";
 
 function App() {
 
@@ -28,15 +29,16 @@ function App() {
     return (
         <div className="container">
             <FreeBuildPage 
-            header = {<Header/>}
             sidebar = {
                 <Sidebar 
                     handleDragStart={handleElementDragStart}
                 />
             }
             canvas = {<Canvas selectedElement={selectedElement}/>}
+            
+            header = {<Header/>}
             />
-            {/* <InstructionTile /> */}
+
         </div>
     )
 }

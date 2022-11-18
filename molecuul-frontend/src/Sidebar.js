@@ -54,7 +54,11 @@ function Sidebar (props) {
 
     const tools = elemInfo.map((item, index) => {
         return (
-            <ElementTool info={item} key={index} index={index} handleDragStart={props.handleDragStart}/>
+            <div>
+                {console.log(item)}
+                <ElementTool info={item} key={index} index={index} handleDragStart={props.handleDragStart}/>
+            </div>
+            
             
         )
     });

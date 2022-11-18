@@ -4,10 +4,12 @@ import iconMinus from './icons/icon-minus.png';
 import iconPlus from './icons/icon-plus.png';
 import iconCursor from './icons/icon-navigation.png';
 import iconTrash from './icons/icon-trash.png';
-import elementHex from './icons/Element hex.png';
+// import elementHex from './icons/Element hex.png';
 import elementOct from './icons/Element-Carbon.png';
 import hollowElement from './icons/Element-Hollow.png';
 import hollowElementHighlight from './icons/Element-Hollow-Highlighted.png';
+import ValidateMolecule from './ValidateMolecule';
+import InstructionTile from './InstructionTile';
 
 var idGen = 0;
 
@@ -30,6 +32,10 @@ function IconBox (props) {
       <div className='iconRow'>
         <img src={iconCursor} alt='cursor icon' className='icon' onClick={handleCursor}/>
         <img src={iconTrash} alt='trash icon' className='icon' onClick={props.trashHandler}/>  
+      </div>
+      <div className='iconRow'>
+        <ValidateMolecule />
+        <InstructionTile />
       </div>
     </div>
   )
