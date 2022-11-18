@@ -93,18 +93,13 @@ function Canvas (props) {
   function removeElement(id) {
     const newElementDict = elements;
 
-    // Print the current molecule's current elements
-    for (let i = 0; i < elements.length; i++) {
-      console.log(elements[i].id);
-    }
-
     // Replace the id from the neighbors' neighbor list with null
     for (let i = 0; i < newElementDict[id].neighbors.length; i++) {
       let neighborId = newElementDict[id].neighbors[i];
       if(neighborId !== undefined) {
         for (let j = 0; j < newElementDict[neighborId].neighbors.length; j++) {
-          if(newElementDict[neighborId].neighbors[j] === id) {
-            newElementDict[neighborId].neighbors[j] = null;
+          if(newElementDict[neighborId].neighbors[j] === parseInt(id)) {
+            newElementDict[neighborId].neighbors[j] = undefined;
           }
         }
       }
@@ -157,21 +152,6 @@ function Canvas (props) {
     elemDict[element.id] = element;
 
     setElements(elemDict);
-    //   const newMolecule = elements.map(obj => {
-    //       if(obj.id === bondedElemId) {
-    //         let newNeighbors = [...obj.neighbors];
-    //         newNeighbors[(pos + 4) % 8] = element.id;
-    //         console.log(`updated neighbor, ${obj.elementName}`)
-    //         return {
-    //           ...obj,
-    //           neighbors: newNeighbors
-    //         };
-    //       }
-    //       return obj;
-    //     });
-    //   // updates molecule
-    //   setElements([...newMolecule, element]);
-    // }
   }
 
   const handleAddElement = (bondId, posId) => {
@@ -322,8 +302,9 @@ function Molecule(props) {
   for(let j = 0; j < Object.entries(props.elements).length; j++) {
     let keys = Object.keys(props.elements);
     for(let k = 0; k < props.elements[keys[j]].lStructure.length; k++) {
+      console.log(`Element neighbor ${props.elements[keys[j]].neighbors[k]}`);
       if((props.elements[keys[j]].lStructure[k] > 0) && (props.elements[keys[j]].neighbors[k] === undefined)) {
-        console.log(`Element at position ${k} of element ${keys[j]}`);
+        // console.log(`Element at position ${k} of element ${keys[j]}`);
         let point = findRelativeCoord(k, coord[keys[j]]);
         console.log(`Point: ${point.x}, ${point.y}`);
         elementDisplay.push(<img
