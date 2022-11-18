@@ -1,5 +1,6 @@
 import React from "react";
 import ElementTool from "./ElementTool";
+import "./Sidebar.css";
 
 function Sidebar (props) {
     const elemInfo = [{
@@ -53,7 +54,7 @@ function Sidebar (props) {
 
     const tools = elemInfo.map((item, index) => {
         return (
-            <ElementTool info={item} key={index} ind={index}/>
+            <ElementTool info={item} key={index} index={index} handleDragStart={props.handleDragStart}/>
             
         )
     });
