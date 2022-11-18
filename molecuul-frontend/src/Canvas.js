@@ -98,23 +98,6 @@ function Canvas (props) {
       console.log(elements[i].id);
     }
 
-    // const newMolecule = elements.map(obj => {
-    // // Find elements that are neighbors with removed node
-    //   if(obj.neighbors.find(item => item === id) !== undefined) {
-    //     // Remove neighbors association with the node
-    //     obj.neighbors = obj.neighbors.filter((neighbor, i) => { return neighbor !== id });
-    //   }
-    //   // Return any elements that are not the removed node
-    //   if(obj !== id) {
-    //     return obj;
-    //   }
-    // });
-
-    // Get elements that are neighbors with removed node
-    // const neighbors = Object.entries(elements).filter(([key, value]) => {
-    //   return value.neighbors.find(item => item === id) !== undefined;
-    // });
-
     // Replace the id from the neighbors' neighbor list with null
     for (let i = 0; i < newElementDict[id].neighbors.length; i++) {
       let neighborId = newElementDict[id].neighbors[i];
@@ -129,11 +112,6 @@ function Canvas (props) {
 
     // Remove the element from the molecule
     delete newElementDict[id];
-
-    // Print the new molecule's new elements
-    // for (var i = 0; i < newMolecule.length; i++) {
-    //   console.log(newMolecule[i].id);
-    // }
 
     setElements(newElementDict);
   }
@@ -296,21 +274,18 @@ function Molecule(props) {
     let point = props.center;
     // Find out if element is child of root
     if(parent !== undefined) {
-      let pos = -1;
+      let pos;
       // Finds the relative position of the element in regards to the parent
       for(let i = 0; i < parent.neighbors.length; i++) {
         if(parent.neighbors[i] === id) {
           pos = i;
         }
       }
-      if(pos === -1) {
-        pos = id
-      }
       
       point = findRelativeCoord(pos, coord[parent.id]);
     }
     return point;
-  }  
+  }
   
   // Draws the current molecule according to the data in canvas
   const elementDisplay = Object.entries(props.elements).map(([key, value]) => {
@@ -348,7 +323,9 @@ function Molecule(props) {
     let keys = Object.keys(props.elements);
     for(let k = 0; k < props.elements[keys[j]].lStructure.length; k++) {
       if((props.elements[keys[j]].lStructure[k] > 0) && (props.elements[keys[j]].neighbors[k] === undefined)) {
-        let point = findRelativePos(props.elements[j], k);
+        console.log(`Element at position ${k} of element ${keys[j]}`);
+        let point = findRelativeCoord(k, coord[keys[j]]);
+        console.log(`Point: ${point.x}, ${point.y}`);
         elementDisplay.push(<img
           key={Math.random()} 
           src={hollowElementHighlight}
