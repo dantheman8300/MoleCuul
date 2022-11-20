@@ -8,9 +8,9 @@ function Sidebar (props) {
 
     return (
         <div className="sidebar">
-            <ElementTool handleDragStart={props.handleDragStart}/>
-            <ElementTool handleDragStart={props.handleDragStart}/>
-            <ElementTool handleDragStart={props.handleDragStart}/>
+            <ElementTool handleDragStart={props.handleDragStart} handleDragEnd={props.handleDragEnd}/>
+            <ElementTool handleDragStart={props.handleDragStart} handleDragEnd={props.handleDragEnd}/>
+            <ElementTool handleDragStart={props.handleDragStart} handleDragEnd={props.handleDragEnd}/>
         </div>
     )
 

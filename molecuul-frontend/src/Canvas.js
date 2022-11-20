@@ -63,6 +63,7 @@ function Canvas (props) {
     setDragStart({x: posX, y: posY});
   }
 
+  
   const handleDragEnd = (event) => {
     var e = window.event;
 
@@ -72,6 +73,7 @@ function Canvas (props) {
     setCenter({x: center.x + posX, y: center.y + posY});
     handleDrop();
   }
+
 
   const handleCanvasMove = (event) => {
     setCenter({x: event.deltaX + center.x, y: event.deltaY + center.y});
@@ -86,6 +88,7 @@ function Canvas (props) {
       
     }
   }
+
 
   /* Removes a single element at specified id from molecule and updates
   * neighboring elements
@@ -185,7 +188,6 @@ function Canvas (props) {
           e.preventDefault();
         }
       }
-      
     >
       <IconBox 
         zoomInHandler={handleZoomIn} zoomOutHandler={handleZoomOut}
@@ -198,8 +200,9 @@ function Canvas (props) {
           mouseX={mouseX} 
           mouseY={mouseY}
           center={center}
+          hover={props.hover}
           handleAddElement={handleAddElement}
-          handleRemoveElement={handleRemoveElement}   
+          handleRemoveElement={handleRemoveElement}
         />
       </div>
     </div>
@@ -293,59 +296,59 @@ function Molecule(props) {
         }
         width={props.scale * 50} 
         height={props.scale * 50} 
-        style={{position: 'absolute', top: coord[key].y, left: coord[key].x}} />
+        style={{position: 'absolute', top: coord[key].y, left: coord[key].x, zIndex: 4}} />
   });
 
-  console.log(`Element Display: ${elementDisplay}`);
-
-  // Adds hollow elements showing where elements can be placed
-  for(let j = 0; j < Object.entries(props.elements).length; j++) {
-    let keys = Object.keys(props.elements);
-    for(let k = 0; k < props.elements[keys[j]].lStructure.length; k++) {
-      console.log(`Element neighbor ${props.elements[keys[j]].neighbors[k]}`);
-      if((props.elements[keys[j]].lStructure[k] > 0) && (props.elements[keys[j]].neighbors[k] === undefined)) {
-        // console.log(`Element at position ${k} of element ${keys[j]}`);
-        let point = findRelativeCoord(k, coord[keys[j]]);
-        console.log(`Point: ${point.x}, ${point.y}`);
-        elementDisplay.push(<img
-          key={Math.random()} 
-          src={hollowElementHighlight}
-          // onMouseOver={e => (e.currentTarget.src = hollowElementHighlight)}
-          // onMouseOut={e => (e.currentTarget.src = hollowElement)} 
-          onDragOver={
-            (e) => {
-              e.stopPropagation();
-              e.preventDefault();
-              console.log(`Drag Over, parent: ${props.elements[keys[j]].id}, posId: ${k}`);
-              (e.currentTarget.src = hollowElementHighlight)
+  console.log(`Hover: ${props.hover}`);
+  if(props.hover) {
+    // Adds hollow elements showing where elements can be placed
+    for(let j = 0; j < Object.entries(props.elements).length; j++) {
+      let keys = Object.keys(props.elements);
+      for(let k = 0; k < props.elements[keys[j]].lStructure.length; k++) {
+        console.log(`Element neighbor ${props.elements[keys[j]].neighbors[k]}`);
+        if((props.elements[keys[j]].lStructure[k] > 0) && (props.elements[keys[j]].neighbors[k] === undefined)) {
+          // console.log(`Element at position ${k} of element ${keys[j]}`);
+          let point = findRelativeCoord(k, coord[keys[j]]);
+          console.log(`Point: ${point.x}, ${point.y}`);
+          elementDisplay.push(<img
+            key={Math.random()} 
+            src={hollowElementHighlight}
+            // onMouseOver={e => (e.currentTarget.src = hollowElementHighlight)}
+            // onMouseOut={e => (e.currentTarget.src = hollowElement)} 
+            onDragOver={
+              (e) => {
+                e.stopPropagation();
+                e.preventDefault();
+                console.log(`Drag Over, parent: ${props.elements[keys[j]].id}, posId: ${k}`);
+                (e.currentTarget.src = hollowElementHighlight)
+              }
+            } 
+            onDragLeave={
+              (e) => {
+                e.stopPropagation();
+                e.preventDefault();
+                console.log("Drag Leave");
+                (e.currentTarget.src = hollowElement)
+              }
             }
-          } 
-          onDragLeave={
-            (e) => {
-              e.stopPropagation();
-              e.preventDefault();
-              console.log("Drag Leave");
-              (e.currentTarget.src = hollowElement)
+            onDrop={
+              (e) => {
+                console.log("Drop 6");
+                (e.currentTarget.src = hollowElement)
+                console.log(`parent: ${props.elements[keys[j]].id}`);
+                console.log(`bond position: ${k}`);
+                props.handleAddElement(props.elements[keys[j]].id, k);
+              }
             }
-          }
-          onDrop={
-            (e) => {
-              console.log("Drop 6");
-              (e.currentTarget.src = hollowElement)
-              console.log(`parent: ${props.elements[keys[j]].id}`);
-              console.log(`bond position: ${k}`);
-              props.handleAddElement(props.elements[keys[j]].id, k);
-            }
-          }
-          alt={'open node'}
-          width={props.scale * 50} 
-          height={props.scale * 50} 
-          style={{position: 'absolute', top: point.y, left: point.x}}
-          />)
+            alt={'open node'}
+            width={props.scale * 50} 
+            height={props.scale * 50} 
+            style={{position: 'absolute', top: point.y, left: point.x, zIndex: 2}}
+            />)
+        }
       }
     }
   }
-
   return (
     elementDisplay
   )
