@@ -76,7 +76,7 @@ function Canvas (props) {
 
 
   const handleCanvasMove = (event) => {
-    setCenter({x: event.deltaX + center.x, y: event.deltaY + center.y});
+    setCenter({x: center.x - event.deltaX, y: center.y - event.deltaY});
   }
 
   const handleDrop = (event) => {
