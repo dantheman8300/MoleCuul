@@ -1,13 +1,15 @@
 import React, {useState} from 'react';
 import "./Canvas.css";
+import OctagonSymbol from "./OctagonSymbol.js";
+import ElementTile from "./ElementTile";
+import ElementRender from "./ElementRender";
 import iconMinus from './icons/icon-minus.png';
 import iconPlus from './icons/icon-plus.png';
-import iconCursor from './icons/icon-navigation.png';
+import iconHome from './icons/icon-home.png';
 import iconTrash from './icons/icon-trash.png';
-import elementHex from './icons/Element hex.png';
 import elementOct from './icons/Element-Carbon.png';
 import hollowElement from './icons/Element-Hollow.png';
-import hollowElementHighlight from './icons/Element-Hollow-Highlighted.png';
+import hollowElementHighlight from './images/oct-border.svg';
 
 var idGen = 0;
 
@@ -19,7 +21,7 @@ function IconBox (props) {
         <img src={iconPlus} alt='plus icon' className='icon' onClick={props.zoomInHandler}/>  
       </div>
       <div className='iconRow'>
-        <img src={iconCursor} alt='cursor icon' className='icon' onClick={props.homeHandler}/>
+        <img src={iconHome} alt='home icon' className='icon' onClick={props.homeHandler}/>
         <img src={iconTrash} alt='trash icon' className='icon' onClick={props.trashHandler}/>  
       </div>
     </div>
@@ -54,25 +56,25 @@ function Canvas (props) {
     setCenter({x: 500, y: 200});
   }
 
-  const handleDragStart = (event) => {
-    var e = window.event;
+  // const handleDragStart = (event) => {
+  //   var e = window.event;
 
-    var posX = e.clientX;
-    var posY = e.clientY;
+  //   var posX = e.clientX;
+  //   var posY = e.clientY;
 
-    setDragStart({x: posX, y: posY});
-  }
+  //   setDragStart({x: posX, y: posY});
+  // }
 
   
-  const handleDragEnd = (event) => {
-    var e = window.event;
+  // const handleDragEnd = (event) => {
+  //   var e = window.event;
 
-    var posX = e.clientX - dragStart.x;
-    var posY = e.clientY - dragStart.y;
+  //   var posX = e.clientX - dragStart.x;
+  //   var posY = e.clientY - dragStart.y;
 
-    setCenter({x: center.x + posX, y: center.y + posY});
-    handleDrop();
-  }
+  //   setCenter({x: center.x + posX, y: center.y + posY});
+  //   handleDrop();
+  // }
 
 
   const handleCanvasMove = (event) => {
@@ -120,14 +122,15 @@ function Canvas (props) {
   * NOTE: Position is indicated by an array index. 0 -> 3 where 
   * 0 is the top position moving clockwise.
   */
-  function addElement(elementName, lStructure, bondedElemId, pos) {
+  function addElement(elementName, source, lStructure, bondedElemId, pos) {
 
     // pos = (pos + 4) % 8; 
 
     // Creates an empty element
     const element = {
       id: idGen, 
-      elementName: elementName, 
+      elementName: elementName,
+      source: source, 
       lStructure: lStructure, 
       neighbors: [...Array(8)], 
       parent: bondedElemId
@@ -161,7 +164,7 @@ function Canvas (props) {
     console.log('adding element')
     // display add element params
     console.log(`name: ${props.selectedElement.name}, name: ${props.selectedElement.lStructure}, bondId: ${bondId}, posId: ${posId}`)
-    addElement("hydrogen-3", props.selectedElement.lStructure, bondId, (posId + 4) % 8);
+    addElement(props.selectedElement.name, props.selectedElement.source, props.selectedElement.lStructure, bondId, (posId + 4) % 8);
   }
 
   const handleRemoveElement = (id) => {
@@ -174,8 +177,7 @@ function Canvas (props) {
       className="canvas" 
       draggable
       onWheel={handleCanvasMove}
-      onDragStart={handleDragStart}
-      onDragEnd={handleDragEnd}
+      onDragEnd={handleDrop}
       onDrop={
         (e) => {
           console.log(`dropped the element: ${props.selectedElement}`);
@@ -203,6 +205,8 @@ function Canvas (props) {
           hover={props.hover}
           handleAddElement={handleAddElement}
           handleRemoveElement={handleRemoveElement}
+          handleDragStart={props.handleDragStart} 
+          handleDragEnd={props.handleDragEnd}
         />
       </div>
     </div>
@@ -210,6 +214,7 @@ function Canvas (props) {
 }
 
 function Molecule(props) {
+  const [adjustElement, setAdjustElement] = useState(null);
   var coord = {};
 
   function findRelativeCoord(pos, parent) {
@@ -270,43 +275,45 @@ function Molecule(props) {
     return point;
   }
   
+  const handleDragStart = (elementInfo) => {
+    setAdjustElement(elementInfo.id);
+    props.handleDragStart(elementInfo);
+  }
+
+  const handleDragEnd = (id) => {
+    setAdjustElement(null);
+    props.handleDragEnd();
+    props.handleRemoveElement(id);
+  }
+
   // Draws the current molecule according to the data in canvas
   const elementDisplay = Object.entries(props.elements).map(([key, value]) => {
-    coord[key] = (findRelativePos(props.elements[value.parent], parseInt(key)));
-    var source = elementOct;
-    return <img
-        key={key} 
-        src={source} 
-        alt={value.elementName}
-        draggable
-        onMouseOver={
-          (e) => {
-            e.currentTarget.height = e.currentTarget.width = props.scale * 55;
-            // print source id
-            console.log(`Element ${value.elementName} id: ${value.id}`);
-            console.log(`Neighbors: ${value.neighbors}`);
-            console.log(`Parent: ${value.parent}`);
-          }
-        } 
-        onMouseOut={e => (e.currentTarget.height = e.currentTarget.width = props.scale * 50)}
-        onDragStart={
-          () => {
-            props.handleRemoveElement(key);
-          }
-        }
-        width={props.scale * 50} 
-        height={props.scale * 50} 
-        style={{position: 'absolute', top: coord[key].y, left: coord[key].x, zIndex: 4}} />
+    if(adjustElement === parseInt(key)) {
+      coord[key] = {x: -1000, y: -1000};
+    }
+    else {
+      coord[key] = (findRelativePos(props.elements[value.parent], parseInt(key)));
+    }
+    return <ElementRender 
+      element={value} 
+      x={coord[key].x} 
+      y={coord[key].y} 
+      scale={props.scale}
+      handleDragStart={handleDragStart} 
+      handleDragEnd={handleDragEnd}/>
   });
 
-  console.log(`Hover: ${props.hover}`);
+
   if(props.hover) {
     // Adds hollow elements showing where elements can be placed
     for(let j = 0; j < Object.entries(props.elements).length; j++) {
       let keys = Object.keys(props.elements);
       for(let k = 0; k < props.elements[keys[j]].lStructure.length; k++) {
         console.log(`Element neighbor ${props.elements[keys[j]].neighbors[k]}`);
-        if((props.elements[keys[j]].lStructure[k] > 0) && (props.elements[keys[j]].neighbors[k] === undefined)) {
+        if((props.elements[keys[j]].lStructure[k] > 0) && 
+          ((props.elements[keys[j]].neighbors[k] === undefined) || 
+          (props.elements[keys[j]].neighbors[k] === adjustElement)) && 
+          (parseInt(keys[j]) !== adjustElement)) {
           // console.log(`Element at position ${k} of element ${keys[j]}`);
           let point = findRelativeCoord(k, coord[keys[j]]);
           console.log(`Point: ${point.x}, ${point.y}`);
@@ -320,20 +327,18 @@ function Molecule(props) {
                 e.stopPropagation();
                 e.preventDefault();
                 console.log(`Drag Over, parent: ${props.elements[keys[j]].id}, posId: ${k}`);
-                (e.currentTarget.src = hollowElementHighlight)
+                (e.currentTarget.src = require(`./images/${props.elements[keys[j]].source}.svg`))
               }
             } 
             onDragLeave={
               (e) => {
                 e.stopPropagation();
                 e.preventDefault();
-                console.log("Drag Leave");
-                (e.currentTarget.src = hollowElement)
+                (e.currentTarget.src = hollowElementHighlight)
               }
             }
             onDrop={
               (e) => {
-                console.log("Drop 6");
                 (e.currentTarget.src = hollowElement)
                 console.log(`parent: ${props.elements[keys[j]].id}`);
                 console.log(`bond position: ${k}`);

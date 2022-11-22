@@ -31,7 +31,8 @@ function App() {
                     handleDragEnd={handleElementDragEnd}
                 />
             }
-            canvas = {<Canvas selectedElement={selectedElement} hover={hover}/>}
+            canvas = {<Canvas selectedElement={selectedElement} hover={hover} 
+            handleDragStart={handleElementDragStart} handleDragEnd={handleElementDragEnd}/>}
             />
         </div>
     )

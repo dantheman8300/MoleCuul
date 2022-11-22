@@ -81,6 +81,35 @@
 
 }
 
+.element-render {
+  position: relative;
+  align-self: center;
+}
+
+.element-render:hover {
+  filter: drop-shadow(0px 4px 2px rgba(0, 0, 0, .5));
+}
+
+.element-render:active {
+  filter: drop-shadow(0px 0px 0px rgba(0, 0, 0, .5));
+}
+
+#elemSym {
+  /* Chemical Symbol */
+
+  position: absolute;
+  top: 25%;
+  left: 37%;
+  transform: translate(-50%, -50%);
+
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 400;
+  text-align: center;
+
+  color: #317389;
+}
+
 .tile-and-symbol {
   position: relative;
   text-align: center;
