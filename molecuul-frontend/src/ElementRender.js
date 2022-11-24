@@ -1,13 +1,13 @@
 import React, {useState} from 'react';
 
-/* Element tile rendered on configuration menu */
+/* Element tile rendered on canvas */
 function ElementRender(props) {
     const image = props.element.source;
     const symbol = props.element.elementName;
     const elementId = props.element.id;
     const scale = props.scale;
-    const posX = props.x;
-    const posY = props.y;
+    const posX = props.point.x;
+    const posY = props.point.y;
 
     return (
         <div 

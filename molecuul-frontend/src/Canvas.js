@@ -1,15 +1,11 @@
 import React, {useState} from 'react';
 import "./Canvas.css";
-import OctagonSymbol from "./OctagonSymbol.js";
-import ElementTile from "./ElementTile";
 import ElementRender from "./ElementRender";
+import OpenElementRender from "./OpenElementRender";
 import iconMinus from './icons/icon-minus.png';
 import iconPlus from './icons/icon-plus.png';
 import iconHome from './icons/icon-home.png';
 import iconTrash from './icons/icon-trash.png';
-import elementOct from './icons/Element-Carbon.png';
-import hollowElement from './icons/Element-Hollow.png';
-import hollowElementHighlight from './images/oct-border.svg';
 
 var idGen = 0;
 
@@ -296,8 +292,7 @@ function Molecule(props) {
     }
     return <ElementRender 
       element={value} 
-      x={coord[key].x} 
-      y={coord[key].y} 
+      point={coord[key]}
       scale={props.scale}
       handleDragStart={handleDragStart} 
       handleDragEnd={handleDragEnd}/>
@@ -311,45 +306,15 @@ function Molecule(props) {
       for(let k = 0; k < props.elements[keys[j]].lStructure.length; k++) {
         console.log(`Element neighbor ${props.elements[keys[j]].neighbors[k]}`);
         if((props.elements[keys[j]].lStructure[k] > 0) && 
-          ((props.elements[keys[j]].neighbors[k] === undefined) || 
+          ((props.elements[keys[j]].neighbors[k] === undefined) ||
           (props.elements[keys[j]].neighbors[k] === adjustElement)) && 
           (parseInt(keys[j]) !== adjustElement)) {
-          // console.log(`Element at position ${k} of element ${keys[j]}`);
-          let point = findRelativeCoord(k, coord[keys[j]]);
-          console.log(`Point: ${point.x}, ${point.y}`);
-          elementDisplay.push(<img
-            key={Math.random()} 
-            src={hollowElementHighlight}
-            // onMouseOver={e => (e.currentTarget.src = hollowElementHighlight)}
-            // onMouseOut={e => (e.currentTarget.src = hollowElement)} 
-            onDragOver={
-              (e) => {
-                e.stopPropagation();
-                e.preventDefault();
-                console.log(`Drag Over, parent: ${props.elements[keys[j]].id}, posId: ${k}`);
-                (e.currentTarget.src = require(`./images/${props.elements[keys[j]].source}.svg`))
-              }
-            } 
-            onDragLeave={
-              (e) => {
-                e.stopPropagation();
-                e.preventDefault();
-                (e.currentTarget.src = hollowElementHighlight)
-              }
-            }
-            onDrop={
-              (e) => {
-                (e.currentTarget.src = hollowElement)
-                console.log(`parent: ${props.elements[keys[j]].id}`);
-                console.log(`bond position: ${k}`);
-                props.handleAddElement(props.elements[keys[j]].id, k);
-              }
-            }
-            alt={'open node'}
-            width={props.scale * 50} 
-            height={props.scale * 50} 
-            style={{position: 'absolute', top: point.y, left: point.x, zIndex: 2}}
-            />)
+          elementDisplay.push(<OpenElementRender 
+            element={props.elements[keys[j]]} 
+            point={findRelativeCoord(k, coord[keys[j]])}
+            scale={props.scale}
+            pos={k}
+            handleAddElement={props.handleAddElement} />);
         }
       }
     }
