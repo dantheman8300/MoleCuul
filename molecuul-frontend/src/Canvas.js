@@ -116,10 +116,6 @@ function Canvas (props) {
   */
   function removeElement(id) {
 
-    // Set molecule status to 0 (unchecked)
-    setMoleculeStatus(0);
-    setMoleculeErrors([]); // Clear molecule errors
-
     const newElementDict = elements;
 
     // Replace the id from the neighbors' neighbor list with null
@@ -147,10 +143,6 @@ function Canvas (props) {
   * 0 is the top position moving clockwise.
   */
   function addElement(elementName, source, lStructure, bondedElemId, pos) {
-
-    // Set molecule status to 0 (not checked)
-    setMoleculeStatus(0);
-    setMoleculeErrors([]); // Clear molecule errors
 
     // pos = (pos + 4) % 8; 
 
@@ -189,6 +181,11 @@ function Canvas (props) {
   }
 
   const handleAddElement = (bondId, posId) => {
+    // Set molecule status to 0 (not checked)
+    setMoleculeStatus(0);
+    setMoleculeErrors([]); // Clear molecule errors
+    setDisplayErrors(false); // Hide error display
+
     console.log('adding element')
     // display add element params
     console.log(`name: ${props.selectedElement.name}, name: ${props.selectedElement.lStructure}, bondId: ${bondId}, posId: ${posId}`)
@@ -196,6 +193,11 @@ function Canvas (props) {
   }
 
   const handleRemoveElement = (id) => {
+    // Set molecule status to 0 (not checked)
+    setMoleculeStatus(0);
+    setMoleculeErrors([]); // Clear molecule errors
+    setDisplayErrors(false); // Hide error display
+
     console.log(`removing element ${id}`)
     removeElement(id);
   }
