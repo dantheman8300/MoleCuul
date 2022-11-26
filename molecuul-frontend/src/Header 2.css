@@ -1,0 +1,14 @@
+@font-face {
+  font-family: 'Roboto';
+  src: url("./fonts/Roboto-Regular.ttf");
+}
+
+.Header {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: space-between;
+  background-color: #CAF0F6;
+  color: black;
+  font-family: Roboto;
+}

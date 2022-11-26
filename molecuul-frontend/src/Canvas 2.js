@@ -2,27 +2,12 @@ import React, {useState} from 'react';
 import "./Canvas.css";
 import ElementRender from "./ElementRender";
 import OpenElementRender from "./OpenElementRender";
-import ErrorBox from "./ErrorBox";
-
 import iconMinus from './icons/icon-minus.png';
 import iconPlus from './icons/icon-plus.png';
 import iconHome from './icons/icon-home.png';
 import iconTrash from './icons/icon-trash.png';
-import iconCheck from './icons/icon-check.png';
-import iconX from './icons/icon-x.png';
-import iconSearch from './icons/icon-search.png';
 
 var idGen = 0;
-const POSITIONS = {
-  0: 'top', 
-  1: 'top right',
-  2: 'right',
-  3: 'bottom right',
-  4: 'bottom',
-  5: 'bottom left',
-  6: 'left',
-  7: 'top left'
-}
 
 function IconBox (props) {
   return (
@@ -34,11 +19,6 @@ function IconBox (props) {
       <div className='iconRow'>
         <img src={iconHome} alt='home icon' className='icon' onClick={props.homeHandler}/>
         <img src={iconTrash} alt='trash icon' className='icon' onClick={props.trashHandler}/>  
-      </div>
-      <div className='iconRow'>
-      <img src={iconSearch} alt='Search icon' className='icon' onClick={props.structureChecker}/>
-        {props.moleculeStatus == 1 && <img src={iconCheck} alt='Check icon' className='icon'/>}
-        {props.moleculeStatus == -1 && <img src={iconX} alt='X icon' className='icon' onClick={props.displayErrors}/>}
       </div>
     </div>
   )
@@ -52,9 +32,6 @@ function Canvas (props) {
   const [mouseY, setMouseY] = useState(200);
   const [center, setCenter] = useState({x: 500, y: 200});
   const [dragStart, setDragStart] = useState({x: 0, y: 0});
-  const [moleculeStatus, setMoleculeStatus] = useState(0);
-  const [moleculeErrors, setMoleculeErrors] = useState([]);
-  const [displayErrors, setDisplayErrors] = useState(false);
 
   const handleZoomOut = event => {
     setScale(scale - .2);
@@ -115,11 +92,6 @@ function Canvas (props) {
   * neighboring elements
   */
   function removeElement(id) {
-
-    // Set molecule status to 0 (unchecked)
-    setMoleculeStatus(0);
-    setMoleculeErrors([]); // Clear molecule errors
-
     const newElementDict = elements;
 
     // Replace the id from the neighbors' neighbor list with null
@@ -147,10 +119,6 @@ function Canvas (props) {
   * 0 is the top position moving clockwise.
   */
   function addElement(elementName, source, lStructure, bondedElemId, pos) {
-
-    // Set molecule status to 0 (not checked)
-    setMoleculeStatus(0);
-    setMoleculeErrors([]); // Clear molecule errors
 
     // pos = (pos + 4) % 8; 
 
@@ -200,77 +168,6 @@ function Canvas (props) {
     removeElement(id);
   }
 
-  const checkStructure = () => {
-    console.log('checking structure')
-    console.log(elements)
-
-    let errors = [];
-
-    // Iterate through each element in the molecule
-    Object.entries(elements).map(([key, element]) => {
-
-      // Iterate through each lStructure in the element and 
-      // check if the element has the correct number of neighbors
-      for (let pos = 0; pos < element.lStructure.length; pos++) {
-        
-        const neighbor = element.neighbors[pos];
-
-        if (neighbor === undefined && element.lStructure[pos] !== 0) {
-          errors.push({
-            errorMessage: 'Missing Bond',
-            errorSpecificMessage: `Element ${element.elementName} is missing a bond in ${POSITIONS[pos]} position`,
-            element: element.elementName,
-            id: element.id,
-            position: pos
-          });
-        }
-
-        // I think this is technically impossible but just in case
-        if (neighbor !== undefined && element.lStructure[pos] === 0) {
-          errors.push({
-            errorMessage: 'Extra Bond',
-            element: element.elementName,
-            id: element.id,
-            position: pos
-          });
-        }
-
-        // Check if the lStructure of the neighbor matches the lStructure of the element
-        // Note: Check to make sure the error isn't already in the list from the neighbor's side or should it be?
-        if (neighbor !== undefined && element.lStructure[pos] !== elements[neighbor].lStructure[(pos + 4) % 8]) {
-
-          errors.push({
-            errorMessage: 'Incorrect Bond',
-            element: element.elementName,
-            id: element.id,
-            position: pos
-          });
-        }
-      }
-    });
-
-    if (errors.length === 0) {
-      setMoleculeStatus(1);
-    } else {
-      setMoleculeStatus(-1);
-      setMoleculeErrors(errors);
-    }
-
-    console.log(errors);
-
-  }
-
-  const displayMoleculeErrors = () => {
-    if (displayErrors) {
-      setDisplayErrors(false);
-    } else {
-      setDisplayErrors(true);
-    }
-
-    console.log(displayErrors);
-  }
-
-
   return (
     <div 
       className="canvas" 
@@ -293,10 +190,7 @@ function Canvas (props) {
       <IconBox 
         zoomInHandler={handleZoomIn} zoomOutHandler={handleZoomOut}
         trashHandler={handleTrash} homeHandler={handleHome}
-        structureChecker={checkStructure} moleculeStatus={moleculeStatus} 
-        moleculeErrors={moleculeErrors} displayErrors={displayMoleculeErrors}
       />
-      {displayErrors && <ErrorBox errors={moleculeErrors} />}
       <div >
         <Molecule 
           scale={scale} 
