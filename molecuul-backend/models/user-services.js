@@ -1,5 +1,7 @@
 const mongoose = require("mongoose");
 const userModel = require("./user");
+const configModel = require("./elementconfig");
+const imageModel = require("./elementimage");
 mongoose.set("debug", true);
 
 mongoose
@@ -15,6 +17,22 @@ mongoose
       result = await userModel.find();
     } else if (elemName && elemSymbol == undefined) {
       result = await findElementByName(elemName);
+    }
+    return result;
+  }
+
+  async function getElectronConfig(config_id) {
+    let result;
+    if (config_id === undefined) {
+      result = await configModel.find();
+    }
+    return result;
+  }
+
+  async function getElementImage(element) {
+    let result;
+    if (element === undefined) {
+      result = await imageModel.find();
     }
     return result;
   }
@@ -53,6 +71,11 @@ async function addElement(user) {
   }
 }
 
+async function deleteElement(elemName) {
+    return await userModel.deleteOne({elemName : elemName});
+  
+}
+
 async function findElementByName(elemName) {
   return await userModel.find({ elemName: elemName });
 }
@@ -68,3 +91,6 @@ async function findElementByName(elemName) {
 exports.getElements = getElements;
 exports.findElementById = findElementById;
 exports.addElement = addElement;
+exports.deleteElement = deleteElement;
+exports.getElectronConfig = getElectronConfig;
+exports.getElementImage = getElementImage;
