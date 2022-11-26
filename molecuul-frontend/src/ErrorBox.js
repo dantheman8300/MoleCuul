@@ -7,7 +7,7 @@ function ErrorBox (props) {
     console.log(key, error);
     const errorMessage = error.errorSpecificMessage || error.message;
     return (
-        <li className="error__message">{errorMessage}</li>
+        <li className="error-message">{errorMessage}</li>
     );
   });
 
