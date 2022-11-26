@@ -1,13 +1,12 @@
 import React from 'react';
 
-/* npm install react-polygon*/
-import Polygon from 'react-polygon'
-
-
-
-function Octagon(props){
-    return (
-        <Polygon className='octa' n={8} fill={props.polyColor} size={props.polySize}/> 
-    )}
+/* Element tile background rendered on config menu */
+function Octagon(props) {
+    const image = props.image;
+    const alt = props.alt;
+    return ( 
+            <img className="oct-img" src={require(`./images/${image}.svg`)} alt={alt}/> 
+    )
+};
 
 export default Octagon;

@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOMClient from "react-dom/client";
-import MoleCuul from './MoleCuul'
+import App from './App.js';
 import "./index.css";
 
 // Create the container
@@ -10,5 +10,5 @@ const container = document.getElementById("root");
 const root = ReactDOMClient.createRoot(container);
 
 // Initial render: Render an element to the Root
-root.render(<MoleCuul />);
+root.render(<App />);
 
