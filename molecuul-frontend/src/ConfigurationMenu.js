@@ -1,11 +1,13 @@
 import React from "react";
-// import ElementTile from "./ElementTile";
-// import Octagon from "./Octagon";
-// use props to import list of possible configs from element tile 
+import ConfigMenuTiles from "./ConfigMenuTiles";
 
-function ConfigurationMenu() {
+function ConfigurationMenu(props) {
+    const images = props.info.images;
+    const symbol = props.info.symbol;
     return (
-        <div className="configMenu"></div>
+        <div className="configurationMenu">
+            <ConfigMenuTiles configs={images} symbol={symbol} handleDragStart={props.handleDragStart} handleDragEnd={props.handleDragEnd}/>
+        </div>
     )
 }
 
