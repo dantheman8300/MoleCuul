@@ -1,20 +1,49 @@
 const mongoose = require("mongoose");
+const dotenv = require("dotenv");
 const userModel = require("./user");
 const configModel = require("./elementconfig");
 const imageModel = require("./elementimage");
+const quizModel = require("./quizzes");
+
+dotenv.config({
+  path: ".env",
+});
+
 mongoose.set("debug", true);
 
+// mongoose
+//   .connect(
+//     // "mongodb://localhost:27017/elements",
+//     {
+//       useNewUrlParser: true, //useFindAndModify: false,
+//       useUnifiedTopology: true,
+//     }
+//   )
+//   .catch((error) => console.log(error));
+
 mongoose
-  .connect("mongodb://localhost:27017/elements", {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
+  .connect(
+    "mongodb+srv://" +
+      process.env.MONGO_USER +
+      ":" +
+      process.env.MONGO_PWD +
+      "@" +
+      process.env.MONGO_CLUSTER +
+      "/" +
+      process.env.MONGO_DB +
+      "?retryWrites=true&w=majority",
+    {
+      useNewUrlParser: true, //useFindAndModify: false,
+      useUnifiedTopology: true,
+    }
+  )
   .catch((error) => console.log(error));
 
   async function getElements(elemName, elemSymbol) {
     let result;
     if (elemName === undefined && elemSymbol === undefined) {
       result = await userModel.find();
+      console.log("result " + result);
     } else if (elemName && elemSymbol == undefined) {
       result = await findElementByName(elemName);
     }
@@ -25,6 +54,14 @@ mongoose
     let result;
     if (config_id === undefined) {
       result = await configModel.find();
+    }
+    return result;
+  }
+
+  async function getQuizzes(question) {
+    let result;
+    if (question === undefined) {
+      result = await quizModel.find();
     }
     return result;
   }
@@ -54,6 +91,15 @@ mongoose
 async function findElementById(id) {
   try {
     return await userModel.findById(id);
+  } catch (error) {
+    console.log(error);
+    return undefined;
+  }
+}
+
+async function findQuizById(id) {
+  try {
+    return await quizModel.findById(id);
   } catch (error) {
     console.log(error);
     return undefined;
@@ -94,3 +140,5 @@ exports.addElement = addElement;
 exports.deleteElement = deleteElement;
 exports.getElectronConfig = getElectronConfig;
 exports.getElementImage = getElementImage;
+exports.findQuizById = findQuizById;
+exports.getQuizzes = getQuizzes;

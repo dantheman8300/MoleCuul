@@ -14,8 +14,8 @@ app.get('/', (req, res) => {
 });
 
 app.get('/elements', async (req, res) => {
-    const name = req.query['elemName'];
-    const symbol = req.query['elemSymbol'];
+    const name = req.query['name'];
+    const symbol = req.query['symbol'];
     try {
         const result = await userServices.getElements(name, symbol);
         res.send({elements: result});         
@@ -30,6 +30,17 @@ app.get('/electron_config', async (req, res) => {
     try {
         const result = await userServices.getElectronConfig(config_id);
         res.send({electron_config: result});         
+    } catch (error) {
+        console.log(error);
+        res.status(500).send('An error ocurred in the server.');
+    }
+});
+
+app.get('/quizzes', async (req, res) => {
+    const question = req.query['question'];
+    try {
+        const result = await userServices.getQuizzes(question);
+        res.send({quizzes: result});         
     } catch (error) {
         console.log(error);
         res.status(500).send('An error ocurred in the server.');
@@ -56,6 +67,17 @@ app.get('/elements/:id', async (req, res) => {
         res.send({elements: result});
     }
 });
+
+app.get('/quizzes/:id', async (req, res) => {
+    const id = req.params['id'];
+    const result = await userServices.findQuizById(id);
+    if (result === undefined || result === null) {
+        res.status(404).send('Resource not found.');
+    }
+    else {
+        res.send({quizzes: result});
+    }
+})
 
 app.post('/elements', async (req, res) => {
     const user = req.body;
