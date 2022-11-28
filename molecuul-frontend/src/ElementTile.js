@@ -7,6 +7,7 @@ function ElementTile(props) {
     const image = props.image;
     const symbol = props.symbol;
     const elementId = props.id;
+    const lStructure = props.image.lStructure
 
 
     const getElementInfo = () => {
@@ -18,8 +19,8 @@ function ElementTile(props) {
         // Get element info from database based on id
         const elementInfo = { // Todo: get element info from database
             name: symbol, // Pass through the symbol for rendering
-            lStructure: [0,1,0,1,0,1,0,1],
-            source: image // Need to attach source to elementInfo for rendering on canvas!
+            lStructure: lStructure,
+            source: image.imagefile // Need to attach source to elementInfo for rendering on canvas!
         };
         return elementInfo;
     }

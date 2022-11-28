@@ -11,33 +11,33 @@ dotenv.config({
 
 mongoose.set("debug", true);
 
-// mongoose
-//   .connect(
-//     "mongodb://localhost:27017/elements",
-//     {
-//       useNewUrlParser: true, //useFindAndModify: false,
-//       useUnifiedTopology: true,
-//     }
-//   )
-//   .catch((error) => console.log(error));
-
 mongoose
   .connect(
-    "mongodb+srv://" +
-      process.env.MONGO_USER +
-      ":" +
-      process.env.MONGO_PWD +
-      "@" +
-      process.env.MONGO_CLUSTER +
-      "/" +
-      process.env.MONGO_DB +
-      "?retryWrites=true&w=majority",
+    "mongodb://localhost:27017/elements",
     {
       useNewUrlParser: true, //useFindAndModify: false,
       useUnifiedTopology: true,
     }
   )
   .catch((error) => console.log(error));
+
+// mongoose
+//   .connect(
+//     "mongodb+srv://" +
+//       process.env.MONGO_USER +
+//       ":" +
+//       process.env.MONGO_PWD +
+//       "@" +
+//       process.env.MONGO_CLUSTER +
+//       "/" +
+//       process.env.MONGO_DB +
+//       "?retryWrites=true&w=majority",
+//     {
+//       useNewUrlParser: true, //useFindAndModify: false,
+//       useUnifiedTopology: true,
+//     }
+//   )
+//   .catch((error) => console.log(error));
 
   async function getElements(elemName, elemSymbol) {
     let result;

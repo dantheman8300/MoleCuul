@@ -7,19 +7,21 @@ function Sidebar (props) {
 
 
     const [elements, setElements] = useState([]);
+    const [isOpen, setOpen] = useState([])
 
     useEffect(() => {
         fetchAll().then( result => {
            if (result) 
-            setElements(result);    
+            setElements(result);
+            setOpen(new Array(result.length).fill(false))
          });
      }, [] );
 
      async function fetchAll(){
         try {
            const response = await axios.get("http://localhost:5000/elements");
-           console.log("response");
-           console.log(response.data.elements);
+        //    console.log("response");
+        //    console.log(response.data.elements);
            return response.data.elements;     
         }
         catch (error){
@@ -31,7 +33,30 @@ function Sidebar (props) {
 
     
 
-    seeElementConfigs();
+    // seeElementConfigs();
+     console.log(elements.length)   
+    // let state = ;
+    // console.log(state)
+    
+
+     console.log("after usestate   " ,  isOpen)
+    const handleChange = (ind) => {
+        console.log("isOpen   " + isOpen)
+        // setOpen[ind](current => !current)
+
+        setOpen(
+            isOpen.map((item, index) => {
+                console.log(ind + "   " + index)
+                if (ind === index) {
+                    console.log(ind + "   " + !item)
+                    return !item;
+                }
+                else { 
+                    return false;
+                }
+            })
+        )
+    }
 
 
     const tools = elements.map((item, index) => {
@@ -40,8 +65,6 @@ function Sidebar (props) {
                 {/* {console.log(item)} */}
                 <ElementTool info={item} key={index} index={index} handleDragStart={props.handleDragStart} handleDragEnd={props.handleDragEnd} handleChange={handleChange} isOpen={isOpen[index]} />
             </div>
-            
-            
         )
     });
 
@@ -59,33 +82,11 @@ function Sidebar (props) {
     }
 
 
-    let state = new Array(elements  .length).fill(false);
     
-    const [isOpen, setOpen] = useState(state)
-    const handleChange = (ind) => {
-        
-        console.log(isOpen)
-        // setOpen[ind](current => !current)
-
-        setOpen(
-            isOpen.map((item, index) => {
-                console.log(ind + "   " + index)
-                if (ind === index) {
-                    console.log(ind + "   " + !item)
-                    return !item;
-                }
-                else { 
-                    return false;
-                }
-            })
-        )
-        console.log(isOpen)
-    }
 
 
     return (
         <div className="sidebar">
-            {console.log(tools)}
             {tools}
         </div>
     )

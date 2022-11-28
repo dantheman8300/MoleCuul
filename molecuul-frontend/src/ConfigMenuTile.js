@@ -8,7 +8,7 @@ function ConfigMenuTile(props) {
     const symbol = props.symbol;
     const tile = props.config.map((image, index) =>{
         return (
-            <ElementTile key={index} image={image} symbol={symbol} />
+            <ElementTile key={index} image={image} symbol={symbol} handleDragStart={props.handleDragStart} handleDragEnd={props.handleDragEnd}/>
         )
     })
 
