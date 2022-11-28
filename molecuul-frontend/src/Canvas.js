@@ -233,7 +233,7 @@ function Canvas (props) {
         }
 
         // I think this is technically impossible but just in case
-        if (neighbor !== undefined && element.lStructure[pos] === 0) {
+        if (neighbor !== undefined && (element.lStructure[pos] === 0 || element.lStructure[pos] === 4)) {
           errors.push({
             errorMessage: 'Extra Bond',
             errorSpecificMessage: `Element, ${NAMES[element.elementName]}, has an extra bond in ${POSITIONS[pos]} position`,
