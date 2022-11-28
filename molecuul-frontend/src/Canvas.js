@@ -3,19 +3,6 @@ import "./Canvas.css";
 import ElementRender from "./ElementRender";
 import OpenElementRender from "./OpenElementRender";
 import ErrorBox from "./ErrorBox";
-<<<<<<< HEAD
-
-import iconMinus from './icons/icon-minus.png';
-import iconPlus from './icons/icon-plus.png';
-import iconHome from './icons/icon-home.png';
-import iconTrash from './icons/icon-trash.png';
-import elementOct from './icons/Element-Carbon.png';
-import hollowElement from './icons/Element-Hollow.png';
-import hollowElementHighlight from './icons/Element-Hollow-Highlighted.png';
-import iconCheck from './icons/icon-check.png';
-import iconX from './icons/icon-x.png';
-import iconSearch from './icons/icon-search.png';
-=======
 import appleX from './icons/cross-mark_274c.png';
 import appleCheck from './icons/check-mark-button_2705.png';
 import appleHouse from './icons/house_1f3e0.png';
@@ -23,7 +10,6 @@ import appleTrash from './icons/wastebasket_1f5d1-fe0f.png';
 import appleMinus from './icons/minus_2796.png';
 import applePlus from './icons/plus_2795.png';
 import appleQuestion from './icons/question-mark_2753.png';
->>>>>>> f99b47b4db3ddc30a52d9535aac32191f994b5c6
 
 var idGen = 0;
 const POSITIONS = {
