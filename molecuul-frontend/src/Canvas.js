@@ -1,28 +1,41 @@
 import React, {useState} from 'react';
 import "./Canvas.css";
+import ElementRender from "./ElementRender";
+import OpenElementRender from "./OpenElementRender";
+import ErrorBox from "./ErrorBox";
+
 import iconMinus from './icons/icon-minus.png';
 import iconPlus from './icons/icon-plus.png';
-import iconCursor from './icons/icon-navigation.png';
+import iconHome from './icons/icon-home.png';
 import iconTrash from './icons/icon-trash.png';
-// import elementHex from './icons/Element hex.png';
 import elementOct from './icons/Element-Carbon.png';
 import hollowElement from './icons/Element-Hollow.png';
 import hollowElementHighlight from './icons/Element-Hollow-Highlighted.png';
 import ValidateMolecule from './ValidateMolecule';
 import InstructionTile from './InstructionTile';
+import iconCheck from './icons/icon-check.png';
+import iconX from './icons/icon-x.png';
+import iconSearch from './icons/icon-search.png';
 
 var idGen = 0;
+const POSITIONS = {
+  0: 'top', 
+  1: 'top right',
+  2: 'right',
+  3: 'bottom right',
+  4: 'bottom',
+  5: 'bottom left',
+  6: 'left',
+  7: 'top left'
+}
+const NAMES = {
+  'H': 'Hydrogen',
+  'C': 'Carbon',
+  'N': 'Nitrogen',
+  'O': 'Oxygen'
+}
 
 function IconBox (props) {
-
-  const handleTrash = event => {
-    console.log('trash')
-  }
-
-  const handleCursor = event => {
-    console.log('cursor')
-  }
-
   return (
     <div className="iconBox">
       <div className='iconRow'>
@@ -30,12 +43,15 @@ function IconBox (props) {
         <img src={iconPlus} alt='plus icon' className='icon' onClick={props.zoomInHandler}/>  
       </div>
       <div className='iconRow'>
-        <img src={iconCursor} alt='cursor icon' className='icon' onClick={handleCursor}/>
+        <img src={iconHome} alt='home icon' className='icon' onClick={props.homeHandler}/>
         <img src={iconTrash} alt='trash icon' className='icon' onClick={props.trashHandler}/>  
       </div>
       <div className='iconRow'>
         <ValidateMolecule />
         <InstructionTile />
+      <img src={iconSearch} alt='Search icon' className='icon' onClick={props.structureChecker}/>
+        {props.moleculeStatus == 1 && <img src={iconCheck} alt='Check icon' className='icon'/>}
+        {props.moleculeStatus == -1 && <img src={iconX} alt='X icon' className='icon' onClick={props.displayErrors}/>}
       </div>
     </div>
   )
@@ -44,16 +60,15 @@ function IconBox (props) {
 function Canvas (props) {
 
   const [scale, setScale] = useState(1);
-  const [elements, setElements] = useState([]);
+  const [elements, setElements] = useState({});
   const [mouseX, setMouseX] = useState(500);
   const [mouseY, setMouseY] = useState(200);
+  const [center, setCenter] = useState({x: 500, y: 200});
+  const [dragStart, setDragStart] = useState({x: 0, y: 0});
+  const [moleculeStatus, setMoleculeStatus] = useState(0);
+  const [moleculeErrors, setMoleculeErrors] = useState([]);
+  const [displayErrors, setDisplayErrors] = useState(false);
 
-  // console.log(props.selectedElement)
-
-  // if(props.newElement ) {
-  //   addElement();
-  // }
-  
   const handleZoomOut = event => {
     setScale(scale - .2);
     console.log(`zooming out, ${scale}`)
@@ -66,95 +81,72 @@ function Canvas (props) {
 
   const handleTrash = event => {
     // Remove all elements in the molecule
-    setElements([]);
+    setElements({});
   }
 
-
-  const handleMouseMove = () => {
-    var e = window.event;
-
-    var posX = e.clientX;
-    var posY = e.clientY;
-
-    setMouseX(posX)
-    setMouseY(posY)
-
-    // console.log(`(${mouseX}, ${mouseY})`)
+  const handleHome = event => {
+    setCenter({x: 500, y: 200});
   }
 
-  const handleMouseWheel = (event) => {
-    console.log(`${event.deltaY}`)
+  // const handleDragStart = (event) => {
+  //   var e = window.event;
 
-    if(event.deltaY > 0) {
-      handleZoomIn();
-    } else {
-      handleZoomOut();
+  //   var posX = e.clientX;
+  //   var posY = e.clientY;
+
+  //   setDragStart({x: posX, y: posY});
+  // }
+
+  
+  // const handleDragEnd = (event) => {
+  //   var e = window.event;
+
+  //   var posX = e.clientX - dragStart.x;
+  //   var posY = e.clientY - dragStart.y;
+
+  //   setCenter({x: center.x + posX, y: center.y + posY});
+  //   handleDrop();
+  // }
+
+
+  const handleCanvasMove = (event) => {
+    setCenter({x: center.x - event.deltaX, y: center.y - event.deltaY});
+  }
+
+  const handleDrop = (event) => {
+    if(Object.keys(elements).length === 0 && props.selectedElement !== null) {
+      var e = window.event;
+      setCenter({x: e.clientX - 290, y: e.clientY - 150});
+      console.log(`Center at x:${center.x}, y:${center.y}`)
+      handleAddElement(undefined, undefined);
+      
     }
   }
+
 
   /* Removes a single element at specified id from molecule and updates
   * neighboring elements
   */
   function removeElement(id) {
-    
-    // Print the current molecule's current elements
-    for (var i = 0; i < elements.length; i++) {
-      console.log(elements[i].id);
-    }
 
-    // const newMolecule = elements.map(obj => {
-    // // Find elements that are neighbors with removed node
-    //   if(obj.neighbors.find(item => item === id) !== undefined) {
-    //     // Remove neighbors association with the node
-    //     obj.neighbors = obj.neighbors.filter((neighbor, i) => { return neighbor !== id });
-    //   }
-    //   // Return any elements that are not the removed node
-    //   if(obj !== id) {
-    //     return obj;
-    //   }
-    // });
-
-    // Get elements that are neighbors with removed node
-    const neighbors = elements.filter(obj => {
-      return obj.neighbors.find(item => item === id) !== undefined;
-    });
-
-    // Remove the element from the molecule
-    const newMolecule = elements.filter((element, i) => { return element.id !== id });
+    const newElementDict = elements;
 
     // Replace the id from the neighbors' neighbor list with null
-    for (var i = 0; i < neighbors.length; i++) {
-      for (var j = 0; j < neighbors[i].neighbors.length; j++) {
-        if(neighbors[i].neighbors[j] === id) {
-          neighbors[i].neighbors[j] = undefined;
+    for (let i = 0; i < newElementDict[id].neighbors.length; i++) {
+      let neighborId = newElementDict[id].neighbors[i];
+      if(neighborId !== undefined) {
+        for (let j = 0; j < newElementDict[neighborId].neighbors.length; j++) {
+          if(newElementDict[neighborId].neighbors[j] === parseInt(id)) {
+            newElementDict[neighborId].neighbors[j] = undefined;
+          }
         }
       }
     }
 
-    // Replace the parent of the neighbors with another element if possible, otherwise null
-    for (var i = 0; i < neighbors.length; i++) {
-      if(neighbors[i].parent !== null) {
-        // Find the parent of the neighbor
-        const parent = newMolecule.find(obj => {
-          return obj.id === neighbors[i].parent;
-        });
+    // Remove the element from the molecule
+    delete newElementDict[id];
 
-        // Find the index of the neighbor in the parent's neighbor list
-        const index = parent.neighbors.indexOf(neighbors[i].id);
-
-        // Find the first non-null neighbor of the neighbor
-        const newNeighbor = neighbors[i].neighbors.find(obj => {
-          return obj !== null;
-        });
-      }
-    }
-
-    // Print the new molecule's new elements
-    for (var i = 0; i < newMolecule.length; i++) {
-      console.log(newMolecule[i].id);
-    }
-
-    setElements(newMolecule);
+    setElements(newElementDict);
   }
 
 
@@ -163,93 +155,176 @@ function Canvas (props) {
   * NOTE: Position is indicated by an array index. 0 -> 3 where 
   * 0 is the top position moving clockwise.
   */
-  function addElement(elementName, lStructure, bondedElemId, pos) {
+  function addElement(elementName, source, lStructure, bondedElemId, pos) {
 
     // pos = (pos + 4) % 8; 
 
     // Creates an empty element
     const element = {
       id: idGen, 
-      elementName: elementName, 
+      elementName: elementName,
+      source: source, 
       lStructure: lStructure, 
       neighbors: [...Array(8)], 
       parent: bondedElemId
     };
 
-    console.log(`adding element ${elementName} to ${bondedElemId} at position ${pos}`)
-
     idGen += 1;
 
-    // Adds neighbor to new element's neighbor list if neighbor exists
-    if(element.parent === null) {
-      setElements([element]);
-    }
-    // Finds bondedElemId in current molecule and updates its neighbor list if bondedElemId exists
-    else {
+    // Creates new element dictionary
+    let elemDict = {};
+
+    // Updates element's parent if parent exists
+    if(element.parent !== null) {
       element.neighbors[pos] = bondedElemId;
 
       // Add new element to bond element neighbor list
-      const newMolecule = elements.map(obj => {
-        if(obj.id === bondedElemId) {
-          obj.neighbors[(pos + 4) % 8] = element.id;
+      Object.entries(elements).map(([key, value]) => {
+        if(parseInt(key) === bondedElemId) {
+          value.neighbors[(pos + 4) % 8] = element.id;
         }
-        return obj;
+        elemDict[key] = value;
       });
-
-      setElements([...newMolecule, element]);
     }
 
-    //   const newMolecule = elements.map(obj => {
-    //       if(obj.id === bondedElemId) {
-    //         let newNeighbors = [...obj.neighbors];
-    //         newNeighbors[(pos + 4) % 8] = element.id;
-    //         console.log(`updated neighbor, ${obj.elementName}`)
-    //         return {
-    //           ...obj,
-    //           neighbors: newNeighbors
-    //         };
-    //       }
-    //       return obj;
-    //     });
-    //   // updates molecule
-    //   setElements([...newMolecule, element]);
-    // }
+    // Adds element to new element dictionary
+    elemDict[element.id] = element;
+
+    setElements(elemDict);
   }
 
   const handleAddElement = (bondId, posId) => {
+    // Set molecule status to 0 (not checked)
+    setMoleculeStatus(0);
+    setMoleculeErrors([]); // Clear molecule errors
+    setDisplayErrors(false); // Hide error display
+
     console.log('adding element')
     // display add element params
     console.log(`name: ${props.selectedElement.name}, name: ${props.selectedElement.lStructure}, bondId: ${bondId}, posId: ${posId}`)
-    addElement("hydrogen-3", props.selectedElement.lStructure, bondId, (posId + 4) % 8);
+    addElement(props.selectedElement.name, props.selectedElement.source, props.selectedElement.lStructure, bondId, (posId + 4) % 8);
   }
 
   const handleRemoveElement = (id) => {
+    // Set molecule status to 0 (not checked)
+    setMoleculeStatus(0);
+    setMoleculeErrors([]); // Clear molecule errors
+    setDisplayErrors(false); // Hide error display
+
     console.log(`removing element ${id}`)
     removeElement(id);
   }
 
+  const checkStructure = () => {
+    console.log('checking structure')
+    console.log(elements)
+
+    let errors = [];
+
+    // Iterate through each element in the molecule
+    Object.entries(elements).map(([key, element]) => {
+
+      // Iterate through each lStructure in the element and 
+      // check if the element has the correct number of neighbors
+      for (let pos = 0; pos < element.lStructure.length; pos++) {
+        
+        const neighbor = element.neighbors[pos];
+
+        if (neighbor === undefined && element.lStructure[pos] !== 0) {
+          errors.push({
+            errorMessage: 'Missing Bond',
+            errorSpecificMessage: `Element, ${NAMES[element.elementName]}, is missing a bond in ${POSITIONS[pos]} position`,
+            element: element.elementName,
+            id: element.id,
+            position: pos
+          });
+        }
+
+        // I think this is technically impossible but just in case
+        if (neighbor !== undefined && element.lStructure[pos] === 0) {
+          errors.push({
+            errorMessage: 'Extra Bond',
+            errorSpecificMessage: `Element, ${NAMES[element.elementName]}, has an extra bond in ${POSITIONS[pos]} position`,
+            element: element.elementName,
+            id: element.id,
+            position: pos
+          });
+        }
+
+        // Check if the lStructure of the neighbor matches the lStructure of the element
+        // Note: Check to make sure the error isn't already in the list from the neighbor's side or should it be?
+        if (neighbor !== undefined && element.lStructure[pos] !== elements[neighbor].lStructure[(pos + 4) % 8]) {
+          errors.push({
+            errorMessage: 'Invalid Bond',
+            errorSpecificMessage: `Element, ${NAMES[element.elementName]}, has an invalid bond in ${POSITIONS[pos]} position`,
+            element: element.elementName,
+            id: element.id,
+            position: pos
+          });
+        }
+      }
+    });
+
+    if (errors.length === 0) {
+      setMoleculeStatus(1);
+    } else {
+      setMoleculeStatus(-1);
+      setMoleculeErrors(errors);
+    }
+
+    console.log(errors);
+
+  }
+
+  const displayMoleculeErrors = () => {
+    if (displayErrors) {
+      setDisplayErrors(false);
+    } else {
+      setDisplayErrors(true);
+    }
+
+    console.log(displayErrors);
+  }
+
+
   return (
     <div 
       className="canvas" 
-      onMouseMove={handleMouseMove}
-      onWheel={handleMouseWheel}
-      onDrop={event => {
-        console.log(`dropped ${props.selectedElement}`)
+      draggable
+      onWheel={handleCanvasMove}
+      onDragEnd={handleDrop}
+      onDrop={
+        (e) => {
+          console.log(`dropped the element: ${props.selectedElement}`);
+          handleDrop();
+        }
+      }
+      onDragOver={
+        (e) => {
+          e.stopPropagation();
+          e.preventDefault();
         }
       }
     >
       <IconBox 
         zoomInHandler={handleZoomIn} zoomOutHandler={handleZoomOut}
-        trashHandler={handleTrash}
+        trashHandler={handleTrash} homeHandler={handleHome}
+        structureChecker={checkStructure} moleculeStatus={moleculeStatus} 
+        moleculeErrors={moleculeErrors} displayErrors={displayMoleculeErrors}
       />
+      {displayErrors && <ErrorBox errors={moleculeErrors} />}
       <div >
         <Molecule 
           scale={scale} 
           elements={elements} 
           mouseX={mouseX} 
-          mouseY={mouseY} 
+          mouseY={mouseY}
+          center={center}
+          hover={props.hover}
           handleAddElement={handleAddElement}
-          handleRemoveElement={handleRemoveElement}   
+          handleRemoveElement={handleRemoveElement}
+          handleDragStart={props.handleDragStart} 
+          handleDragEnd={props.handleDragEnd}
         />
       </div>
     </div>
@@ -257,34 +332,8 @@ function Canvas (props) {
 }
 
 function Molecule(props) {
-
-  const [dragX, setDragX] = useState(500);
-  const [dragY, setDragY] = useState(500);
-  const coord = []
-
-  // const handleDrag = (event) => {
-  //   var e = window.event;
-
-  //   var posX = e.clientX;
-  //   var posY = e.clientY;
-
-  //   setDragX(posX);
-  //   setDragY(posY);
-
-  //   console.log(`Drag: (${posX}, ${posY})`)
-  // }
-
-  const handleDragEnd = (event) => {
-    var e = window.event;
-
-    var posX = e.clientX;
-    var posY = e.clientY;
-
-    setDragX(posX);
-    setDragY(posY);
-
-    console.log(`Drag: (${posX}, ${posY})`)
-  }
+  const [adjustElement, setAdjustElement] = useState(null);
+  var coord = {};
 
   function findRelativeCoord(pos, parent) {
     var x = parent.x;
@@ -328,138 +377,70 @@ function Molecule(props) {
   }
 
   function findRelativePos(parent, id) {
-    // Find out if element is root of tree
-    let point = {x: dragX - (props.scale * 50 / 2), y:dragY - (props.scale * 50 / 2)};
-    
+    let point = props.center;
+    // Find out if element is child of root
     if(parent !== undefined) {
-      let pos = -1;
+      let pos;
       // Finds the relative position of the element in regards to the parent
       for(let i = 0; i < parent.neighbors.length; i++) {
         if(parent.neighbors[i] === id) {
           pos = i;
         }
       }
-      if(pos === -1) {
-        pos = id
-      }
+      
       point = findRelativeCoord(pos, coord[parent.id]);
     }
-    return point
-  }  
-
-  // Creates draws the current molecule according to the data in canvas
-  const elementDisplay = props.elements.map(({id, elementName, parent, neighbors }) => {
-    coord.push(findRelativePos(props.elements[parent], id));
-    // console.log(`Element ${elementName} neighbor's list: ${neighbors}`);
-    var source = elementOct;
-    return <img
-        key={id} 
-        src={source} 
-        alt={elementName}
-        draggable
-        onMouseOver={
-          (e) => {
-            e.currentTarget.height = e.currentTarget.width = props.scale * 55;
-            // print source id
-            console.log(`Element ${elementName} id: ${id}`);
-            console.log(`Neighbors: ${neighbors}`);
-            console.log(`Bonds: ${props.elements[id].lStructure}`);
-            console.log(`Parent: ${parent}`);
-          }
-        } 
-        onMouseOut={e => (e.currentTarget.height = e.currentTarget.width = props.scale * 50)}
-        onDragStart={
-          () => {
-            props.handleRemoveElement(id);
-          }
-        }
-        // onDragEnd={handleDragEnd}
-        width={props.scale * 50} 
-        height={props.scale * 50} 
-        style={{position: 'absolute', top: coord[id].y, left: coord[id].x}} />
-  });
-
-  const handleDragOver = (event) => {
-    console.log("Drag Over");
+    return point;
+  }
+  
+  const handleDragStart = (elementInfo) => {
+    setAdjustElement(elementInfo.id);
+    props.handleDragStart(elementInfo);
   }
 
-  // Adds hollow elements showing where elements can be placed
-  for(let j = 0; j < props.elements.length; j++) {
-    for(let k = 0; k < props.elements[j].lStructure.length; k++) {
-      console.log(`Element ${j} has bond ${k} with ${props.elements[j].neighbors[k]} neighbors and ${props.elements[j].lStructure[k]} bonds`);
-      if((props.elements[j].lStructure[k] > 0) && (props.elements[j].neighbors[k] === undefined)) {
-        console.log(`----Element ${j} has bond ${k} with ${props.elements[j].neighbors[k]} neighbors and ${props.elements[j].lStructure[k]} bonds`);
-        let point = findRelativePos(props.elements[j], k)
-        console.log(`point: ${point.x}, ${point.y}`)
-        elementDisplay.push(<img
-          key={Math.random()} 
-          src={hollowElement}
-          // onMouseOver={e => (e.currentTarget.src = hollowElementHighlight)} 
-          onDragOver={
-            (e) => {
-              e.stopPropagation();
-              e.preventDefault();
-              console.log(`Drag Over, parent: ${props.elements[j].id}, posId: ${k}`);
-              (e.currentTarget.src = hollowElementHighlight)
-            }
-          } 
-          onDragLeave={
-            (e) => {
-              e.stopPropagation();
-              e.preventDefault();
-              console.log("Drag Leave");
-              (e.currentTarget.src = hollowElement)
-            }
-          }
-          onDrop={
-            (e) => {
-              console.log("Drop 6");
-              (e.currentTarget.src = hollowElement)
-              console.log(`parent: ${props.elements[j].id}`);
-              console.log(`bond position: ${k}`);
-              props.handleAddElement(props.elements[j].id, k);
-            }
-          }
-          alt={'open node'}
-          width={props.scale * 50} 
-          height={props.scale * 50} 
-          style={{position: 'absolute', top: point.y, left: point.x}}
-          />)
+  const handleDragEnd = (id) => {
+    setAdjustElement(null);
+    props.handleDragEnd();
+    props.handleRemoveElement(id);
+  }
+
+  // Draws the current molecule according to the data in canvas
+  const elementDisplay = Object.entries(props.elements).map(([key, value]) => {
+    if(adjustElement === parseInt(key)) {
+      coord[key] = {x: -1000, y: -1000};
+    }
+    else {
+      coord[key] = (findRelativePos(props.elements[value.parent], parseInt(key)));
+    }
+    return <ElementRender 
+      element={value} 
+      point={coord[key]}
+      scale={props.scale}
+      handleDragStart={handleDragStart} 
+      handleDragEnd={handleDragEnd}/>
+  });
+
+
+  if(props.hover) {
+    // Adds hollow elements showing where elements can be placed
+    for(let j = 0; j < Object.entries(props.elements).length; j++) {
+      let keys = Object.keys(props.elements);
+      for(let k = 0; k < props.elements[keys[j]].lStructure.length; k++) {
+        console.log(`Element neighbor ${props.elements[keys[j]].neighbors[k]}`);
+        if((props.elements[keys[j]].lStructure[k] > 0) && 
+          ((props.elements[keys[j]].neighbors[k] === undefined) ||
+          (props.elements[keys[j]].neighbors[k] === adjustElement)) && 
+          (parseInt(keys[j]) !== adjustElement)) {
+          elementDisplay.push(<OpenElementRender 
+            element={props.elements[keys[j]]} 
+            point={findRelativeCoord(k, coord[keys[j]])}
+            scale={props.scale}
+            pos={k}
+            handleAddElement={props.handleAddElement} />);
+        }
       }
     }
   }
-
-  // Adds hollow elements when the molecule is empty
-  if (props.elements.length === 0) {
-    elementDisplay.push(<img
-      key={Math.random()}
-      src={
-        hollowElementHighlight
-      }
-      onDragOver={
-        (e) => {
-          e.stopPropagation();
-          e.preventDefault();
-          console.log("Drag Over");
-          (e.currentTarget.src = hollowElementHighlight)
-        }
-      }
-      onDrop={
-        (e) => {
-
-          console.log("Drop 7");
-          (e.currentTarget.src = hollowElement)
-          props.handleAddElement(undefined, undefined);
-        }
-      }
-      alt={'open node'}
-      width={props.scale * 50}
-      height={props.scale * 50}
-      style={{ position: 'absolute', top: dragY - (props.scale * 50 / 2), left: dragX - (props.scale * 50 / 2) }}
-    />)
-  }
-
-    
   return (
     elementDisplay
   )

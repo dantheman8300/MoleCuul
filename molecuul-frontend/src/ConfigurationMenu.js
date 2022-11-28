@@ -11,8 +11,8 @@ function ConfigurationMenu(props) {
     })();
     return (
         <div>
-            {singleConfig && <div className="configurationMenu-single"><ConfigMenuTile config={images} symbol={symbol} handleDragStart={props.handleDragStart}/> </ div>}
-            {!singleConfig && <div className="configurationMenu"><ConfigMenuTiles configs={images} symbol={symbol} handleDragStart={props.handleDragStart}/> </ div>}
+            {singleConfig && <div className="configurationMenu-single"><ConfigMenuTile config={images} symbol={symbol} handleDragStart={props.handleDragStart} handleDragEnd={props.handleDragEnd}/> </ div>}
+            {!singleConfig && <div className="configurationMenu"><ConfigMenuTiles configs={images} symbol={symbol} handleDragStart={props.handleDragStart} handleDragEnd={props.handleDragEnd}/> </ div>}
         </div>
     )
 }

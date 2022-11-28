@@ -83,7 +83,7 @@ function Sidebar (props) {
         return (
             <div>
                 {/* {console.log(item)} */}
-                <ElementTool info={item} key={index} index={index} handleDragStart={props.handleDragStart} handleChange={handleChange} isOpen={isOpen[index]} />
+                <ElementTool info={item} key={index} index={index} handleDragStart={props.handleDragStart} handleDragEnd={props.handleDragEnd} handleChange={handleChange} isOpen={isOpen[index]} />
             </div>
             
             
