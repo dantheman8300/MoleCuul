@@ -222,7 +222,7 @@ function Canvas (props) {
         
         const neighbor = element.neighbors[pos];
 
-        if (neighbor === undefined && (element.lStructure[pos] !== 0 || element.lStructure[pos] !== 4)) {
+        if (neighbor === undefined && element.lStructure[pos] !== 0) {
           errors.push({
             errorMessage: 'Missing Bond',
             errorSpecificMessage: `Element, ${NAMES[element.elementName]}, is missing a bond in ${POSITIONS[pos]} position`,
