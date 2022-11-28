@@ -11,6 +11,14 @@ import iconTrash from './icons/icon-trash.png';
 import iconCheck from './icons/icon-check.png';
 import iconX from './icons/icon-x.png';
 import iconSearch from './icons/icon-search.png';
+import appleX from './icons/cross-mark_274c.png';
+import appleCheck from './icons/check-mark-button_2705.png';
+import appleSearch from './icons/magnifying-glass-tilted-left_1f50d.png';
+import appleHouse from './icons/house_1f3e0.png';
+import appleTrash from './icons/wastebasket_1f5d1-fe0f.png';
+import appleMinus from './icons/minus_2796.png';
+import applePlus from './icons/plus_2795.png';
+import appleQuestion from './icons/question-mark_2753.png';
 
 var idGen = 0;
 const POSITIONS = {
@@ -34,17 +42,13 @@ function IconBox (props) {
   return (
     <div className="iconBox">
       <div className='iconRow'>
-        <img src={iconMinus} alt='minus icon' className='icon' onClick={props.zoomOutHandler}/>
-        <img src={iconPlus} alt='plus icon' className='icon' onClick={props.zoomInHandler}/>  
-      </div>
-      <div className='iconRow'>
-        <img src={iconHome} alt='home icon' className='icon' onClick={props.homeHandler}/>
-        <img src={iconTrash} alt='trash icon' className='icon' onClick={props.trashHandler}/>  
-      </div>
-      <div className='iconRow'>
-      <img src={iconSearch} alt='Search icon' className='icon' onClick={props.structureChecker}/>
-        {props.moleculeStatus == 1 && <img src={iconCheck} alt='Check icon' className='icon'/>}
-        {props.moleculeStatus == -1 && <img src={iconX} alt='X icon' className='icon' onClick={props.displayErrors}/>}
+        <img src={appleMinus} alt='minus icon' className='icon' onClick={props.zoomOutHandler}/>
+        <img src={applePlus} alt='plus icon' className='icon' onClick={props.zoomInHandler}/>  
+        <img src={appleHouse} alt='home icon' className='icon' onClick={props.homeHandler}/>
+        <img src={appleTrash} alt='trash icon' className='icon' onClick={props.trashHandler}/>  
+        <img src={appleQuestion} alt='Search icon' className='icon' onClick={props.structureChecker}/>
+        {props.moleculeStatus == 1 && <img src={appleCheck} alt='Check icon' className='icon'/>}
+        {props.moleculeStatus == -1 && <img src={appleX} alt='X icon' className='icon' onClick={props.displayErrors}/>}
       </div>
     </div>
   )
