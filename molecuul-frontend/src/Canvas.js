@@ -68,6 +68,7 @@ function Canvas (props) {
   const [moleculeStatus, setMoleculeStatus] = useState(0);
   const [moleculeErrors, setMoleculeErrors] = useState([]);
   const [displayErrors, setDisplayErrors] = useState(false);
+  const [hoveredElement, setHoveredElement] = useState(undefined);
 
   const handleZoomOut = event => {
     setScale(scale - .2);
@@ -286,6 +287,14 @@ function Canvas (props) {
     console.log(displayErrors);
   }
 
+  const handleHover = (id) => {
+    setHoveredElement(id);
+  }
+
+  const handleOutHover = () => {
+    setHoveredElement(undefined);
+  }
+
 
   return (
     <div 
@@ -312,7 +321,7 @@ function Canvas (props) {
         structureChecker={checkStructure} moleculeStatus={moleculeStatus} 
         moleculeErrors={moleculeErrors} displayErrors={displayMoleculeErrors}
       />
-      {displayErrors && <ErrorBox errors={moleculeErrors} />}
+      {displayErrors && <ErrorBox errors={moleculeErrors} elementId={hoveredElement} />}
       <div >
         <Molecule 
           scale={scale} 
@@ -325,6 +334,8 @@ function Canvas (props) {
           handleRemoveElement={handleRemoveElement}
           handleDragStart={props.handleDragStart} 
           handleDragEnd={props.handleDragEnd}
+          handleHover={handleHover}
+          handleOutHover={handleOutHover}
         />
       </div>
     </div>
@@ -417,7 +428,9 @@ function Molecule(props) {
       point={coord[key]}
       scale={props.scale}
       handleDragStart={handleDragStart} 
-      handleDragEnd={handleDragEnd}/>
+      handleDragEnd={handleDragEnd}
+      handleMouseOver={props.handleHover}
+      handleMouseOut={props.handleOutHover}/>
   });
 
 

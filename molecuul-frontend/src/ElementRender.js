@@ -13,21 +13,31 @@ function ElementRender(props) {
         <div 
         draggable
         onDragStart={
-        () => {
-            const elementInfo = {
-                id: props.element.id,
-                name: symbol,
-                lStructure: props.element.lStructure,
-                source: image
-            };
-            props.handleDragStart(elementInfo);
-        }
+            () => {
+                const elementInfo = {
+                    id: props.element.id,
+                    name: symbol,
+                    lStructure: props.element.lStructure,
+                    source: image
+                };
+                props.handleDragStart(elementInfo);
+            }
         }
         onDragEnd={
-        () => {
-            props.handleDragEnd(elementId);
-            
+            () => {
+                props.handleDragEnd(elementId);
+                
+            }
         }
+        onMouseOver={
+            () => {
+                props.handleMouseOver(elementId);
+            }
+        }
+        onMouseOut={
+            () => {
+                props.handleMouseOut(elementId);
+            }
         }
         style={{position: 'absolute', top: posY, left: posX, zIndex: 4}}>
             <img className='element-render' src={require(`./images/${image}.svg`)} alt={'render of' + image} style={{height:scale * 50, width:scale * 50}}/>
