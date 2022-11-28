@@ -8,10 +8,13 @@
   font-family: Roboto;
   color: #a94442;
   padding: 15px;
-  margin: 20px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  margin-right: 150px;
+  margin-left: 20px;
   border: 2px solid black;
   border-radius: 20px;
-  z-index: 100;
+  z-index: 9;
   position: relative;
 }
 
