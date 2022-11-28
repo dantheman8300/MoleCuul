@@ -2,6 +2,9 @@ import React from "react";
 import ElementTile from "./ElementTile";
 
 function ConfigMenuTile(props) {
+
+    console.log("config menu tile");
+    console.log(props.config);
     const symbol = props.symbol;
     const tile = props.config.map((image, index) =>{
         return (

@@ -44,7 +44,12 @@ function Sidebar () {
 
     function seeElementConfigs() {
         for (let i = 0; i < elements.length; i++) {
-            console.log(elements[i]);
+            for (const property in elements[i].configs[0]) {
+                console.log(property);
+            }
+            // for (let j = 0; j < elements[i].cfgs.length; j++) {
+            //     console.log(elements[i].cfgs[j].imagefile);
+            // }
         }
     }
 
