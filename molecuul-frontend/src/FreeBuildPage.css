@@ -1,7 +1,7 @@
 .page {
   display: grid;
   grid-template-columns: 150px auto;
-  grid-template-rows: 80px auto;
+  grid-template-rows: 65px auto;
 
   overflow: hidden;
 
@@ -19,9 +19,10 @@
   grid-column: span 3;
   /* background: #CAF0F6; */
 
-  border-bottom: 2.5px solid black;
+  border-bottom: 2.5px solid #495879;
 
   overflow: hidden;
+  
 }
 
 .sidebar-section {
@@ -30,7 +31,7 @@
 /*   
   border-bottom: 3px solid black;
   border-left: 3px solid black; */
-  border-right: 2px solid black; 
+  border-right: 2px solid #495879; 
   
   align-items: center ;
 

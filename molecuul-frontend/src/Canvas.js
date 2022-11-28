@@ -11,8 +11,6 @@ import iconTrash from './icons/icon-trash.png';
 import elementOct from './icons/Element-Carbon.png';
 import hollowElement from './icons/Element-Hollow.png';
 import hollowElementHighlight from './icons/Element-Hollow-Highlighted.png';
-import ValidateMolecule from './ValidateMolecule';
-import InstructionTile from './InstructionTile';
 import iconCheck from './icons/icon-check.png';
 import iconX from './icons/icon-x.png';
 import iconSearch from './icons/icon-search.png';
@@ -47,8 +45,6 @@ function IconBox (props) {
         <img src={iconTrash} alt='trash icon' className='icon' onClick={props.trashHandler}/>  
       </div>
       <div className='iconRow'>
-        <ValidateMolecule />
-        <InstructionTile />
       <img src={iconSearch} alt='Search icon' className='icon' onClick={props.structureChecker}/>
         {props.moleculeStatus == 1 && <img src={iconCheck} alt='Check icon' className='icon'/>}
         {props.moleculeStatus == -1 && <img src={iconX} alt='X icon' className='icon' onClick={props.displayErrors}/>}
