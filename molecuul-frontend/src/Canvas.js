@@ -73,6 +73,7 @@ function Canvas (props) {
     setElements({});
     setMoleculeStatus(0);
     setMoleculeErrors([]);
+    setDisplayErrors(false);
   }
 
   const handleHome = event => {
