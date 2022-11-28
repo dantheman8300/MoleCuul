@@ -4,18 +4,21 @@ import ConfigurationMenu from "./ConfigurationMenu";
 /* square element on sidebar */
 function ElementTool (props) {
     const octInfo = props.info;
-    const [isOpen, setOpen] = useState(false);
+    const ind = props.index;
+    let isOpen = props.isOpen;
+    //const [isOpen, setOpen] = useState(false);
     // const index = props.index;
     const image = props.info.tile;
 
     const handleClick = event => {
-        setOpen(current => !current);
+        console.log(ind)
+        isOpen = props.handleChange(ind);
     }
 
-    useEffect(() => {
-        // props.handleChange(props.ind);
-        console.log(isOpen)
-    });
+    // useEffect(() => {
+    //     // props.handleChange(props.ind);
+    //     console.log(isOpen)
+    // });
 
     return (
         <div className='ElementTool'>

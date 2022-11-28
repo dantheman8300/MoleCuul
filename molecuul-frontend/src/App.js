@@ -31,12 +31,12 @@ function App() {
             <FreeBuildPage 
             sidebar = {
                 <Sidebar 
-                    handleDragStart={handleElementDragStart}
+                    handleDragStart={handleElementDragStart} 
                 />
             }
-            canvas = {<Canvas selectedElement={selectedElement}/>}
+            canvas = {<Canvas selectedElement={selectedElement} />}
             
-            header = {<Header/>}
+            header = {<Header />}
             />
 
         </div>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect, useState}  from "react";
 import ElementTool from "./ElementTool";
 import "./Sidebar.css";
 
@@ -35,6 +35,33 @@ function Sidebar (props) {
         'tile': "square-hydrogen",
     }];
 
+    let state = new Array(elemInfo.length).fill(false);
+
+    const [isOpen, setOpen] = useState(state)
+
+
+    const handleChange = (ind) => {
+        
+        console.log(isOpen)
+        // setOpen[ind](current => !current)
+
+        setOpen(
+            isOpen.map((item, index) => {
+                console.log(ind + "   " + index)
+                if (ind === index) {
+                    console.log(ind + "   " + !item)
+                    return !item;
+                }
+                else { 
+                    return false;
+                }
+            })
+        )
+        console.log(isOpen)
+    }
+
+    
+
     // const [isOpen, setOpen] = useState([])
 
     // const handleChange = ((index) => {
@@ -55,8 +82,8 @@ function Sidebar (props) {
     const tools = elemInfo.map((item, index) => {
         return (
             <div>
-                {console.log(item)}
-                <ElementTool info={item} key={index} index={index} handleDragStart={props.handleDragStart}/>
+                {/* {console.log(item)} */}
+                <ElementTool info={item} key={index} index={index} handleDragStart={props.handleDragStart} handleChange={handleChange} isOpen={isOpen[index]} />
             </div>
             
             
