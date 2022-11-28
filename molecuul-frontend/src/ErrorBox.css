@@ -12,6 +12,7 @@
   border: 2px solid black;
   border-radius: 20px;
   z-index: 100;
+  position: relative;
 }
 
 .error-message {
