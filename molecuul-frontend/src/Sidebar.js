@@ -79,7 +79,35 @@ function Sidebar (props) {
 
     // const handleClick = 
 
-    const tools = elemInfo.map((item, index) => {
+    useEffect(() => {
+
+        fetchAll().then( result => {
+           if (result) 
+            setElements(result);    
+         });
+     }, [] );
+
+     async function fetchAll(){
+        try {
+           const response = await axios.get("http://localhost:5000/elements");
+           console.log("response");
+           console.log(response.data.elements);
+           return response.data.elements;     
+        }
+        catch (error){
+           //We're not handling errors. Just logging into the console.
+           console.log("error"); 
+           return false;         
+        }
+     }
+
+    
+
+    seeElementConfigs();
+
+
+    const tools = elements.map((item, index) => {
+ 
         return (
             <div>
                 {/* {console.log(item)} */}
@@ -91,6 +119,17 @@ function Sidebar (props) {
     });
 
    
+
+    function seeElementConfigs() {
+        for (let i = 0; i < elements.length; i++) {
+            for (const property in elements[i].configs[0]) {
+                console.log(property);
+            }
+            // for (let j = 0; j < elements[i].cfgs.length; j++) {
+            //     console.log(elements[i].cfgs[j].imagefile);
+            // }
+        }
+    }
 
     return (
         <div className="sidebar">

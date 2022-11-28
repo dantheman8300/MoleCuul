@@ -1,14 +1,21 @@
-import React from "react";
+import React, {useEffect} from "react";
 import ConfigMenuTile from "./ConfigMenuTile";
 import ConfigMenuTiles from "./ConfigMenuTiles";
+import axios from 'axios';
 
 function ConfigurationMenu(props) {
-    const images = props.info.configs;
+
+    console.log("props.info.cfgs");
+        console.log(props.info.cfgs);
+    
+    const images = props.info.cfgs;
     const symbol = props.info.symbol;
+
     const singleConfig = (() => {
         if(images.length === 1) return true;
         else return false;
     })();
+    
     return (
         <div>
             {singleConfig && <div className="configurationMenu-single"><ConfigMenuTile config={images} symbol={symbol} handleDragStart={props.handleDragStart} handleDragEnd={props.handleDragEnd}/> </ div>}
