@@ -3,17 +3,8 @@ import "./Canvas.css";
 import ElementRender from "./ElementRender";
 import OpenElementRender from "./OpenElementRender";
 import ErrorBox from "./ErrorBox";
-
-import iconMinus from './icons/icon-minus.png';
-import iconPlus from './icons/icon-plus.png';
-import iconHome from './icons/icon-home.png';
-import iconTrash from './icons/icon-trash.png';
-import iconCheck from './icons/icon-check.png';
-import iconX from './icons/icon-x.png';
-import iconSearch from './icons/icon-search.png';
 import appleX from './icons/cross-mark_274c.png';
 import appleCheck from './icons/check-mark-button_2705.png';
-import appleSearch from './icons/magnifying-glass-tilted-left_1f50d.png';
 import appleHouse from './icons/house_1f3e0.png';
 import appleTrash from './icons/wastebasket_1f5d1-fe0f.png';
 import appleMinus from './icons/minus_2796.png';
@@ -80,6 +71,8 @@ function Canvas (props) {
   const handleTrash = event => {
     // Remove all elements in the molecule
     setElements({});
+    setMoleculeStatus(0);
+    setMoleculeErrors([]);
   }
 
   const handleHome = event => {
