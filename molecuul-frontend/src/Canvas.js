@@ -338,20 +338,18 @@ function Molecule(props) {
 
   // Draws the current molecule according to the data in canvas
   const elementDisplay = Object.entries(props.elements).map(([key, value]) => {
-    if(adjustElement === parseInt(key)) {
-      coord[key] = {x: -1000, y: -1000};
-    }
-    else {
-      coord[key] = (findRelativePos(props.elements[value.parent], parseInt(key)));
-    }
+    coord[key] = (findRelativePos(props.elements[value.parent], parseInt(key)));
     idGen = parseInt(key) + 1;
+    
     return <ElementRender
-      key={key} 
-      element={value} 
-      point={coord[key]}
-      scale={props.scale}
-      handleDragStart={handleDragStart} 
-      handleDragEnd={handleDragEnd}/>
+    key={key} 
+    element={value} 
+    point={coord[key]}
+    scale={props.scale}
+    handleDragStart={handleDragStart} 
+    handleDragEnd={handleDragEnd}/>
+  
+    
   });
 
 

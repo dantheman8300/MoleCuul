@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import hollowElement from './icons/Element-Hollow.png';
 import hollowElementHighlight from './images/oct-border.svg';
-import ElementRender from "./ElementRender";
+import ElementImage from './ElementImage';
 
 /* Open Element tile rendered in canvas */
 function OpenElementRender(props) {
@@ -14,12 +14,16 @@ function OpenElementRender(props) {
     const posY = props.point.y;
     const bondPos = props.pos;
 
-    const handleDragOver = (e) => {
-        e.currentTarget.src = require(`./images/${image}.svg`);
+    // const handleDragOver = (e) => {
+    //     e.currentTarget.src = require(`./images/${image}.svg`);
+    // }
+
+    const handleDragEnter = (e) => {
+        setHover(true);
     }
 
     const handleDragLeave = (e) => {
-        e.currentTarget.src = hollowElementHighlight;
+        setHover(false);
     }
 
     const handleDrop = (e) => {
@@ -30,17 +34,23 @@ function OpenElementRender(props) {
     }
 
     return (
-        <img
+        <div
+            onDragLeave={handleDragLeave}
+            onDragOver={handleDragEnter}
+            onDrop={handleDrop}
+            width={scale * 50} 
+            height={scale * 50} 
+            style={{position: 'absolute', top: posY, left: posX, zIndex: 2}}>
+        {hover && <ElementImage image={image} scale={scale} symbol={symbol} />}
+        {!hover && <img
             key={'Open node of ' + props.element.id} 
             src={hollowElementHighlight}
             alt={'open node'}
             width={scale * 50} 
-            height={scale * 50} 
-            style={{position: 'absolute', top: posY, left: posX, zIndex: 2}}
-            onDragOver={handleDragOver}
-            onDragLeave={handleDragLeave}
-            onDrop={handleDrop}
-            />);
+            height={scale * 50}
+            />}
+        </div>
+            );
 };
 
 export default OpenElementRender;

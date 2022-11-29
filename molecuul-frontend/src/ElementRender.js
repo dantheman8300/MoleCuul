@@ -1,7 +1,10 @@
-import React from 'react';
+import React, {useState} from 'react';
+import ElementImage from './ElementImage';
+import hollowElementHighlight from './images/oct-border.svg';
 
 /* Element tile rendered on canvas */
 function ElementRender(props) {
+    const [showElement, setShowElement] = useState(true);
     const image = props.element.source;
     const symbol = props.element.elementName;
     const elementId = props.element.id;
@@ -14,6 +17,7 @@ function ElementRender(props) {
         draggable
         onDragStart={
         () => {
+            setShowElement(false);
             const elementInfo = {
                 id: props.element.id,
                 name: symbol,
@@ -25,8 +29,8 @@ function ElementRender(props) {
         }
         onDragEnd={
         () => {
+            setShowElement(true);
             props.handleDragEnd(elementId);
-            
         }
         }
         onMouseEnter={
@@ -40,8 +44,7 @@ function ElementRender(props) {
         }
         }
         style={{position: 'absolute', top: posY, left: posX, zIndex: 4}}>
-            <img className='element-render' src={require(`./images/${image}.svg`)} alt={'render of' + image} style={{height:scale * 50, width:scale * 50}}/>
-            <div id='elemSym' style={{height:1, width:1, fontSize:scale * 20}}>{symbol}</div>
+            <ElementImage image={image} scale={scale} symbol={symbol}/>
         </div>
     )
 };
