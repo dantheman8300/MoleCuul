@@ -253,6 +253,7 @@ function Canvas (props) {
           mouseY={mouseY}
           center={center}
           hover={props.hover}
+          selectedElement={props.selectedElement}
           handleAddElement={handleAddElement}
           handleRemoveElement={handleRemoveElement}
           handleDragStart={props.handleDragStart} 
@@ -366,6 +367,7 @@ function Molecule(props) {
           elementDisplay.push(<OpenElementRender 
             key={`Hollow of ${keys[j]} at position ${k}`}
             element={props.elements[keys[j]]} 
+            selectedElement={props.selectedElement}
             point={findRelativeCoord(k, coord[keys[j]])}
             scale={props.scale}
             pos={k}

@@ -6,8 +6,8 @@ import ElementImage from './ElementImage';
 /* Open Element tile rendered in canvas */
 function OpenElementRender(props) {
     const [hover, setHover] = useState(false);
-    const image = props.element.source;
-    const symbol = props.element.elementName;
+    const image = props.selectedElement.source;
+    const symbol = props.selectedElement.name;
     const elementId = props.element.id;
     const scale = props.scale;
     const posX = props.point.x;
