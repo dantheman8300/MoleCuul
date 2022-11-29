@@ -22,7 +22,7 @@ function ElementTile(props) {
         // Get element info from database based on id
         const elementInfo = { 
             name: symbol, // Pass through the symbol for rendering
-            lStructure: lStructure.slice(), // Pass through a copy of the lStructure
+            lStructure: rotateLStructure(rotation).slice(), // Pass through a copy of the lStructure
             source: image.imagefile, // Need to attach source to elementInfo for rendering on canvas!
             rotation: rotation % 8
         };
@@ -32,27 +32,24 @@ function ElementTile(props) {
     const handleRotation = (rotator) => {
         console.log(`Starting rotation: ${rotation}`);
         console.log(`Rotation changed with rotator ${rotator}`);
+        console.log(`lStructure before rotation: ${lStructure}`);
         if (rotator === 0) {
             lStructure = props.image.lStructure;
             setRotation(0);
         } else {
-            rotateLStructure();
             setRotation(rotation + rotator);
         }
-
         console.log(`Rotation changed to ${rotation}`);
     }
 
-    const rotateLStructure = () => {
-        let temp = lStructure[7];
-        lStructure[7] = lStructure[6];
-        lStructure[6] = lStructure[5];
-        lStructure[5] = lStructure[4];
-        lStructure[4] = lStructure[3];
-        lStructure[3] = lStructure[2];
-        lStructure[2] = lStructure[1];
-        lStructure[1] = lStructure[0];
-        lStructure[0] = temp;
+    const rotateLStructure = (rotation) => {
+        console.log(`Rotating lStructure by ${rotation}`);
+        let originalLStructure = props.image.lStructure;
+        let rotatedLStructure = [];
+        for (let i = 0; i < originalLStructure.length; i++) {
+            rotatedLStructure.push(originalLStructure[(i - rotation) % 8]);
+        }
+        return rotatedLStructure;
     }
 
     return (
