@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import infoIcon from "./icons/icon-info.svg";
+import infoIcon from "./icons/icon-information.png";
 import InstructionInfo from "./InstructionInfo";
 
 function InstructionTile() {
