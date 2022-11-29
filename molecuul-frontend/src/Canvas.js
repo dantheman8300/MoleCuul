@@ -221,6 +221,7 @@ function Canvas (props) {
     removeElement(id);
   }
 
+  console.log(`Elements are ${Object.entries(elements)}`);
 
   return (
     <div 
@@ -339,7 +340,12 @@ function Molecule(props) {
 
   // Draws the current molecule according to the data in canvas
   const elementDisplay = Object.entries(props.elements).map(([key, value]) => {
-    coord[key] = (findRelativePos(props.elements[value.parent], parseInt(key)));
+    if(adjustElement === parseInt(key)) {
+      coord[key] = {x:-1000, y:-1000};
+    }
+    else {
+      coord[key] = (findRelativePos(props.elements[value.parent], parseInt(key)));
+    }
     idGen = parseInt(key) + 1;
     
     return <ElementRender
