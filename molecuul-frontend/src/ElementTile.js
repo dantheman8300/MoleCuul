@@ -19,6 +19,7 @@ function ElementTile(props) {
     }
 
     const getElementInfoFromDatabase = (id) => {
+        console.log(`rotated lStructure: ${rotateLStructure(rotation).slice()}`);
         // Get element info from database based on id
         const elementInfo = { 
             name: symbol, // Pass through the symbol for rendering
@@ -47,7 +48,7 @@ function ElementTile(props) {
         let originalLStructure = props.image.lStructure;
         let rotatedLStructure = [];
         for (let i = 0; i < originalLStructure.length; i++) {
-            rotatedLStructure.push(originalLStructure[(i - rotation) % 8]);
+            rotatedLStructure.push(originalLStructure[Math.abs((i - rotation) % 8)]);
         }
         return rotatedLStructure;
     }
