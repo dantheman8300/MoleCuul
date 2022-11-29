@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import "./Canvas.css";
 import ElementRender from "./ElementRender";
 import OpenElementRender from "./OpenElementRender";
@@ -32,6 +32,15 @@ function Canvas (props) {
   const [mouseY, setMouseY] = useState(200);
   const [center, setCenter] = useState({x: 500, y: 200});
   const [dragStart, setDragStart] = useState({x: 0, y: 0});
+  const cacheLoaded = useRef(false);
+
+  useEffect(() => {
+    if (!cacheLoaded.current) {
+      console.log(`Loading molecule from cache`);
+      getElementFromCache('Molecule', 'https://localhost:300');
+      cacheLoaded.current = true;
+    }
+  });
 
   const handleZoomOut = event => {
     setScale(scale - .2);
@@ -45,7 +54,9 @@ function Canvas (props) {
 
   const handleTrash = event => {
     // Remove all elements in the molecule
-    setElements({});
+    setElements([]);
+    deleteElementCache('Molecule');
+    
   }
 
   const handleHome = event => {
@@ -87,6 +98,46 @@ function Canvas (props) {
     }
   }
 
+  const addElementIntoCache = (cacheName, url, response) => {
+    deleteElementCache(cacheName);
+    // Converting our response into Actual Response form
+    const data = new Response(JSON.stringify(response));
+  
+    if ('caches' in window) {
+      caches.open(cacheName).then((cache) => {
+        cache.put(url, data);
+        console.log('Element Added to cache')
+      });
+    }
+  };
+  
+  const getElementFromCache = async (cacheName, url) => {
+    if (typeof caches === 'undefined') return false;
+    
+    const cacheStorage = await caches.open(cacheName);
+    const cachedResponse = await cacheStorage.match(url);
+
+    // If no cache exists, add current molecule to cache
+    if (!cachedResponse || !cachedResponse.ok) {
+      addElementIntoCache('Molecule', 'https://localhost:300', elements);
+    }
+    else {
+      cachedResponse.json().then((item) => {
+        setElements(item)
+      });
+    }
+  };
+
+
+  // Function to delete our give cache
+  const deleteElementCache = (cacheName) => {
+    if ("caches" in window) {
+      caches.delete(cacheName).then(function (res) {
+        return res;
+      });
+    }
+  };
+
 
   /* Removes a single element at specified id from molecule and updates
   * neighboring elements
@@ -110,6 +161,7 @@ function Canvas (props) {
     delete newElementDict[id];
 
     setElements(newElementDict);
+    addElementIntoCache('Molecule', 'https://localhost:300', newElementDict);
   }
 
 
@@ -154,6 +206,7 @@ function Canvas (props) {
     elemDict[element.id] = element;
 
     setElements(elemDict);
+    addElementIntoCache('Molecule', 'https://localhost:300', elemDict);
   }
 
   const handleAddElement = (bondId, posId) => {
@@ -167,6 +220,7 @@ function Canvas (props) {
     console.log(`removing element ${id}`)
     removeElement(id);
   }
+
 
   return (
     <div 
@@ -290,7 +344,9 @@ function Molecule(props) {
     else {
       coord[key] = (findRelativePos(props.elements[value.parent], parseInt(key)));
     }
-    return <ElementRender 
+    idGen = parseInt(key) + 1;
+    return <ElementRender
+      key={key} 
       element={value} 
       point={coord[key]}
       scale={props.scale}
@@ -310,6 +366,7 @@ function Molecule(props) {
           (props.elements[keys[j]].neighbors[k] === adjustElement)) && 
           (parseInt(keys[j]) !== adjustElement)) {
           elementDisplay.push(<OpenElementRender 
+            key={`Hollow of ${keys[j]} at position ${k}`}
             element={props.elements[keys[j]]} 
             point={findRelativeCoord(k, coord[keys[j]])}
             scale={props.scale}
