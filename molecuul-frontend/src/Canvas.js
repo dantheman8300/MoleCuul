@@ -147,7 +147,8 @@ function Canvas (props) {
   * NOTE: Position is indicated by an array index. 0 -> 3 where 
   * 0 is the top position moving clockwise.
   */
-  function addElement(elementName, source, lStructure, bondedElemId, pos) {
+  function addElement(elementName, source, lStructure, bondedElemId, pos, rotation) {
+    console.log(`rotation: ${rotation}`)
 
     // pos = (pos + 4) % 8; 
 
@@ -158,7 +159,8 @@ function Canvas (props) {
       source: source, 
       lStructure: lStructure, 
       neighbors: [...Array(8)], 
-      parent: bondedElemId
+      parent: bondedElemId,
+      rotation: rotation,
     };
 
     idGen += 1;
@@ -194,7 +196,7 @@ function Canvas (props) {
     console.log('adding element')
     // display add element params
     console.log(`name: ${props.selectedElement.name}, name: ${props.selectedElement.lStructure}, bondId: ${bondId}, posId: ${posId}`)
-    addElement(props.selectedElement.name, props.selectedElement.source, props.selectedElement.lStructure, bondId, (posId + 4) % 8);
+    addElement(props.selectedElement.name, props.selectedElement.source, props.selectedElement.lStructure, bondId, (posId + 4) % 8, props.selectedElement.rotation);
   }
 
   const handleRemoveElement = (id) => {

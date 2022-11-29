@@ -19,7 +19,7 @@ function Sidebar (props) {
 
      async function fetchAll(){
         try {
-           const response = await axios.get("http://localhost:5000/elements");
+           const response = await axios.get("http://localhost:5001/elements");
         //    console.log("response");
         //    console.log(response.data.elements);
            return response.data.elements;     
@@ -52,6 +52,7 @@ function Sidebar (props) {
                     return !item;
                 }
                 else { 
+                    // props.handleRotation(0);
                     return false;
                 }
             })

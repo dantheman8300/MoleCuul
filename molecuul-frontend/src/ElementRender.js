@@ -1,4 +1,5 @@
 import React, {useState} from 'react';
+import { pushRotate } from 'react-burger-menu';
 
 /* Element tile rendered on canvas */
 function ElementRender(props) {
@@ -8,6 +9,12 @@ function ElementRender(props) {
     const scale = props.scale;
     const posX = props.point.x;
     const posY = props.point.y;
+    const rotation = props.element.rotation;
+
+    const elementStyle = {
+        position: "relative",
+        alignSelf: "center",
+    }
 
     return (
         <div 
@@ -40,7 +47,7 @@ function ElementRender(props) {
             }
         }
         style={{position: 'absolute', top: posY, left: posX, zIndex: 4}}>
-            <img className='element-render' src={require(`./images/${image}.svg`)} alt={'render of' + image} style={{height:scale * 50, width:scale * 50}}/>
+            <img className='element-render' src={require(`./images/${image}.svg`)} alt={'render of' + image} style={{height:scale * 50, width:scale * 50, transform: `rotate(${rotation * 45}deg)`}}/>
             <div id='elemSym' style={{height:1, width:1, fontSize:scale * 20}}>{symbol}</div>
         </div>
     )
