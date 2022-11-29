@@ -37,7 +37,7 @@ function IconBox (props) {
         <img src={applePlus} alt='plus icon' className='icon' onClick={props.zoomInHandler}/>  
         <img src={appleHouse} alt='home icon' className='icon' onClick={props.homeHandler}/>
         <img src={appleTrash} alt='trash icon' className='icon' onClick={props.trashHandler}/>  
-        <img src={appleQuestion} alt='Search icon' className='icon' onClick={props.structureChecker}/>
+        {props.moleculeStatus == 0 && <img src={appleQuestion} alt='Search icon' className='icon' onClick={props.structureChecker}/>}
         {props.moleculeStatus == 1 && <img src={appleCheck} alt='Check icon' className='icon'/>}
         {props.moleculeStatus == -1 && <img src={appleX} alt='X icon' className='icon' onClick={props.displayErrors}/>}
       </div>
