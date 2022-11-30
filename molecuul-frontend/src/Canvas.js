@@ -385,9 +385,7 @@ function Canvas (props) {
   return (
     <div 
       className="canvas" 
-      draggable
       onWheel={handleCanvasMove}
-      onDragEnd={handleDrop}
       onDrop={
         (e) => {
           // console.log(`dropped the element: ${props.selectedElement}`);
