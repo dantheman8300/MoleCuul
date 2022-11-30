@@ -64,23 +64,26 @@ function Canvas (props) {
     if (!cacheLoaded.current) {
       console.log(`Loading molecule from cache`);
       getElementFromCache('Molecule', 'https://localhost:300');
+      getStateFromCache('State', 'https://localhost:300')
       cacheLoaded.current = true;
     }
   });
 
   const handleZoomOut = event => {
+    addDataIntoCache('State', 'https://localhost:300', [scale - .2, center]);
     setScale(scale - .2);
     console.log(`zooming out, ${scale}`)
   }
 
   const handleZoomIn = event => {
+    addDataIntoCache('State', 'https://localhost:300', [scale + .2, center]);
     setScale(scale +.2);
     console.log(`zooming in, ${scale}`)
   }
 
   const handleTrash = event => {
     // Remove all elements in the molecule
-    deleteElementCache('Molecule');
+    deleteCache('Molecule');
     setElements({});
     setMoleculeStatus(0);
     setMoleculeErrors([]);
@@ -88,6 +91,7 @@ function Canvas (props) {
   }
 
   const handleHome = event => {
+    addDataIntoCache('State', 'https://localhost:300', [scale, {x: 500, y: 200}]);
     setCenter({x: 500, y: 200});
   }
 
@@ -113,7 +117,20 @@ function Canvas (props) {
 
 
   const handleCanvasMove = (event) => {
-    setCenter({x: center.x - event.deltaX, y: center.y - event.deltaY});
+    if(event.ctrlKey) {
+      event.preventDefault();
+      if(event.deltaY > 0) {
+        handleZoomIn();
+      }
+      else if(event.deltaY < 0) {
+        handleZoomOut();
+      }
+    }
+    else {
+      addDataIntoCache('State', 'https://localhost:300', [scale, {x: center.x - event.deltaX, y: center.y - event.deltaY}]);
+      setCenter({x: center.x - event.deltaX, y: center.y - event.deltaY});
+      
+    }
   }
 
   const handleDrop = (event) => {
@@ -126,15 +143,14 @@ function Canvas (props) {
     }
   }
 
-  const addElementIntoCache = (cacheName, url, response) => {
-    deleteElementCache(cacheName);
+  const addDataIntoCache = (cacheName, url, response) => {
+    deleteCache(cacheName);
     // Converting our response into Actual Response form
     const data = new Response(JSON.stringify(response));
   
     if ('caches' in window) {
       caches.open(cacheName).then((cache) => {
         cache.put(url, data);
-        console.log('Element Added to cache')
       });
     }
   };
@@ -147,7 +163,7 @@ function Canvas (props) {
 
     // If no cache exists, add current molecule to cache
     if (!cachedResponse || !cachedResponse.ok) {
-      addElementIntoCache('Molecule', 'https://localhost:300', elements);
+      addDataIntoCache('Molecule', 'https://localhost:300', elements);
     }
     else {
       cachedResponse.json().then((item) => {
@@ -156,9 +172,27 @@ function Canvas (props) {
     }
   };
 
+  const getStateFromCache = async (cacheName, url) => {
+    if (typeof caches === 'undefined') return false;
+    
+    const cacheStorage = await caches.open(cacheName);
+    const cachedResponse = await cacheStorage.match(url);
+
+    // If no cache exists, add current molecule to cache
+    if (!cachedResponse || !cachedResponse.ok) {
+      addDataIntoCache('State', 'https://localhost:300', [scale, center]);
+    }
+    else {
+      cachedResponse.json().then((item) => {
+        setScale(item[0]);
+        setCenter(item[1]);
+      });
+    }
+  };
+
 
   // Function to delete our give cache
-  const deleteElementCache = (cacheName) => {
+  const deleteCache = (cacheName) => {
     if ("caches" in window) {
       caches.delete(cacheName).then(function (res) {
         return res;
@@ -190,7 +224,7 @@ function Canvas (props) {
     delete newElementDict[id];
 
     setElements(newElementDict);
-    addElementIntoCache('Molecule', 'https://localhost:300', newElementDict);
+    addDataIntoCache('Molecule', 'https://localhost:300', newElementDict);
   }
 
 
@@ -237,7 +271,7 @@ function Canvas (props) {
     elemDict[element.id] = element;
 
     setElements(elemDict);
-    addElementIntoCache('Molecule', 'https://localhost:300', elemDict);
+    addDataIntoCache('Molecule', 'https://localhost:300', elemDict);
   }
 
   const handleAddElement = (bondId, posId) => {
