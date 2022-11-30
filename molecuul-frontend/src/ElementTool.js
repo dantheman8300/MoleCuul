@@ -1,25 +1,29 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import ConfigurationMenu from "./ConfigurationMenu";
-import square from "./images/square-carbon.svg"
 
 /* square element on sidebar */
 function ElementTool (props) {
-    const [isOpen, Open] = useState(false);
-    const octInfo = {
-        'atomicNum': 6,
-        'symbol': 'C',
-        'name': 'Carbon',
-        'images': [
-            "carbon22",
-            "carbon31"
-        ]
-    };
+    const octInfo = props.info;
+    const ind = props.index;
+    let isOpen = props.isOpen;
+    //const [isOpen, setOpen] = useState(false);
+    // const index = props.index;
+    const image = props.info.tile;
+
     const handleClick = event => {
-        Open(current => !current);
+        console.log(ind)
+        isOpen = props.handleChange(ind);
     }
+
+    // useEffect(() => {
+    //     // props.handleChange(props.ind);
+    //     console.log(isOpen)
+    // });
+
     return (
         <div className='ElementTool'>
-            <img id='elem-square' src={square} alt='element tile' onClick={handleClick} />
+            <img id='elem-square' src={require(`./images/${image}.svg`)} alt='element tile' onClick={handleClick}  />
+            {console.log("info  ", octInfo)}
             {isOpen && <ConfigurationMenu info={octInfo} handleDragStart={props.handleDragStart} handleDragEnd={props.handleDragEnd}/>}
         </div>
     )

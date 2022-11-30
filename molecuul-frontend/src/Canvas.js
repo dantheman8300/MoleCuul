@@ -2,23 +2,44 @@ import React, {useState, useEffect, useRef} from 'react';
 import "./Canvas.css";
 import ElementRender from "./ElementRender";
 import OpenElementRender from "./OpenElementRender";
-import iconMinus from './icons/icon-minus.png';
-import iconPlus from './icons/icon-plus.png';
-import iconHome from './icons/icon-home.png';
-import iconTrash from './icons/icon-trash.png';
+import ErrorBox from "./ErrorBox";
+import appleX from './icons/cross-mark_274c.png';
+import appleCheck from './icons/check-mark-button_2705.png';
+import appleHouse from './icons/house_1f3e0.png';
+import appleTrash from './icons/wastebasket_1f5d1-fe0f.png';
+import appleMinus from './icons/minus_2796.png';
+import applePlus from './icons/plus_2795.png';
+import appleQuestion from './icons/question-mark_2753.png';
 
 var idGen = 0;
+const POSITIONS = {
+  0: 'top', 
+  1: 'top right',
+  2: 'right',
+  3: 'bottom right',
+  4: 'bottom',
+  5: 'bottom left',
+  6: 'left',
+  7: 'top left'
+}
+const NAMES = {
+  'H': 'Hydrogen',
+  'C': 'Carbon',
+  'N': 'Nitrogen',
+  'O': 'Oxygen'
+}
 
 function IconBox (props) {
   return (
     <div className="iconBox">
       <div className='iconRow'>
-        <img src={iconMinus} alt='minus icon' className='icon' onClick={props.zoomOutHandler}/>
-        <img src={iconPlus} alt='plus icon' className='icon' onClick={props.zoomInHandler}/>  
-      </div>
-      <div className='iconRow'>
-        <img src={iconHome} alt='home icon' className='icon' onClick={props.homeHandler}/>
-        <img src={iconTrash} alt='trash icon' className='icon' onClick={props.trashHandler}/>  
+        <img src={appleMinus} alt='minus icon' className='icon' onClick={props.zoomOutHandler}/>
+        <img src={applePlus} alt='plus icon' className='icon' onClick={props.zoomInHandler}/>  
+        <img src={appleHouse} alt='home icon' className='icon' onClick={props.homeHandler}/>
+        <img src={appleTrash} alt='trash icon' className='icon' onClick={props.trashHandler}/>  
+        <img src={appleQuestion} alt='Search icon' className='icon' onClick={props.structureChecker}/>
+        {props.moleculeStatus == 1 && <img src={appleCheck} alt='Check icon' className='icon'/>}
+        {props.moleculeStatus == -1 && <img src={appleX} alt='X icon' className='icon' onClick={props.displayErrors}/>}
       </div>
     </div>
   )
@@ -32,6 +53,11 @@ function Canvas (props) {
   const [mouseY, setMouseY] = useState(200);
   const [center, setCenter] = useState({x: 500, y: 200});
   const [dragStart, setDragStart] = useState({x: 0, y: 0});
+  const [moleculeStatus, setMoleculeStatus] = useState(0);
+  const [moleculeErrors, setMoleculeErrors] = useState([]);
+  const [displayErrors, setDisplayErrors] = useState(false);
+  const [hoveredElement, setHoveredElement] = useState(undefined);
+
   const cacheLoaded = useRef(false);
 
   useEffect(() => {
@@ -54,9 +80,11 @@ function Canvas (props) {
 
   const handleTrash = event => {
     // Remove all elements in the molecule
-    setElements([]);
     deleteElementCache('Molecule');
-    
+    setElements({});
+    setMoleculeStatus(0);
+    setMoleculeErrors([]);
+    setDisplayErrors(false);
   }
 
   const handleHome = event => {
@@ -143,6 +171,7 @@ function Canvas (props) {
   * neighboring elements
   */
   function removeElement(id) {
+
     const newElementDict = elements;
 
     // Replace the id from the neighbors' neighbor list with null
@@ -210,6 +239,11 @@ function Canvas (props) {
   }
 
   const handleAddElement = (bondId, posId) => {
+    // Set molecule status to 0 (not checked)
+    setMoleculeStatus(0);
+    setMoleculeErrors([]); // Clear molecule errors
+    setDisplayErrors(false); // Hide error display
+
     console.log('adding element')
     // display add element params
     console.log(`name: ${props.selectedElement.name}, name: ${props.selectedElement.lStructure}, bondId: ${bondId}, posId: ${posId}`)
@@ -217,11 +251,96 @@ function Canvas (props) {
   }
 
   const handleRemoveElement = (id) => {
+    // Set molecule status to 0 (not checked)
+    setMoleculeStatus(0);
+    setMoleculeErrors([]); // Clear molecule errors
+    setDisplayErrors(false); // Hide error display
+
     console.log(`removing element ${id}`)
     removeElement(id);
   }
 
-  console.log(`Elements are ${Object.entries(elements)}`);
+  // console.log(`Elements are ${Object.entries(elements)}`);
+
+  const checkStructure = () => {
+    console.log('checking structure')
+    console.log(elements)
+
+    let errors = [];
+
+    // Iterate through each element in the molecule
+    Object.entries(elements).map(([key, element]) => {
+
+      // Iterate through each lStructure in the element and 
+      // check if the element has the correct number of neighbors
+      for (let pos = 0; pos < element.lStructure.length; pos++) {
+        
+        const neighbor = element.neighbors[pos];
+
+        if (neighbor === undefined && element.lStructure[pos] !== 0 && element.lStructure[pos] !== 4) {
+          errors.push({
+            errorMessage: 'Missing Bond',
+            errorSpecificMessage: `Element, ${NAMES[element.elementName]}, is missing a bond in ${POSITIONS[pos]} position`,
+            element: element.elementName,
+            id: element.id,
+            position: pos
+          });
+        }
+
+        // I think this is technically impossible but just in case
+        if (neighbor !== undefined && (element.lStructure[pos] === 0 || element.lStructure[pos] === 4)) {
+          errors.push({
+            errorMessage: 'Extra Bond',
+            errorSpecificMessage: `Element, ${NAMES[element.elementName]}, has an extra bond in ${POSITIONS[pos]} position`,
+            element: element.elementName,
+            id: element.id,
+            position: pos
+          });
+        }
+
+        // Check if the lStructure of the neighbor matches the lStructure of the element
+        // Note: Check to make sure the error isn't already in the list from the neighbor's side or should it be?
+        if (neighbor !== undefined && element.lStructure[pos] !== elements[neighbor].lStructure[(pos + 4) % 8]) {
+          errors.push({
+            errorMessage: 'Invalid Bond',
+            errorSpecificMessage: `Element, ${NAMES[element.elementName]}, has an invalid bond in ${POSITIONS[pos]} position`,
+            element: element.elementName,
+            id: element.id,
+            position: pos
+          });
+        }
+      }
+    });
+
+    if (errors.length === 0) {
+      setMoleculeStatus(1);
+    } else {
+      setMoleculeStatus(-1);
+      setMoleculeErrors(errors);
+    }
+
+    console.log(errors);
+
+  }
+
+  const displayMoleculeErrors = () => {
+    if (displayErrors) {
+      setDisplayErrors(false);
+    } else {
+      setDisplayErrors(true);
+    }
+
+    console.log(displayErrors);
+  }
+
+  const handleHover = (id) => {
+    setHoveredElement(id);
+  }
+
+  const handleOutHover = () => {
+    setHoveredElement(undefined);
+  }
+
 
   return (
     <div 
@@ -245,7 +364,10 @@ function Canvas (props) {
       <IconBox 
         zoomInHandler={handleZoomIn} zoomOutHandler={handleZoomOut}
         trashHandler={handleTrash} homeHandler={handleHome}
+        structureChecker={checkStructure} moleculeStatus={moleculeStatus} 
+        moleculeErrors={moleculeErrors} displayErrors={displayMoleculeErrors}
       />
+      {displayErrors && <ErrorBox errors={moleculeErrors} elementId={hoveredElement} />}
       <div >
         <Molecule 
           scale={scale} 
@@ -259,6 +381,8 @@ function Canvas (props) {
           handleRemoveElement={handleRemoveElement}
           handleDragStart={props.handleDragStart} 
           handleDragEnd={props.handleDragEnd}
+          handleHover={handleHover}
+          handleOutHover={handleOutHover}
         />
       </div>
     </div>
@@ -354,7 +478,9 @@ function Molecule(props) {
     point={coord[key]}
     scale={props.scale}
     handleDragStart={handleDragStart} 
-    handleDragEnd={handleDragEnd}/>
+    handleDragEnd={handleDragEnd}
+    handleMouseOver={props.handleHover}
+    handleMouseOut={props.handleOutHover}/>
   
     
   });

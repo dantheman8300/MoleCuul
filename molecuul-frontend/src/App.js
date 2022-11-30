@@ -1,8 +1,10 @@
+import InstructionTile from "./InstructionTile";
 import React, {useState} from "react";
 import Sidebar from "./Sidebar";
 import FreeBuildPage from "./FreeBuildPage.js";
 import Canvas from "./Canvas";
 import Header from "./Header";
+import ValidateMolecule from "./ValidateMolecule";
 
 function App() {
 
@@ -21,10 +23,19 @@ function App() {
         setSelectedElement(null);
     }
 
+    // const lst = [
+    //     "CH4",
+    //     "C2H6",
+    //     "CO2",
+    //     "H2O",
+    //     "CH2O",
+    //     "C2H2",
+    //     "C2H4O",
+    //     "CH3OH"
+    // ]
     return (
         <div className="container">
             <FreeBuildPage 
-            header = {<Header/>}
             sidebar = {
                 <Sidebar 
                     handleDragStart={handleElementDragStart}
@@ -33,7 +44,9 @@ function App() {
             }
             canvas = {<Canvas selectedElement={selectedElement} hover={hover} 
             handleDragStart={handleElementDragStart} handleDragEnd={handleElementDragEnd}/>}
+            header = {<Header />}
             />
+
         </div>
     )
 }
