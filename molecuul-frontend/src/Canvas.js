@@ -30,6 +30,24 @@ const NAMES = {
 }
 
 function IconBox (props) {
+
+  const [horses, setHorses] = useState(1);
+
+  const horseButtons = () => {
+    const horseButtons = [];
+    for (let i = 0; i < horses; i++) {
+      horseButtons.push(
+        <button onClick={handleHorseClick}>horse</button>
+      )
+    }
+    return horseButtons;
+  }
+
+  const handleHorseClick = (e) => {
+    setHorses(horses + 1);
+  }
+
+
   return (
     <div className="iconBox">
       <div className='iconRow'>
@@ -37,9 +55,12 @@ function IconBox (props) {
         <img src={applePlus} alt='plus icon' className='icon' onClick={props.zoomInHandler}/>  
         <img src={appleHouse} alt='home icon' className='icon' onClick={props.homeHandler}/>
         <img src={appleTrash} alt='trash icon' className='icon' onClick={props.trashHandler}/>  
+        <img src={appleTrash} alt='trash icon' className='icon' onClick={handleHorseClick}/> 
         {props.moleculeStatus == 0 && <img src={appleQuestion} alt='Search icon' className='icon' onClick={props.structureChecker}/>}
         {props.moleculeStatus == 1 && <img src={appleCheck} alt='Check icon' className='icon'/>}
         {props.moleculeStatus == -1 && <img src={appleX} alt='X icon' className='icon' onClick={props.displayErrors}/>}
+        {/* {horseButtons} */}
+        {horseButtons()}
       </div>
     </div>
   )
