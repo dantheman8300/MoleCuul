@@ -12,6 +12,7 @@ import applePlus from './icons/plus_2795.png';
 import appleQuestion from './icons/icon-gray-check.png';
 import appleHorse from './icons/icon-horse.png';
 import InstructionTile from './InstructionTile';  
+import smileyFace from './icons/smiling-face_263a-fe0f.png';
 
 var idGen = 0;
 const POSITIONS = {
@@ -418,7 +419,7 @@ function Canvas (props) {
   return (
     <div 
       className="canvas" 
-      onWheel={handleCanvasMove}
+      // onWheel={handleCanvasMove}
       onDrop={
         (e) => {
           // console.log(`dropped the element: ${props.selectedElement}`);
@@ -461,7 +462,7 @@ function Canvas (props) {
 
       </div>
     
-      {focusMsg && <div className='instruction-info' id='focusMsg'><h2>Quit horsin around, get back to work! 😊</h2></div>}
+      {focusMsg && <div className='instruction-info' id='focusMsg'><h2>Quit horsin' around, get back to work! <img className="smileyFaceHorse" src={smileyFace} /></h2></div>}
     </div>
   );
 }
