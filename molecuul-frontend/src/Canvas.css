@@ -215,10 +215,10 @@
 
 .arrow {
   position: absolute;
-  width: 100px;
-  height: 100px;
-  left: 100px;
-  top: 100px;
+  width: 500px;
+  height: 500px;
+
+  z-index: 100;
 
 }
 

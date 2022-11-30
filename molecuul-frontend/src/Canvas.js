@@ -79,7 +79,7 @@ function Canvas (props) {
 }
   
   const handleHorseClick = (e) => {
-    setHorseBtns ( horseBtns.concat(<img src={appleHorse} alt='horse icon' className='horse' onClick={handleHorseClick} style={{top: (Math.random() * (window.screen.availHeight) - 200), left: (Math.random() * (window.screen.availWidth) - 200)}}/>))
+    setHorseBtns ( horseBtns.concat(<img src={appleHorse} alt='horse icon' className='horse' onClick={handleHorseClick} style={{top: (Math.random() * window.screen.availHeight), left: (Math.random() * window.screen.availWidth)}}/>))
   }
 
   const handleZoomOut = event => {

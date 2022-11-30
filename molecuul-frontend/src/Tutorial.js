@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import Arrow from "./Arrow";
+import arrow from "./images/arrow.svg";
+
 
 
 function Tutorial() {
@@ -28,7 +30,9 @@ function Tutorial() {
                 <button className="close" onMouseEnter={handleHover} onMouseLeave={handleHover}>{closeText()}</button>
                 <button className="dir" onClick={handleOne}>next</button>
             </div>
-            <Arrow onClick={handleOne}/>
+            <Arrow />
+            
+            <img src={arrow} alt="arrow img" className="arrow"/>
         </div>
     )
 
