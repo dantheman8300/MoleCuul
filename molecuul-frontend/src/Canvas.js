@@ -10,6 +10,7 @@ import appleTrash from './icons/wastebasket_1f5d1-fe0f.png';
 import appleMinus from './icons/minus_2796.png';
 import applePlus from './icons/plus_2795.png';
 import appleQuestion from './icons/icon-gray-check.png';
+import appleHorse from './icons/icon-horse.png'
 
 var idGen = 0;
 const POSITIONS = {
@@ -29,38 +30,26 @@ const NAMES = {
   'O': 'Oxygen'
 }
 
+
+
 function IconBox (props) {
 
-  const [horses, setHorses] = useState(1);
-
-  const horseButtons = () => {
-    const horseButtons = [];
-    for (let i = 0; i < horses; i++) {
-      horseButtons.push(
-        <button onClick={handleHorseClick}>horse</button>
-      )
-    }
-    return horseButtons;
-  }
-
-  const handleHorseClick = (e) => {
-    setHorses(horses + 1);
-  }
-
-
   return (
-    <div className="iconBox">
-      <div className='iconRow'>
-        <img src={appleMinus} alt='minus icon' className='icon' onClick={props.zoomOutHandler}/>
-        <img src={applePlus} alt='plus icon' className='icon' onClick={props.zoomInHandler}/>  
-        <img src={appleHouse} alt='home icon' className='icon' onClick={props.homeHandler}/>
-        <img src={appleTrash} alt='trash icon' className='icon' onClick={props.trashHandler}/>  
-        <img src={appleTrash} alt='trash icon' className='icon' onClick={handleHorseClick}/> 
-        {props.moleculeStatus == 0 && <img src={appleQuestion} alt='Search icon' className='icon' onClick={props.structureChecker}/>}
-        {props.moleculeStatus == 1 && <img src={appleCheck} alt='Check icon' className='icon'/>}
-        {props.moleculeStatus == -1 && <img src={appleX} alt='X icon' className='icon' onClick={props.displayErrors}/>}
-        {/* {horseButtons} */}
-        {horseButtons()}
+    <div>
+      <div className="iconBox">
+        <div className='iconRow'>
+          <img src={appleMinus} alt='minus icon' className='icon' onClick={props.zoomOutHandler}/>
+          <img src={applePlus} alt='plus icon' className='icon' onClick={props.zoomInHandler}/>  
+          <img src={appleHouse} alt='home icon' className='icon' onClick={props.homeHandler}/>
+          <img src={appleTrash} alt='trash icon' className='icon' onClick={props.trashHandler}/>  
+          {props.moleculeStatus == 0 && <img src={appleQuestion} alt='Search icon' className='icon' onClick={props.structureChecker}/>}
+          {props.moleculeStatus == 1 && <img src={appleCheck} alt='Check icon' className='icon'/>}
+          {props.moleculeStatus == -1 && <img src={appleX} alt='X icon' className='icon' onClick={props.displayErrors}/>}
+          {/* {horseButtons} */}
+          
+          <img src={appleHorse} alt='horse icon' className='icon' onClick={props.handleHorseClick}/> 
+          
+        </div>
       </div>
     </div>
   )
@@ -78,6 +67,12 @@ function Canvas (props) {
   const [moleculeErrors, setMoleculeErrors] = useState([]);
   const [displayErrors, setDisplayErrors] = useState(false);
   const [hoveredElement, setHoveredElement] = useState(undefined);
+  const [horseBtns, setHorseBtns] = useState([]);
+
+  
+  const handleHorseClick = (e) => {
+    setHorseBtns ( horseBtns.concat(<img src={appleHorse} alt='horse icon' className='horse' onClick={handleHorseClick} style={{top: (Math.random() * (window.screen.availHeight) - 200), left: (Math.random() * (window.screen.availWidth) - 200)}}/>))
+  }
 
   const handleZoomOut = event => {
     setScale(scale - .2);
@@ -334,6 +329,7 @@ function Canvas (props) {
         trashHandler={handleTrash} homeHandler={handleHome}
         structureChecker={checkStructure} moleculeStatus={moleculeStatus} 
         moleculeErrors={moleculeErrors} displayErrors={displayMoleculeErrors}
+        handleHorseClick={handleHorseClick}
       />
       {displayErrors && <ErrorBox errors={moleculeErrors} elementId={hoveredElement} />}
       <div >
@@ -350,7 +346,10 @@ function Canvas (props) {
           handleDragEnd={props.handleDragEnd}
           handleHover={handleHover}
           handleOutHover={handleOutHover}
+          horseBtns={horseBtns}
         />
+        
+
       </div>
     </div>
   );
@@ -469,7 +468,10 @@ function Molecule(props) {
     }
   }
   return (
-    elementDisplay
+    <div>
+      {elementDisplay}
+      {props.horseBtns}
+    </div>
   )
 
 }
