@@ -100,14 +100,14 @@ function Canvas (props) {
   });
 
   const handleZoomOut = event => {
-    addDataIntoCache('State', 'https://localhost:300', [scale - .2, center]);
+    addDataIntoCache('State', 'https://localhost:300', scale - .2);
     setScale(scale - .2);
     console.log(`zooming out, ${scale}`)
     setFocusMsg(false)
   }
 
   const handleZoomIn = event => {
-    addDataIntoCache('State', 'https://localhost:300', [scale + .2, center]);
+    addDataIntoCache('State', 'https://localhost:300', scale + .2);
     setScale(scale +.2);
     console.log(`zooming in, ${scale}`)
     setFocusMsg(false)
@@ -128,7 +128,6 @@ function Canvas (props) {
   }
 
   const handleHome = event => {
-    addDataIntoCache('State', 'https://localhost:300', [scale, {x: 500, y: 200}]);
     setCenter({x: 500, y: 200});
     setFocusMsg(false)
   }
@@ -166,7 +165,6 @@ function Canvas (props) {
       }
     }
     else {
-      addDataIntoCache('State', 'https://localhost:300', [scale, {x: center.x - event.deltaX, y: center.y - event.deltaY}]);
       setCenter({x: center.x - event.deltaX, y: center.y - event.deltaY});
       
     }
@@ -221,12 +219,11 @@ function Canvas (props) {
 
     // If no cache exists, add current molecule to cache
     if (!cachedResponse || !cachedResponse.ok) {
-      addDataIntoCache('State', 'https://localhost:300', [scale, center]);
+      addDataIntoCache('State', 'https://localhost:300', scale);
     }
     else {
       cachedResponse.json().then((item) => {
-        setScale(item[0]);
-        setCenter(item[1]);
+        setScale(item);
       });
     }
   };
