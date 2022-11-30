@@ -29,7 +29,8 @@ function ElementRender(props) {
                 id: props.element.id,
                 name: symbol,
                 lStructure: props.element.lStructure,
-                source: image
+                source: image,
+                rotation: rotation
             };
             props.handleDragStart(elementInfo);
         }
@@ -41,6 +42,10 @@ function ElementRender(props) {
         }
         onMouseOver={
             () => {
+                console.log(`Element ${props.element.id} with ${props.element.elementName}`);
+                console.log(`       lStructure ${props.element.lStructure}`);
+                console.log(`       Neighbors ${props.element.neighbors}`);
+                console.log(`       Parent ${props.element.parent}`);
                 props.handleMouseOver(elementId);
             }
         }

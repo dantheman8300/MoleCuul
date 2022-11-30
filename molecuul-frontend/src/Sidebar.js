@@ -34,21 +34,21 @@ function Sidebar (props) {
     
 
     // seeElementConfigs();
-     console.log(elements.length)   
+    //  console.log(elements.length)   
     // let state = ;
     // console.log(state)
     
 
-     console.log("after usestate   " ,  isOpen)
+    //  console.log("after usestate   " ,  isOpen)
     const handleChange = (ind) => {
-        console.log("isOpen   " + isOpen)
+        // console.log("isOpen   " + isOpen)
         // setOpen[ind](current => !current)
 
         setOpen(
             isOpen.map((item, index) => {
-                console.log(ind + "   " + index)
+                // console.log(ind + "   " + index)
                 if (ind === index) {
-                    console.log(ind + "   " + !item)
+                    // console.log(ind + "   " + !item)
                     return !item;
                 }
                 else { 
@@ -62,9 +62,9 @@ function Sidebar (props) {
 
     const tools = elements.map((item, index) => {
         return (
-            <div>
+            <div key={`Element tool: ` + index}>
                 {/* {console.log(item)} */}
-                <ElementTool info={item} key={index} index={index} handleDragStart={props.handleDragStart} handleDragEnd={props.handleDragEnd} handleChange={handleChange} isOpen={isOpen[index]} />
+                <ElementTool key={index} info={item} index={index} handleDragStart={props.handleDragStart} handleDragEnd={props.handleDragEnd} handleChange={handleChange} isOpen={isOpen[index]} />
             </div>
         )
     });
@@ -74,7 +74,7 @@ function Sidebar (props) {
     function seeElementConfigs() {
         for (let i = 0; i < elements.length; i++) {
             for (const property in elements[i].configs[0]) {
-                console.log(property);
+                // console.log(property);
             }
             // for (let j = 0; j < elements[i].cfgs.length; j++) {
             //     console.log(elements[i].cfgs[j].imagefile);

@@ -62,7 +62,7 @@ function Canvas (props) {
 
   useEffect(() => {
     if (!cacheLoaded.current) {
-      console.log(`Loading molecule from cache`);
+      // console.log(`Loading molecule from cache`);
       getElementFromCache('Molecule', 'https://localhost:300');
       getStateFromCache('State', 'https://localhost:300')
       cacheLoaded.current = true;
@@ -72,13 +72,13 @@ function Canvas (props) {
   const handleZoomOut = event => {
     addDataIntoCache('State', 'https://localhost:300', [scale - .2, center]);
     setScale(scale - .2);
-    console.log(`zooming out, ${scale}`)
+    // console.log(`zooming out, ${scale}`)
   }
 
   const handleZoomIn = event => {
     addDataIntoCache('State', 'https://localhost:300', [scale + .2, center]);
     setScale(scale +.2);
-    console.log(`zooming in, ${scale}`)
+    // console.log(`zooming in, ${scale}`)
   }
 
   const handleTrash = event => {
@@ -207,11 +207,13 @@ function Canvas (props) {
   function removeElement(id) {
 
     const newElementDict = elements;
+    console.log(`Elements: ${Object.entries(newElementDict)}`);
 
     // Replace the id from the neighbors' neighbor list with null
     for (let i = 0; i < newElementDict[id].neighbors.length; i++) {
       let neighborId = newElementDict[id].neighbors[i];
-      if(neighborId !== undefined) {
+      if(neighborId !== undefined && neighborId !== null) {
+        console.log(`Element id: ${neighborId} with type ${typeof neighborId}`);
         for (let j = 0; j < newElementDict[neighborId].neighbors.length; j++) {
           if(newElementDict[neighborId].neighbors[j] === parseInt(id)) {
             newElementDict[neighborId].neighbors[j] = undefined;
@@ -234,7 +236,7 @@ function Canvas (props) {
   * 0 is the top position moving clockwise.
   */
   function addElement(elementName, source, lStructure, bondedElemId, pos, rotation) {
-    console.log(`rotation: ${rotation}`)
+    // console.log(`rotation: ${rotation}`)
 
     // pos = (pos + 4) % 8; 
 
@@ -280,9 +282,9 @@ function Canvas (props) {
     setMoleculeErrors([]); // Clear molecule errors
     setDisplayErrors(false); // Hide error display
 
-    console.log('adding element')
+    // console.log('adding element')
     // display add element params
-    console.log(`name: ${props.selectedElement.name}, name: ${props.selectedElement.lStructure}, bondId: ${bondId}, posId: ${posId}`)
+    // console.log(`name: ${props.selectedElement.name}, name: ${props.selectedElement.lStructure}, bondId: ${bondId}, posId: ${posId}`)
     addElement(props.selectedElement.name, props.selectedElement.source, props.selectedElement.lStructure, bondId, (posId + 4) % 8, props.selectedElement.rotation);
   }
 
@@ -292,7 +294,7 @@ function Canvas (props) {
     setMoleculeErrors([]); // Clear molecule errors
     setDisplayErrors(false); // Hide error display
 
-    console.log(`removing element ${id}`)
+    // console.log(`removing element ${id}`)
     removeElement(id);
   }
 
@@ -386,7 +388,7 @@ function Canvas (props) {
       onDragEnd={handleDrop}
       onDrop={
         (e) => {
-          console.log(`dropped the element: ${props.selectedElement}`);
+          // console.log(`dropped the element: ${props.selectedElement}`);
           handleDrop();
         }
       }
@@ -527,9 +529,11 @@ function Molecule(props) {
     for(let j = 0; j < Object.entries(props.elements).length; j++) {
       let keys = Object.keys(props.elements);
       for(let k = 0; k < props.elements[keys[j]].lStructure.length; k++) {
-        console.log(`Element neighbor ${props.elements[keys[j]].neighbors[k]}`);
-        if((props.elements[keys[j]].lStructure[k] > 0) && 
+        // console.log(`Element neighbor ${props.elements[keys[j]].neighbors[k]}`);
+        if(((props.elements[keys[j]].lStructure[k] > 0) &&
+          (props.elements[keys[j]].lStructure[k] < 4)) && 
           ((props.elements[keys[j]].neighbors[k] === undefined) ||
+          (props.elements[keys[j]].neighbors[k] === null) ||
           (props.elements[keys[j]].neighbors[k] === adjustElement)) && 
           (parseInt(keys[j]) !== adjustElement)) {
           elementDisplay.push(<OpenElementRender 
