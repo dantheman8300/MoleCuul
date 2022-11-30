@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import "./Canvas.css";
 import ElementRender from "./ElementRender";
 import OpenElementRender from "./OpenElementRender";
@@ -9,7 +9,10 @@ import appleHouse from './icons/house_1f3e0.png';
 import appleTrash from './icons/wastebasket_1f5d1-fe0f.png';
 import appleMinus from './icons/minus_2796.png';
 import applePlus from './icons/plus_2795.png';
-import appleQuestion from './icons/question-mark_2753.png';
+import appleQuestion from './icons/icon-gray-check.png';
+import appleHorse from './icons/icon-horse.png';
+import InstructionTile from './InstructionTile';
+import Tutorial from './Tutorial';
 
 var idGen = 0;
 const POSITIONS = {
@@ -26,20 +29,31 @@ const NAMES = {
   'H': 'Hydrogen',
   'C': 'Carbon',
   'N': 'Nitrogen',
-  'O': 'Oxygen'
+  'O': 'Oxygen',
+  'Cl': 'Chlorine'
 }
 
+
+
 function IconBox (props) {
+
   return (
-    <div className="iconBox">
-      <div className='iconRow'>
-        <img src={appleMinus} alt='minus icon' className='icon' onClick={props.zoomOutHandler}/>
-        <img src={applePlus} alt='plus icon' className='icon' onClick={props.zoomInHandler}/>  
-        <img src={appleHouse} alt='home icon' className='icon' onClick={props.homeHandler}/>
-        <img src={appleTrash} alt='trash icon' className='icon' onClick={props.trashHandler}/>  
-        <img src={appleQuestion} alt='Search icon' className='icon' onClick={props.structureChecker}/>
-        {props.moleculeStatus == 1 && <img src={appleCheck} alt='Check icon' className='icon'/>}
-        {props.moleculeStatus == -1 && <img src={appleX} alt='X icon' className='icon' onClick={props.displayErrors}/>}
+    <div>
+      <div className="iconBox">
+        <div className='iconRow'>
+          <InstructionTile handleTutorial={props.handleTutorial}/>
+          <img src={appleMinus} alt='minus icon' className='icon' onClick={props.zoomOutHandler}/>
+          <img src={applePlus} alt='plus icon' className='icon' onClick={props.zoomInHandler}/>  
+          <img src={appleTrash} alt='trash icon' className='icon' onClick={props.trashHandler}/>  
+          <img src={appleHouse} alt='home icon' className='icon' onClick={props.homeHandler}/>
+          {props.moleculeStatus == 0 && <img src={appleQuestion} alt='Search icon' className='icon' onClick={props.structureChecker}/>}
+          {props.moleculeStatus == 1 && <img src={appleCheck} alt='Check icon' className='icon'/>}
+          {props.moleculeStatus == -1 && <img src={appleX} alt='X icon' className='icon' onClick={props.displayErrors}/>}
+          {/* {horseButtons} */}
+          
+          <img src={appleHorse} alt='horse icon' className='icon' onClick={props.handleHorseClick}/> 
+          
+        </div>
       </div>
     </div>
   )
@@ -57,27 +71,66 @@ function Canvas (props) {
   const [moleculeErrors, setMoleculeErrors] = useState([]);
   const [displayErrors, setDisplayErrors] = useState(false);
   const [hoveredElement, setHoveredElement] = useState(undefined);
+  const [horseBtns, setHorseBtns] = useState([]);
+  const [focusMsg, setFocusMsg] = useState(false);
+  const [openTutorial, setTutorial] = useState(false);
+
+
+  const handleTutorial = event => {
+    setTutorial(current => !current)
+}
+  
+  const handleHorseClick = (e) => {
+    setHorseBtns ( horseBtns.concat(<img src={appleHorse} alt='horse icon' className='horse' onClick={handleHorseClick} style={{top: (Math.random() * window.screen.availHeight), left: (Math.random() * window.screen.availWidth)}}/>))
+    if(horseBtns.length > 10){
+      setFocusMsg(true)
+    }
+  }
+
+
+  const cacheLoaded = useRef(false);
+
+  useEffect(() => {
+    if (!cacheLoaded.current) {
+      // console.log(`Loading molecule from cache`);
+      getElementFromCache('Molecule', 'https://localhost:300');
+      getStateFromCache('State', 'https://localhost:300')
+      cacheLoaded.current = true;
+    }
+  });
 
   const handleZoomOut = event => {
+    addDataIntoCache('State', 'https://localhost:300', [scale - .2, center]);
     setScale(scale - .2);
     console.log(`zooming out, ${scale}`)
+    setFocusMsg(false)
   }
 
   const handleZoomIn = event => {
+    addDataIntoCache('State', 'https://localhost:300', [scale + .2, center]);
     setScale(scale +.2);
     console.log(`zooming in, ${scale}`)
+    setFocusMsg(false)
+    
   }
 
   const handleTrash = event => {
     // Remove all elements in the molecule
+    deleteCache('Molecule');
+    deleteCache('State');
+    setCenter({x: 500, y: 200});
     setElements({});
     setMoleculeStatus(0);
     setMoleculeErrors([]);
     setDisplayErrors(false);
+    setFocusMsg(false)
+    idGen = 0;
   }
 
   const handleHome = event => {
+    addDataIntoCache('State', 'https://localhost:300', [scale, {x: 500, y: 200}]);
     setCenter({x: 500, y: 200});
+    setFocusMsg(false)
   }
 
   // const handleDragStart = (event) => {
@@ -103,17 +156,90 @@ function Canvas (props) {
 
   const handleCanvasMove = (event) => {
     setCenter({x: center.x - event.deltaX, y: center.y - event.deltaY});
+    setFocusMsg(false)
+    if(event.ctrlKey) {
+      if(event.deltaY > 0) {
+        handleZoomIn();
+      }
+      else if(event.deltaY < 0) {
+        handleZoomOut();
+      }
+    }
+    else {
+      addDataIntoCache('State', 'https://localhost:300', [scale, {x: center.x - event.deltaX, y: center.y - event.deltaY}]);
+      setCenter({x: center.x - event.deltaX, y: center.y - event.deltaY});
+      
+    }
   }
 
   const handleDrop = (event) => {
     if(Object.keys(elements).length === 0 && props.selectedElement !== null) {
       var e = window.event;
-      setCenter({x: e.clientX - 290, y: e.clientY - 150});
+      setCenter({x: e.clientX - (190), y: e.clientY - (100)});
       console.log(`Center at x:${center.x}, y:${center.y}`)
       handleAddElement(undefined, undefined);
+      setFocusMsg(false)
+      
       
     }
   }
+
+  const addDataIntoCache = (cacheName, url, response) => {
+    deleteCache(cacheName);
+    // Converting our response into Actual Response form
+    const data = new Response(JSON.stringify(response));
+  
+    if ('caches' in window) {
+      caches.open(cacheName).then((cache) => {
+        cache.put(url, data);
+      });
+    }
+  };
+  
+  const getElementFromCache = async (cacheName, url) => {
+    if (typeof caches === 'undefined') return false;
+    
+    const cacheStorage = await caches.open(cacheName);
+    const cachedResponse = await cacheStorage.match(url);
+
+    // If no cache exists, add current molecule to cache
+    if (!cachedResponse || !cachedResponse.ok) {
+      addDataIntoCache('Molecule', 'https://localhost:300', elements);
+    }
+    else {
+      cachedResponse.json().then((item) => {
+        setElements(item)
+      });
+    }
+  };
+
+  const getStateFromCache = async (cacheName, url) => {
+    if (typeof caches === 'undefined') return false;
+    
+    const cacheStorage = await caches.open(cacheName);
+    const cachedResponse = await cacheStorage.match(url);
+
+    // If no cache exists, add current molecule to cache
+    if (!cachedResponse || !cachedResponse.ok) {
+      addDataIntoCache('State', 'https://localhost:300', [scale, center]);
+    }
+    else {
+      cachedResponse.json().then((item) => {
+        setScale(item[0]);
+        setCenter(item[1]);
+      });
+    }
+  };
+
+
+  // Function to delete our give cache
+  const deleteCache = (cacheName) => {
+    if ("caches" in window) {
+      caches.delete(cacheName).then(function (res) {
+        return res;
+      });
+    }
+  };
 
 
   /* Removes a single element at specified id from molecule and updates
@@ -122,11 +248,13 @@ function Canvas (props) {
   function removeElement(id) {
 
     const newElementDict = elements;
+    console.log(`Elements: ${Object.entries(newElementDict)}`);
 
     // Replace the id from the neighbors' neighbor list with null
     for (let i = 0; i < newElementDict[id].neighbors.length; i++) {
       let neighborId = newElementDict[id].neighbors[i];
-      if(neighborId !== undefined) {
+      if(neighborId !== undefined && neighborId !== null) {
+        console.log(`Element id: ${neighborId} with type ${typeof neighborId}`);
         for (let j = 0; j < newElementDict[neighborId].neighbors.length; j++) {
           if(newElementDict[neighborId].neighbors[j] === parseInt(id)) {
             newElementDict[neighborId].neighbors[j] = undefined;
@@ -139,6 +267,7 @@ function Canvas (props) {
     delete newElementDict[id];
 
     setElements(newElementDict);
+    addDataIntoCache('Molecule', 'https://localhost:300', newElementDict);
   }
 
 
@@ -147,7 +276,8 @@ function Canvas (props) {
   * NOTE: Position is indicated by an array index. 0 -> 3 where 
   * 0 is the top position moving clockwise.
   */
-  function addElement(elementName, source, lStructure, bondedElemId, pos) {
+  function addElement(elementName, source, lStructure, bondedElemId, pos, rotation) {
+    // console.log(`rotation: ${rotation}`)
 
     // pos = (pos + 4) % 8; 
 
@@ -158,7 +288,8 @@ function Canvas (props) {
       source: source, 
       lStructure: lStructure, 
       neighbors: [...Array(8)], 
-      parent: bondedElemId
+      parent: bondedElemId,
+      rotation: rotation,
     };
 
     idGen += 1;
@@ -183,6 +314,7 @@ function Canvas (props) {
     elemDict[element.id] = element;
 
     setElements(elemDict);
+    addDataIntoCache('Molecule', 'https://localhost:300', elemDict);
   }
 
   const handleAddElement = (bondId, posId) => {
@@ -191,10 +323,11 @@ function Canvas (props) {
     setMoleculeErrors([]); // Clear molecule errors
     setDisplayErrors(false); // Hide error display
 
-    console.log('adding element')
+    // console.log('adding element')
     // display add element params
-    console.log(`name: ${props.selectedElement.name}, name: ${props.selectedElement.lStructure}, bondId: ${bondId}, posId: ${posId}`)
-    addElement(props.selectedElement.name, props.selectedElement.source, props.selectedElement.lStructure, bondId, (posId + 4) % 8);
+    // console.log(`name: ${props.selectedElement.name}, name: ${props.selectedElement.lStructure}, bondId: ${bondId}, posId: ${posId}`)
+    addElement(props.selectedElement.name, props.selectedElement.source, props.selectedElement.lStructure, bondId, (posId + 4) % 8, props.selectedElement.rotation);
+    setFocusMsg(false)
   }
 
   const handleRemoveElement = (id) => {
@@ -203,13 +336,18 @@ function Canvas (props) {
     setMoleculeErrors([]); // Clear molecule errors
     setDisplayErrors(false); // Hide error display
 
-    console.log(`removing element ${id}`)
+    // console.log(`removing element ${id}`)
     removeElement(id);
+    setFocusMsg(false)
   }
+
+  // console.log(`Elements are ${Object.entries(elements)}`);
 
   const checkStructure = () => {
     console.log('checking structure')
     console.log(elements)
+    
+    setFocusMsg(false)
 
     let errors = [];
 
@@ -222,7 +360,7 @@ function Canvas (props) {
         
         const neighbor = element.neighbors[pos];
 
-        if (neighbor === undefined && element.lStructure[pos] !== 0 && element.lStructure[pos] !== 4) {
+        if ((neighbor === undefined || neighbor === null) && element.lStructure[pos] !== 0 && element.lStructure[pos] !== 4) {
           errors.push({
             errorMessage: 'Missing Bond',
             errorSpecificMessage: `Element, ${NAMES[element.elementName]}, is missing a bond in ${POSITIONS[pos]} position`,
@@ -233,7 +371,7 @@ function Canvas (props) {
         }
 
         // I think this is technically impossible but just in case
-        if (neighbor !== undefined && (element.lStructure[pos] === 0 || element.lStructure[pos] === 4)) {
+        if (neighbor !== undefined && neighbor !== null &&  (element.lStructure[pos] === 0 || element.lStructure[pos] === 4)) {
           errors.push({
             errorMessage: 'Extra Bond',
             errorSpecificMessage: `Element, ${NAMES[element.elementName]}, has an extra bond in ${POSITIONS[pos]} position`,
@@ -245,7 +383,7 @@ function Canvas (props) {
 
         // Check if the lStructure of the neighbor matches the lStructure of the element
         // Note: Check to make sure the error isn't already in the list from the neighbor's side or should it be?
-        if (neighbor !== undefined && element.lStructure[pos] !== elements[neighbor].lStructure[(pos + 4) % 8]) {
+        if (neighbor !== undefined && neighbor !== null && element.lStructure[pos] !== elements[neighbor].lStructure[(pos + 4) % 8]) {
           errors.push({
             errorMessage: 'Invalid Bond',
             errorSpecificMessage: `Element, ${NAMES[element.elementName]}, has an invalid bond in ${POSITIONS[pos]} position`,
@@ -290,12 +428,10 @@ function Canvas (props) {
   return (
     <div 
       className="canvas" 
-      draggable
       onWheel={handleCanvasMove}
-      onDragEnd={handleDrop}
       onDrop={
         (e) => {
-          console.log(`dropped the element: ${props.selectedElement}`);
+          // console.log(`dropped the element: ${props.selectedElement}`);
           handleDrop();
         }
       }
@@ -311,6 +447,7 @@ function Canvas (props) {
         trashHandler={handleTrash} homeHandler={handleHome}
         structureChecker={checkStructure} moleculeStatus={moleculeStatus} 
         moleculeErrors={moleculeErrors} displayErrors={displayMoleculeErrors}
+        handleHorseClick={handleHorseClick} handleTutorial={handleTutorial}
       />
       {displayErrors && <ErrorBox errors={moleculeErrors} elementId={hoveredElement} />}
       <div >
@@ -321,14 +458,21 @@ function Canvas (props) {
           mouseY={mouseY}
           center={center}
           hover={props.hover}
+          selectedElement={props.selectedElement}
           handleAddElement={handleAddElement}
           handleRemoveElement={handleRemoveElement}
           handleDragStart={props.handleDragStart} 
           handleDragEnd={props.handleDragEnd}
           handleHover={handleHover}
           handleOutHover={handleOutHover}
+          horseBtns={horseBtns}
         />
+        
+
       </div>
+      
+      {openTutorial && <Tutorial />}
+      {focusMsg && <div className='instruction-info' id='focusMsg'><h2>Quit horsin around, get back to work! ;)</h2></div>}
     </div>
   );
 }
@@ -409,19 +553,24 @@ function Molecule(props) {
   // Draws the current molecule according to the data in canvas
   const elementDisplay = Object.entries(props.elements).map(([key, value]) => {
     if(adjustElement === parseInt(key)) {
-      coord[key] = {x: -1000, y: -1000};
+      coord[key] = {x:-1000, y:-1000};
     }
     else {
       coord[key] = (findRelativePos(props.elements[value.parent], parseInt(key)));
     }
-    return <ElementRender 
-      element={value} 
-      point={coord[key]}
-      scale={props.scale}
-      handleDragStart={handleDragStart} 
-      handleDragEnd={handleDragEnd}
-      handleMouseOver={props.handleHover}
-      handleMouseOut={props.handleOutHover}/>
+    idGen = parseInt(key) + 1;
+    
+    return <ElementRender
+    key={key} 
+    element={value} 
+    point={coord[key]}
+    scale={props.scale}
+    handleDragStart={handleDragStart} 
+    handleDragEnd={handleDragEnd}
+    handleMouseOver={props.handleHover}
+    handleMouseOut={props.handleOutHover}/>
+  
+    
   });
 
 
@@ -430,13 +579,17 @@ function Molecule(props) {
     for(let j = 0; j < Object.entries(props.elements).length; j++) {
       let keys = Object.keys(props.elements);
       for(let k = 0; k < props.elements[keys[j]].lStructure.length; k++) {
-        console.log(`Element neighbor ${props.elements[keys[j]].neighbors[k]}`);
-        if((props.elements[keys[j]].lStructure[k] > 0) && 
+        // console.log(`Element neighbor ${props.elements[keys[j]].neighbors[k]}`);
+        if(((props.elements[keys[j]].lStructure[k] > 0) &&
+          (props.elements[keys[j]].lStructure[k] < 4)) && 
           ((props.elements[keys[j]].neighbors[k] === undefined) ||
+          (props.elements[keys[j]].neighbors[k] === null) ||
           (props.elements[keys[j]].neighbors[k] === adjustElement)) && 
           (parseInt(keys[j]) !== adjustElement)) {
           elementDisplay.push(<OpenElementRender 
+            key={`Hollow of ${keys[j]} at position ${k}`}
             element={props.elements[keys[j]]} 
+            selectedElement={props.selectedElement}
             point={findRelativeCoord(k, coord[keys[j]])}
             scale={props.scale}
             pos={k}
@@ -446,7 +599,10 @@ function Molecule(props) {
     }
   }
   return (
-    elementDisplay
+    <div>
+      {elementDisplay}
+      {props.horseBtns}
+    </div>
   )
 
 }

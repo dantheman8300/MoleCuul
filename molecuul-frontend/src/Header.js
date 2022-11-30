@@ -6,9 +6,9 @@ import InstructionTile from './InstructionTile';
 
 function Header() {
   return (
-    <div className="Header">
+    <div >
+      <div className="Header"></div>
       <h1 className='Header-title'>MoleCuul</h1>
-      <InstructionTile />
       {/* <HamburgerMenu/g> */}
     </div>
   )

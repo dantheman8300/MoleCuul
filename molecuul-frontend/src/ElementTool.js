@@ -11,7 +11,7 @@ function ElementTool (props) {
     const image = props.info.tile;
 
     const handleClick = event => {
-        console.log(ind)
+        // console.log(ind)
         isOpen = props.handleChange(ind);
     }
 
@@ -23,7 +23,7 @@ function ElementTool (props) {
     return (
         <div className='ElementTool'>
             <img id='elem-square' src={require(`./images/${image}.svg`)} alt='element tile' onClick={handleClick}  />
-            {console.log("info  ", octInfo)}
+            {/* {console.log("info  ", octInfo)} */}
             {isOpen && <ConfigurationMenu info={octInfo} handleDragStart={props.handleDragStart} handleDragEnd={props.handleDragEnd}/>}
         </div>
     )

@@ -1,36 +1,51 @@
 import React, {useState} from 'react';
+import ElementImage from './ElementImage';
+import hollowElementHighlight from './images/oct-border.svg';
+import { pushRotate } from 'react-burger-menu';
 
 /* Element tile rendered on canvas */
 function ElementRender(props) {
+    const [showElement, setShowElement] = useState(true);
     const image = props.element.source;
     const symbol = props.element.elementName;
     const elementId = props.element.id;
     const scale = props.scale;
     const posX = props.point.x;
     const posY = props.point.y;
+    const rotation = props.element.rotation;
+
+    const elementStyle = {
+        position: "relative",
+        alignSelf: "center",
+    }
 
     return (
         <div 
         draggable
         onDragStart={
-            () => {
-                const elementInfo = {
-                    id: props.element.id,
-                    name: symbol,
-                    lStructure: props.element.lStructure,
-                    source: image
-                };
-                props.handleDragStart(elementInfo);
-            }
+        () => {
+            setShowElement(false);
+            const elementInfo = {
+                id: props.element.id,
+                name: symbol,
+                lStructure: props.element.lStructure,
+                source: image,
+                rotation: rotation
+            };
+            props.handleDragStart(elementInfo);
+        }
         }
         onDragEnd={
-            () => {
-                props.handleDragEnd(elementId);
-                
-            }
+        () => {
+            props.handleDragEnd(elementId);
+        }
         }
         onMouseOver={
             () => {
+                console.log(`Element ${props.element.id} with ${props.element.elementName}`);
+                console.log(`       lStructure ${props.element.lStructure}`);
+                console.log(`       Neighbors ${props.element.neighbors}`);
+                console.log(`       Parent ${props.element.parent}`);
                 props.handleMouseOver(elementId);
             }
         }
@@ -40,8 +55,7 @@ function ElementRender(props) {
             }
         }
         style={{position: 'absolute', top: posY, left: posX, zIndex: 4}}>
-            <img className='element-render' src={require(`./images/${image}.svg`)} alt={'render of' + image} style={{height:scale * 50, width:scale * 50}}/>
-            <div id='elemSym' style={{height:1, width:1, fontSize:scale * 20}}>{symbol}</div>
+            <ElementImage image={image} scale={scale} symbol={symbol} rotation={rotation}/>
         </div>
     )
 };
