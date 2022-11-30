@@ -1,16 +1,23 @@
-import InstructionTile from "./InstructionTile";
+
 import React, {useState} from "react";
 import Sidebar from "./Sidebar";
 import FreeBuildPage from "./FreeBuildPage.js";
 import Canvas from "./Canvas";
 import Header from "./Header";
-import ValidateMolecule from "./ValidateMolecule";
+import './Tutorial.css';
+
+import Tutorial from './Tutorial';
 
 function App() {
 
     // Create state to hold the currently selected element from sidebar
     const [selectedElement, setSelectedElement] = useState(null);
     const [hover, setHover] = useState(false);
+    
+    const [openTutorial, setTutorial] = useState(false);
+
+
+
     // const [rotation, setRotation] = React.useState(0);
 
 
@@ -23,6 +30,10 @@ function App() {
     const handleElementDragEnd = () => {
         setHover(!hover);
         setSelectedElement(null);
+    }
+
+    const handleTutorial = event => {
+        setTutorial(current => !current)
     }
 
     // const handleElementRotation = (rotator) => {
@@ -56,10 +67,12 @@ function App() {
                 />
             }
             canvas = {<Canvas selectedElement={selectedElement} hover={hover} 
-            handleDragStart={handleElementDragStart} handleDragEnd={handleElementDragEnd}/>}
+            handleDragStart={handleElementDragStart} handleDragEnd={handleElementDragEnd} handleTutorial={handleTutorial}/>}
             header = {<Header />}
+            
             />
             
+         {openTutorial && <Tutorial handleTutorial={handleTutorial}/>}
 
         </div>
     )
