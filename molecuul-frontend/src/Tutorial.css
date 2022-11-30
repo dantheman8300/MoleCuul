@@ -2,18 +2,19 @@
 
 .tutorialBox {
     position: relative;
-    width: 250px;
+    width: 150px;
+    height: 50px;
     
     box-sizing:border-box;
   
-    background-color:#677BAB;
+    background-color:#95a9d6;
   
     z-index: 11;
     border-radius: 6px;
     border: 1px solid #495879;
   
     top: 90%;
-    left: 40%;
+    left: 45%;
     display: flex;
     flex-direction: row;
   
@@ -23,63 +24,20 @@
     padding: 5px 0px 5px 0px;
   }
   
-  .dir {
-    position: relative;
-    width: 60px;
-    padding: 5px;
-    font-size: 20px;
-    
-    font-family: 'Roboto';
-    background-color:#93a2c3;
-  
-    border-radius: 6px;
-    
-    border: 1px solid #495879;
-    color:#293142;
-    margin: 2px;
-  }
   
   
-  .dir:hover {
-    
-    background-color:#b3c2e3;
-    box-shadow: 1px 1px 2px #495879;
   
-  }
+
   
-  .dir:active{
-  
-    
-    background-color:#93a2c3;
-  }
   
   .close {
     position: relative;
-    width: 60px;
-    padding: 5px;
-    font-size: 20px;
-    
-    font-family: 'Roboto';
-    background-color:#93a2c3;
-  
-    border-radius: 6px;
-    
-    border: 1px solid #495879;
-    color:#293142;
+    width: 30px;
     margin: 2px;
   }
   
   .close:hover {
-    
-    background-color:#b3c2e3;
-    box-shadow: 1px 1px 2px #495879;
-  
-  }
-  
-  .close:active{
-  
-    
-    background-color:#93a2c3;
+    opacity: 50%;
   }
   
   .arrow {

@@ -90,12 +90,13 @@
 }
 
 .instruction-info > h1 {
-  margin: 3px;
+  margin: 0px;
 }
 
 .subtitle {
   font-size: 15px;
   text-align: center;
+  margin: 0;
 }
 .end-text {
   font-size: 12px;
@@ -162,65 +163,6 @@
   justify-items: center;
   justify-content: space-evenly;
   padding: 5px 0px 5px 0px;
-}
-
-.dir {
-  position: relative;
-  width: 30px;
-  padding: 5px;
-  font-size: 20px;
-  
-  font-family: 'Roboto';
-  /* background-color:#93a2c3; */
-
-  /* border-radius: 6px; */
-  
-  /* border: 1px solid #495879; */
-  /* color:#293142; */
-  margin: 2px;
-}
-
-
-.dir:hover {
-  
-  background-color:#b3c2e3;
-  box-shadow: 1px 1px 2px #495879;
-
-}
-
-.dir:active{
-
-  
-  background-color:#93a2c3;
-}
-
-.close {
-  position: relative;
-  width: 30px;
-  padding: 5px;
-  font-size: 20px;
-  
-  /* font-family: 'Roboto'; */
-  /* background-color:#93a2c3;
-
-  border-radius: 6px;
-  
-  border: 1px solid #495879;
-  color:#293142; */
-  margin: 2px;
-}
-
-.close:hover {
-  
-  background-color:#b3c2e3;
-  box-shadow: 1px 1px 2px #495879;
-
-}
-
-.close:active{
-
-  
-  background-color:#93a2c3;
 }
 
 .arrow {
