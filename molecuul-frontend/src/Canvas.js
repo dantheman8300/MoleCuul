@@ -9,7 +9,7 @@ import appleHouse from './icons/house_1f3e0.png';
 import appleTrash from './icons/wastebasket_1f5d1-fe0f.png';
 import appleMinus from './icons/minus_2796.png';
 import applePlus from './icons/plus_2795.png';
-import appleQuestion from './icons/question-mark_2753.png';
+import appleQuestion from './icons/icon-gray-check.png';
 
 var idGen = 0;
 const POSITIONS = {
