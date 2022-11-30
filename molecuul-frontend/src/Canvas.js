@@ -72,22 +72,25 @@ function Canvas (props) {
   const handleZoomOut = event => {
     addDataIntoCache('State', 'https://localhost:300', [scale - .2, center]);
     setScale(scale - .2);
-    // console.log(`zooming out, ${scale}`)
+    console.log(`zooming out, ${scale}`)
   }
 
   const handleZoomIn = event => {
     addDataIntoCache('State', 'https://localhost:300', [scale + .2, center]);
     setScale(scale +.2);
-    // console.log(`zooming in, ${scale}`)
+    console.log(`zooming in, ${scale}`)
   }
 
   const handleTrash = event => {
     // Remove all elements in the molecule
     deleteCache('Molecule');
+    deleteCache('State');
+    setCenter({x: 500, y: 200});
     setElements({});
     setMoleculeStatus(0);
     setMoleculeErrors([]);
     setDisplayErrors(false);
+    idGen = 0;
   }
 
   const handleHome = event => {
@@ -118,7 +121,6 @@ function Canvas (props) {
 
   const handleCanvasMove = (event) => {
     if(event.ctrlKey) {
-      event.preventDefault();
       if(event.deltaY > 0) {
         handleZoomIn();
       }
@@ -136,7 +138,7 @@ function Canvas (props) {
   const handleDrop = (event) => {
     if(Object.keys(elements).length === 0 && props.selectedElement !== null) {
       var e = window.event;
-      setCenter({x: e.clientX - 290, y: e.clientY - 150});
+      setCenter({x: e.clientX - (190), y: e.clientY - (100)});
       console.log(`Center at x:${center.x}, y:${center.y}`)
       handleAddElement(undefined, undefined);
       
