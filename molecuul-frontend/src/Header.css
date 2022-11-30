@@ -4,60 +4,30 @@
 }
 
 .Header {
+  position: absolute;
   width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: space-evenly;
-  align-content: center;
-  background-color: #CAF0F6;
-  color: #495879;
-  font-family: Roboto;
+  height: 80px;
+  margin: 0px;
+  padding: 0px;
 
-  flex-direction: row;
+  background-color: #CAF0F6;
 
   overflow: visible;
+  z-index: -2;
 }
 
 .Header-title {
-  position: relative;
+  position: absolute;
+  width: 100%;
+  height: auto;
   text-align: center;
   align-self: center;
   justify-self: center;
+  margin: 5px;
+  top: 5px;
+
+  color: #495879;
+  font-family: Roboto;
 }
 
 
-.info-icon {
-  position: absolute;
-  /* top: 150px;
-  left: 220px; */
-  width: 30px;
-  height: 30px;
-
-  align-self: center;
-
-}
-
-.instruction-info {
-  position: absolute;
-
-  width: 75%;
-  height: 200px;
-
-  box-sizing:border-box;
-
-  background-color: #677BAB;
-
-
-  border-radius: 6px;
-  border: 2px solid black;
-  color: black;
-  text-align: center;
-
-
-  left: -100px;
-
-  font-family: 'Roboto';
-  font-style: normal;
-
-  z-index: 1;
-}

@@ -10,7 +10,9 @@ import appleTrash from './icons/wastebasket_1f5d1-fe0f.png';
 import appleMinus from './icons/minus_2796.png';
 import applePlus from './icons/plus_2795.png';
 import appleQuestion from './icons/icon-gray-check.png';
-import appleHorse from './icons/icon-horse.png'
+import appleHorse from './icons/icon-horse.png';
+import InstructionTile from './InstructionTile';
+import Tutorial from './Tutorial';
 
 var idGen = 0;
 const POSITIONS = {
@@ -38,10 +40,11 @@ function IconBox (props) {
     <div>
       <div className="iconBox">
         <div className='iconRow'>
+          <InstructionTile handleTutorial={props.handleTutorial}/>
           <img src={appleMinus} alt='minus icon' className='icon' onClick={props.zoomOutHandler}/>
           <img src={applePlus} alt='plus icon' className='icon' onClick={props.zoomInHandler}/>  
-          <img src={appleHouse} alt='home icon' className='icon' onClick={props.homeHandler}/>
           <img src={appleTrash} alt='trash icon' className='icon' onClick={props.trashHandler}/>  
+          <img src={appleHouse} alt='home icon' className='icon' onClick={props.homeHandler}/>
           {props.moleculeStatus == 0 && <img src={appleQuestion} alt='Search icon' className='icon' onClick={props.structureChecker}/>}
           {props.moleculeStatus == 1 && <img src={appleCheck} alt='Check icon' className='icon'/>}
           {props.moleculeStatus == -1 && <img src={appleX} alt='X icon' className='icon' onClick={props.displayErrors}/>}
@@ -68,7 +71,12 @@ function Canvas (props) {
   const [displayErrors, setDisplayErrors] = useState(false);
   const [hoveredElement, setHoveredElement] = useState(undefined);
   const [horseBtns, setHorseBtns] = useState([]);
+  const [openTutorial, setTutorial] = useState(false);
 
+
+  const handleTutorial = event => {
+    setTutorial(current => !current)
+}
   
   const handleHorseClick = (e) => {
     setHorseBtns ( horseBtns.concat(<img src={appleHorse} alt='horse icon' className='horse' onClick={handleHorseClick} style={{top: (Math.random() * (window.screen.availHeight) - 200), left: (Math.random() * (window.screen.availWidth) - 200)}}/>))
@@ -329,7 +337,7 @@ function Canvas (props) {
         trashHandler={handleTrash} homeHandler={handleHome}
         structureChecker={checkStructure} moleculeStatus={moleculeStatus} 
         moleculeErrors={moleculeErrors} displayErrors={displayMoleculeErrors}
-        handleHorseClick={handleHorseClick}
+        handleHorseClick={handleHorseClick} handleTutorial={handleTutorial}
       />
       {displayErrors && <ErrorBox errors={moleculeErrors} elementId={hoveredElement} />}
       <div >
@@ -351,6 +359,8 @@ function Canvas (props) {
         
 
       </div>
+      
+      {openTutorial && <Tutorial />}
     </div>
   );
 }
