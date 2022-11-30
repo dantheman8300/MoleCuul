@@ -69,7 +69,7 @@
   position: absolute;
 
   padding: 10px;
-  width: 440px;
+  width: 500px;
   box-sizing:border-box;
 
   background-color: #677BAB;
@@ -98,12 +98,6 @@
   text-align: center;
   margin: 0;
 }
-.end-text {
-  font-size: 12px;
-  text-align: left;
-
-  margin: 4px;
-}
 
 .body1 {
   font-size: 18px;
@@ -111,7 +105,7 @@
 }
 
 .body2 {
-  font-size: 18px;
+  font-size: 20px;
   margin: 4px;
 }
 
