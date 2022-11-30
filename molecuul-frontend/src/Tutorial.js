@@ -4,41 +4,57 @@ import arrow from "./images/arrow.svg";
 import leftArrow from './icons/left-arrow_2b05-fe0f.png';
 import rightArrow from './icons/right-arrow_27a1-fe0f.png';
 import appleX from './icons/cross-mark_274c.png';
+import TutorialPages from "./TutorialPages";
 
 
 
-function Tutorial() {
+function Tutorial(props) {
 
     const [isHover, setHover] = useState(false)
-    const [isOne, setOne] = useState(false)
-    const [isTwo, setTwo] = useState(false)
-
-    const handleOne = event => {
-        setOne(current => !current)
-    }
+    const [curInd, setCurInd] = useState(0)
     
     const closeText = () => {
         if(isHover) return 'x'
         else return 'close'
     }
 
+
+
     const handleHover = event => {
         setHover(current => !current)
     }
 
-    return (
-        <div className="tutorialScreen">
-            <div className="tutorialBox">
-                {/* <button className="dir">prev</button> */}
-                <img src={leftArrow} alt="left arrow" className="dir" />
-                {/* <button className="close" onMouseEnter={handleHover} onMouseLeave={handleHover}>{closeText()}</button> */}
-                <img src={appleX} alt="close" className="close" onMouseEnter={handleHover} onMouseLeave={handleHover} />
-                {/* <button className="dir" onClick={handleOne}>next</button> */}
-                <img src={rightArrow} alt="right arrow" className="dir" onClick={handleOne} />
-            </div>
-            <Arrow />
+
+    const increaseCurInd = () => {
+        if(curInd + 1 > 3) {
+            setCurInd(0)
+        }
+        else {  
+            setCurInd(curInd + 1)
+            console.log(curInd)
+        }
+    }
+
+    const decreaseCurInd = () => {
+        if(curInd  - 1 < 0) {
+            setCurInd(3)
+        }
+        else {  
             
-            <img src={arrow} alt="arrow img" className="arrow"/>
+        setCurInd(curInd - 1)
+        }
+    }
+
+
+    return (
+        <div className="tutorialScreen" style={{width: window.innerWidth, height: window.innerHeight}}>
+            <div className="tutorialBox">
+                <button className="dir" onClick={decreaseCurInd}>prev</button>
+                <button className="close" onMouseEnter={handleHover} onMouseLeave={handleHover} onClick={props.handleTutorial}>{closeText()}</button>
+                <button className="dir" onClick={increaseCurInd}>next</button>
+            </div>
+            <TutorialPages index={curInd}/>
+
         </div>
     )
 

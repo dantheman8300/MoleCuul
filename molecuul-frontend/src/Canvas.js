@@ -11,8 +11,7 @@ import appleMinus from './icons/minus_2796.png';
 import applePlus from './icons/plus_2795.png';
 import appleQuestion from './icons/icon-gray-check.png';
 import appleHorse from './icons/icon-horse.png';
-import InstructionTile from './InstructionTile';
-import Tutorial from './Tutorial';
+import InstructionTile from './InstructionTile';  
 
 var idGen = 0;
 const POSITIONS = {
@@ -73,15 +72,9 @@ function Canvas (props) {
   const [hoveredElement, setHoveredElement] = useState(undefined);
   const [horseBtns, setHorseBtns] = useState([]);
   const [focusMsg, setFocusMsg] = useState(false);
-  const [openTutorial, setTutorial] = useState(false);
-
-
-  const handleTutorial = event => {
-    setTutorial(current => !current)
-}
   
   const handleHorseClick = (e) => {
-    setHorseBtns ( horseBtns.concat(<img src={appleHorse} alt='horse icon' className='horse' onClick={handleHorseClick} style={{top: (Math.random() * window.screen.availHeight), left: (Math.random() * window.screen.availWidth)}}/>))
+    setHorseBtns ( horseBtns.concat(<img src={appleHorse} alt='horse icon' className='horse' onClick={handleHorseClick} style={{top: (Math.random() * window.innerHeight), left: (Math.random() * window.innerWidth)}}/>))
     if(horseBtns.length > 10){
       setFocusMsg(true)
     }
@@ -444,7 +437,7 @@ function Canvas (props) {
         trashHandler={handleTrash} homeHandler={handleHome}
         structureChecker={checkStructure} moleculeStatus={moleculeStatus} 
         moleculeErrors={moleculeErrors} displayErrors={displayMoleculeErrors}
-        handleHorseClick={handleHorseClick} handleTutorial={handleTutorial}
+        handleHorseClick={handleHorseClick} handleTutorial={props.handleTutorial}
       />
       {displayErrors && <ErrorBox errors={moleculeErrors} elementId={hoveredElement} />}
       <div >
