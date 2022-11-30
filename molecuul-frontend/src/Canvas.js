@@ -469,7 +469,7 @@ function Canvas (props) {
       </div>
       
       {openTutorial && <Tutorial />}
-      {focusMsg && <div className='instruction-info' id='focusMsg'><h2>Quit horsin around, get back to work! ;)</h2></div>}
+      {focusMsg && <div className='instruction-info' id='focusMsg'><h2>Quit horsin around, get back to work! 😊</h2></div>}
     </div>
   );
 }

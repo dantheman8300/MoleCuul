@@ -68,7 +68,7 @@
   position: absolute;
 
   padding: 10px;
-  width: 400px;
+  width: 440px;
   box-sizing:border-box;
 
   background-color: #677BAB;
@@ -95,6 +95,7 @@
 .subtitle {
   margin: 4px 4px 4px 14px;
   font-size: 15px;
+  text-align: center;
 }
 .end-text {
   font-size: 12px;
@@ -140,11 +141,12 @@
 
 .tutorialBox {
   position: relative;
-  width: 250px;
+  width: 150px;
+  height: 50px;
   
   box-sizing:border-box;
 
-  background-color:#677BAB;
+  background-color:#caf0f678;
 
   z-index: 11;
   border-radius: 6px;
@@ -164,17 +166,17 @@
 
 .dir {
   position: relative;
-  width: 60px;
+  width: 30px;
   padding: 5px;
   font-size: 20px;
   
   font-family: 'Roboto';
-  background-color:#93a2c3;
+  /* background-color:#93a2c3; */
 
-  border-radius: 6px;
+  /* border-radius: 6px; */
   
-  border: 1px solid #495879;
-  color:#293142;
+  /* border: 1px solid #495879; */
+  /* color:#293142; */
   margin: 2px;
 }
 
@@ -194,17 +196,17 @@
 
 .close {
   position: relative;
-  width: 60px;
+  width: 30px;
   padding: 5px;
   font-size: 20px;
   
-  font-family: 'Roboto';
-  background-color:#93a2c3;
+  /* font-family: 'Roboto'; */
+  /* background-color:#93a2c3;
 
   border-radius: 6px;
   
   border: 1px solid #495879;
-  color:#293142;
+  color:#293142; */
   margin: 2px;
 }
 

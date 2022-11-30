@@ -8,7 +8,7 @@ function Header() {
   return (
     <div >
       <div className="Header"></div>
-      <h1 className='Header-title'>MoleCuul</h1>
+      <h1 className='Header-title'>MoleCuul 🔬</h1>
       {/* <HamburgerMenu/g> */}
     </div>
   )
