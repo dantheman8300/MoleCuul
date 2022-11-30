@@ -26,7 +26,8 @@ const NAMES = {
   'H': 'Hydrogen',
   'C': 'Carbon',
   'N': 'Nitrogen',
-  'O': 'Oxygen'
+  'O': 'Oxygen',
+  'Cl': 'Chlorine'
 }
 
 function IconBox (props) {
