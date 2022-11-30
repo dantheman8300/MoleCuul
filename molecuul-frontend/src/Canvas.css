@@ -54,6 +54,14 @@
 
 }
 
+#focusMsg {
+  margin: 5px;
+  padding: 5px;
+  width: auto;
+  height: auto;
+
+  z-index: 2;
+}
 
 
 .instruction-info {

@@ -71,6 +71,7 @@ function Canvas (props) {
   const [displayErrors, setDisplayErrors] = useState(false);
   const [hoveredElement, setHoveredElement] = useState(undefined);
   const [horseBtns, setHorseBtns] = useState([]);
+  const [focusMsg, setFocusMsg] = useState(false);
   const [openTutorial, setTutorial] = useState(false);
 
 
@@ -80,16 +81,23 @@ function Canvas (props) {
   
   const handleHorseClick = (e) => {
     setHorseBtns ( horseBtns.concat(<img src={appleHorse} alt='horse icon' className='horse' onClick={handleHorseClick} style={{top: (Math.random() * window.screen.availHeight), left: (Math.random() * window.screen.availWidth)}}/>))
+    if(horseBtns.length > 10){
+      setFocusMsg(true)
+    }
   }
+
 
   const handleZoomOut = event => {
     setScale(scale - .2);
     console.log(`zooming out, ${scale}`)
+    setFocusMsg(false)
   }
 
   const handleZoomIn = event => {
     setScale(scale +.2);
     console.log(`zooming in, ${scale}`)
+    setFocusMsg(false)
+    
   }
 
   const handleTrash = event => {
@@ -98,10 +106,12 @@ function Canvas (props) {
     setMoleculeStatus(0);
     setMoleculeErrors([]);
     setDisplayErrors(false);
+    setFocusMsg(false)
   }
 
   const handleHome = event => {
     setCenter({x: 500, y: 200});
+    setFocusMsg(false)
   }
 
   // const handleDragStart = (event) => {
@@ -127,6 +137,7 @@ function Canvas (props) {
 
   const handleCanvasMove = (event) => {
     setCenter({x: center.x - event.deltaX, y: center.y - event.deltaY});
+    setFocusMsg(false)
   }
 
   const handleDrop = (event) => {
@@ -135,6 +146,8 @@ function Canvas (props) {
       setCenter({x: e.clientX - 290, y: e.clientY - 150});
       console.log(`Center at x:${center.x}, y:${center.y}`)
       handleAddElement(undefined, undefined);
+      setFocusMsg(false)
+      
       
     }
   }
@@ -221,6 +234,7 @@ function Canvas (props) {
     // display add element params
     console.log(`name: ${props.selectedElement.name}, name: ${props.selectedElement.lStructure}, bondId: ${bondId}, posId: ${posId}`)
     addElement(props.selectedElement.name, props.selectedElement.source, props.selectedElement.lStructure, bondId, (posId + 4) % 8, props.selectedElement.rotation);
+    setFocusMsg(false)
   }
 
   const handleRemoveElement = (id) => {
@@ -231,11 +245,14 @@ function Canvas (props) {
 
     console.log(`removing element ${id}`)
     removeElement(id);
+    setFocusMsg(false)
   }
 
   const checkStructure = () => {
     console.log('checking structure')
     console.log(elements)
+    
+    setFocusMsg(false)
 
     let errors = [];
 
@@ -361,6 +378,7 @@ function Canvas (props) {
       </div>
       
       {openTutorial && <Tutorial />}
+      {focusMsg && <div className='instruction-info' id='focusMsg'><h2>Quit horsin around, get back to work! ;)</h2></div>}
     </div>
   );
 }
