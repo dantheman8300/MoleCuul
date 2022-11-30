@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import ElementImage from './ElementImage';
 import hollowElementHighlight from './images/oct-border.svg';
+import { pushRotate } from 'react-burger-menu';
 
 /* Element tile rendered on canvas */
 function ElementRender(props) {
@@ -11,6 +12,12 @@ function ElementRender(props) {
     const scale = props.scale;
     const posX = props.point.x;
     const posY = props.point.y;
+    const rotation = props.element.rotation;
+
+    const elementStyle = {
+        position: "relative",
+        alignSelf: "center",
+    }
 
     return (
         <div 
@@ -43,7 +50,7 @@ function ElementRender(props) {
             }
         }
         style={{position: 'absolute', top: posY, left: posX, zIndex: 4}}>
-            <ElementImage image={image} scale={scale} symbol={symbol}/>
+            <ElementImage image={image} scale={scale} symbol={symbol} rotation={rotation}/>
         </div>
     )
 };

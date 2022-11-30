@@ -30,6 +30,10 @@
   position: absolute;
   /* top: 150px;
   left: 220px; */
+  width: 30px;
+  height: 30px;
+
+  align-self: center;
 
 }
 

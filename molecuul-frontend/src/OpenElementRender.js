@@ -13,6 +13,7 @@ function OpenElementRender(props) {
     const posX = props.point.x;
     const posY = props.point.y;
     const bondPos = props.pos;
+    const rotation = props.selectedElement.rotation;
 
     // const handleDragOver = (e) => {
     //     e.currentTarget.src = require(`./images/${image}.svg`);
@@ -41,7 +42,7 @@ function OpenElementRender(props) {
             width={scale * 50} 
             height={scale * 50} 
             style={{position: 'absolute', top: posY, left: posX, zIndex: 2}}>
-        {hover && <ElementImage image={image} scale={scale} symbol={symbol} />}
+        {hover && <ElementImage image={image} scale={scale} symbol={symbol} rotation={rotation}/>}
         {!hover && <img
             key={'Open node of ' + props.element.id} 
             src={hollowElementHighlight}

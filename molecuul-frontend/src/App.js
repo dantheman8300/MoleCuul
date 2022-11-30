@@ -11,10 +11,12 @@ function App() {
     // Create state to hold the currently selected element from sidebar
     const [selectedElement, setSelectedElement] = useState(null);
     const [hover, setHover] = useState(false);
+    // const [rotation, setRotation] = React.useState(0);
 
-    const handleElementDragStart = (id) => {
-        console.log(`Drag started for ${id}`);
-        setSelectedElement(id);
+
+    const handleElementDragStart = (elementInfo) => {
+        console.log(`Drag started for ${elementInfo}`);
+        setSelectedElement(elementInfo);
         setHover(!hover);
     }
 
@@ -22,6 +24,16 @@ function App() {
         setHover(!hover);
         setSelectedElement(null);
     }
+
+    // const handleElementRotation = (rotator) => {
+    //     console.log(`Rotation changed to ${rotation}`);
+    //     if (rotation === 0) {
+    //         setRotation(0);
+    //     } else {
+    //         setRotation(rotation + rotator);
+    //     }
+    // }
+
 
     // const lst = [
     //     "CH4",
@@ -40,6 +52,7 @@ function App() {
                 <Sidebar 
                     handleDragStart={handleElementDragStart}
                     handleDragEnd={handleElementDragEnd}
+                    // handleRotation={handleElementRotation}
                 />
             }
             canvas = {<Canvas selectedElement={selectedElement} hover={hover} 

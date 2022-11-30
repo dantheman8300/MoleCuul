@@ -9,7 +9,7 @@ import appleHouse from './icons/house_1f3e0.png';
 import appleTrash from './icons/wastebasket_1f5d1-fe0f.png';
 import appleMinus from './icons/minus_2796.png';
 import applePlus from './icons/plus_2795.png';
-import appleQuestion from './icons/question-mark_2753.png';
+import appleQuestion from './icons/icon-gray-check.png';
 
 var idGen = 0;
 const POSITIONS = {
@@ -199,7 +199,8 @@ function Canvas (props) {
   * NOTE: Position is indicated by an array index. 0 -> 3 where 
   * 0 is the top position moving clockwise.
   */
-  function addElement(elementName, source, lStructure, bondedElemId, pos) {
+  function addElement(elementName, source, lStructure, bondedElemId, pos, rotation) {
+    console.log(`rotation: ${rotation}`)
 
     // pos = (pos + 4) % 8; 
 
@@ -210,7 +211,8 @@ function Canvas (props) {
       source: source, 
       lStructure: lStructure, 
       neighbors: [...Array(8)], 
-      parent: bondedElemId
+      parent: bondedElemId,
+      rotation: rotation,
     };
 
     idGen += 1;
@@ -247,7 +249,7 @@ function Canvas (props) {
     console.log('adding element')
     // display add element params
     console.log(`name: ${props.selectedElement.name}, name: ${props.selectedElement.lStructure}, bondId: ${bondId}, posId: ${posId}`)
-    addElement(props.selectedElement.name, props.selectedElement.source, props.selectedElement.lStructure, bondId, (posId + 4) % 8);
+    addElement(props.selectedElement.name, props.selectedElement.source, props.selectedElement.lStructure, bondId, (posId + 4) % 8, props.selectedElement.rotation);
   }
 
   const handleRemoveElement = (id) => {

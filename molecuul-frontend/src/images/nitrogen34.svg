@@ -47,14 +47,10 @@
     </g>
   </g>
   <g id="Nitrogen_34" data-name="Nitrogen 34">
-    <g>
-      <circle class="cls-4" cx="144" cy="31.5" r="10"/>
-      <circle class="cls-4" cx="166.5" cy="31.5" r="10"/>
-      <circle class="cls-4" cx="121.5" cy="31.5" r="10"/>
-      <circle class="cls-4" cx="144" cy="31.5" r="10"/>
-      <circle class="cls-4" cx="166.5" cy="31.5" r="10"/>
-      <circle class="cls-4" cx="121.5" cy="31.5" r="10"/>
-    </g>
+    <circle class="cls-4" cx="144" cy="31.5" r="10"/>
+    <circle class="cls-4" cx="144" cy="31.5" r="10"/>
+    <circle class="cls-4" cx="180.5" cy="31.5" r="10"/>
+    <circle class="cls-4" cx="107.5" cy="31.5" r="10"/>
     <g>
       <circle class="cls-6" cx="152.49" cy="252.19" r="10"/>
       <circle class="cls-6" cx="135.51" cy="252.19" r="10"/>
