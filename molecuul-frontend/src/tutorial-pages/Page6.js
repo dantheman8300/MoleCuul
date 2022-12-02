@@ -12,7 +12,7 @@ function PageSix (props) {
                 <Arrow/>
             </div>
 
-            <div className="text-box">home icon - centers molecule on canvas</div>
+            <div className="text-box" id="page-six-box">home icon - centers molecule on canvas</div>
             <div className="text-box">hint if you can't find your molecule, try pressing the home button </div>
         
         </div>

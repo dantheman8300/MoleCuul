@@ -8,7 +8,7 @@ function PageZero (props) {
 
 
     return (
-        <div className="pages">
+        <div>
             <div className='page-zero-arrow'><Arrow/></div>
             <div className="text-box" id="page-zero-box">click here to open the tile menu</div>
 

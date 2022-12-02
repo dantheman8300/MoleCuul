@@ -95,7 +95,8 @@ function App() {
                 />
             }
             canvas = {<Canvas selectedElement={selectedElement} hover={hover} 
-            handleDragStart={handleElementDragStart} handleDragEnd={handleElementDragEnd} handleTutorial={handleTutorial} />}
+            handleDragStart={handleElementDragStart} handleDragEnd={handleElementDragEnd} handleTutorial={handleTutorial} openTutorial={openTutorial}
+            curInd={curInd} increaseCurInd={increaseCurInd}/>}
             header = {<Header />}
             
             />

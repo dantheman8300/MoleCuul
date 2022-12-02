@@ -23,8 +23,10 @@ function ConfigurationMenu(props) {
     
     return (
         <div>
-            {singleConfig && <div className="configurationMenu-single" ><ConfigMenuTile config={images} symbol={symbol} handleDragStart={props.handleDragStart} handleDragEnd={props.handleDragEnd} /> </ div>}
-            {!singleConfig && <div className="configurationMenu" onScroll={checkTutorial}><ConfigMenuTiles configs={images} symbol={symbol} handleDragStart={props.handleDragStart} handleDragEnd={props.handleDragEnd}/> </ div>}
+            {singleConfig && <div className="configurationMenu-single" ><ConfigMenuTile config={images} symbol={symbol} handleDragStart={props.handleDragStart} handleDragEnd={props.handleDragEnd} 
+            openTutorial={props.openTutorial} curInd={props.curInd} increaseCurInd={props.increaseCurInd}/> </ div>}
+            {!singleConfig && <div className="configurationMenu" onScroll={checkTutorial} ><ConfigMenuTiles configs={images} symbol={symbol} handleDragStart={props.handleDragStart} handleDragEnd={props.handleDragEnd}
+            openTutorial={props.openTutorial} curInd={props.curInd} increaseCurInd={props.increaseCurInd}/> </ div>}
         </div>
     )
 }

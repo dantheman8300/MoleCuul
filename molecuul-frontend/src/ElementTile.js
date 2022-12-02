@@ -31,6 +31,9 @@ function ElementTile(props) {
     }
 
     const handleRotation = (rotator) => {
+        if(props.openTutorial && props.curInd === 2){
+            props.increaseCurInd()
+        }
         console.log(`Starting rotation: ${rotation}`);
         console.log(`Rotation changed with rotator ${rotator}`);
         console.log(`lStructure before rotation: ${lStructure}`);

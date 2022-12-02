@@ -557,6 +557,10 @@ function Canvas (props) {
           handleHover={handleHover}
           handleOutHover={handleOutHover}
           horseBtns={horseBtns}
+          
+          openTutorial={props.openTutorial}
+          curInd={props.curInd}
+          increaseCurInd={props.increaseCurInd}
         />
         
 
@@ -617,7 +621,10 @@ function Molecule(props) {
     handleDragEnd={handleDragEnd}
     handleMouseOver={props.handleHover}
     handleMouseOut={props.handleOutHover}
-    updateElement={props.updateElement}/>
+    updateElement={props.updateElement}
+    openTutorial={props.openTutorial}
+    curInd={props.curInd}
+    increaseCurInd={props.increaseCurInd}/>
   });
 
 

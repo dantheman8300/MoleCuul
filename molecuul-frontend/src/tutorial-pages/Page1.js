@@ -1,5 +1,6 @@
 import React from "react";
 import Arrow from "../Arrow";
+import BondKey from "./BondKey";
 
 function PageOne (props) {
 
@@ -11,10 +12,8 @@ function PageOne (props) {
             <div className='page-one-arrow'>
                 <Arrow/>
             </div>
-            <div className="text-box" >scroll to see more options</div>
-            <div className="text-box"> key box </div>
-
-            <div className="key">Key</div>
+            <div className="text-box" id="page-one-box">scroll to see more options</div>
+            <BondKey />
 
 
         

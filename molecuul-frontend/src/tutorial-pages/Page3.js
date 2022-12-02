@@ -12,7 +12,7 @@ function PageThree (props) {
                 <Arrow/>
             </div>
 
-            <div className="text-box">drag and drop</div>
+            <div className="text-box" id="page-three-box">drag and drop</div>
             
             <div className="text-box"> key box </div>
         

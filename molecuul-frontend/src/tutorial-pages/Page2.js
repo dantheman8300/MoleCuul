@@ -8,11 +8,11 @@ function PageTwo (props) {
 
     return (
         <div className="pages">
-            <div className='page-two-arrow'>
+            <div className='page-one-arrow'>
                 <Arrow/>
             </div>
 
-            <div className="text-box">click on a tile to rotate it</div>
+            <div className="text-box" id="page-one-box">click on a tile to rotate it</div>
             
             <div className="text-box"> key box </div>s
         

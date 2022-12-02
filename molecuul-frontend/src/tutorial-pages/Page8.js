@@ -12,7 +12,7 @@ function PageEight (props) {
                 <Arrow/>
             </div>
 
-            <div className="text-box">x means you molecule is incorrect</div>
+            <div className="text-box" id="page-eight-box">x means you molecule is incorrect</div>
             <div className="text-box"> click on the x to see your errors</div>
         
         </div>
