@@ -485,10 +485,14 @@ function Canvas (props) {
 
     if (errors.length === 0) {
       setMoleculeStatus(1);
+      setMoleculeErrors([]);
     } else {
       setMoleculeStatus(-1);
       setMoleculeErrors(errors);
     }
+
+    setDisplayErrors(true);
+
 
     console.log(errors);
 
