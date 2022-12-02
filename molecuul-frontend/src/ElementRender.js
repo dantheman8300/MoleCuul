@@ -35,23 +35,37 @@ function ElementRender(props) {
         <div 
         draggable
         onDragStart={
-        () => {
-            setShowElement(false);
-            const elementInfo = {
-                id: id,
-                name: symbol,
-                lStructure: lStructure,
-                source: image,
-                rotation: rotation,
-                point: props.point
-            };
-            props.handleDragStart(elementInfo);
+            () => {
+                // setShowElement(false);
+                const elementInfo = {
+                    id: id,
+                    name: symbol,
+                    lStructure: lStructure,
+                    source: image,
+                    rotation: rotation,
+                    point: props.point
+                };
+                props.handleDragStart(elementInfo);
+            }
         }
+        onDrag={
+            () => {
+                setShowElement(false);
+                // const elementInfo = {
+                //     id: id,
+                //     name: symbol,
+                //     lStructure: lStructure,
+                //     source: image,
+                //     rotation: rotation,
+                //     point: props.point
+                // };
+                // props.handleDragStart(elementInfo);
+            }
         }
         onDragEnd={
-        () => {
-            props.handleDragEnd(elementId);
-        }
+            () => {
+                props.handleDragEnd(elementId);
+            }
         }
         onMouseOver={
             () => {
