@@ -1,5 +1,8 @@
 # MoleCuul
 
+![CI Badge](https://github.com/dantheman8300/MoleCuul/actions/workflows/node.js.yml/badge.svg)
+![CD Badge](https://github.com/dantheman8300/MoleCuul/actions/workflows/main_molecuulapi.yml/badge.svg)
+
 <b> Anthony Bui | Tyler Herzog | Emelia Ortiz | Daniel Leavitt </b>
 
 ## Project Vision
