@@ -518,6 +518,13 @@ function Canvas (props) {
   }
 
 
+  const handleErrorReset = () => {
+    setMoleculeStatus(0);
+    setMoleculeErrors([]); // Clear molecule errors
+    setDisplayErrors(false); // Hide error display
+    setFocusMsg(false)
+  }
+
   return (
     <div 
       className="canvas" 
@@ -560,6 +567,7 @@ function Canvas (props) {
           updateElement={updateElement}
           handleHover={handleHover}
           handleOutHover={handleOutHover}
+          handleErrorReset={handleErrorReset}
           horseBtns={horseBtns}
         />
         
@@ -622,7 +630,8 @@ function Molecule(props) {
     handleDragEnd={handleDragEnd}
     handleMouseOver={props.handleHover}
     handleMouseOut={props.handleOutHover}
-    updateElement={props.updateElement}/>
+    updateElement={props.updateElement}
+    handleErrorReset={props.handleErrorReset}/>
   });
 
 

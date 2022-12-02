@@ -71,6 +71,7 @@ function ElementRender(props) {
         onClick={
             () => {
                 props.updateElement(id, rotateLStructure(1), rotation + 1, null, null);
+                props.handleErrorReset();
             }
         }
         style={{position: 'absolute', top: posY, left: posX, zIndex: (showElement ? 4 : -1)}}>
