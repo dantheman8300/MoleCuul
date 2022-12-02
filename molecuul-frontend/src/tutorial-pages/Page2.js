@@ -13,7 +13,7 @@ function PageTwo (props) {
                 <Arrow/>
             </div>
 
-            <div className="text-box" id="page-one-box">click on a tile to rotate it</div>
+            <div className="text-box" id="page-one-box">click on an octagon to rotate it</div>
             <BondKey />
         
         </div>

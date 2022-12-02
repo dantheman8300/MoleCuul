@@ -21,7 +21,7 @@ function App() {
     
     const [curInd, setCurInd] = useState(0)
     const increaseCurInd = () => {
-        if(curInd + 1 > 12) {
+        if(curInd + 1 > 15) {
             setCurInd(0)
         }
         else {  
@@ -32,7 +32,7 @@ function App() {
 
     const decreaseCurInd = () => {
         if(curInd  - 1 < 0) {
-            setCurInd(12)
+            setCurInd(15)
         }
         else {  
             
@@ -60,6 +60,10 @@ function App() {
 
     const handleTutorial = event => {
         setTutorial(current => !current)
+
+        if(curInd === 15) {
+            setCurInd(0)
+        }
     }
 
     // const handleElementRotation = (rotator) => {

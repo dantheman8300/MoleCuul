@@ -8,12 +8,12 @@ function PageSix (props) {
 
     return (
         <div className="pages">
-            <div className='page-two-arrow'>
+            <div className='page-six-arrow'>
                 <Arrow/>
             </div>
 
-            <div className="text-box" id="page-six-box">home icon - centers molecule on canvas</div>
-            <div className="text-box">hint if you can't find your molecule, try pressing the home button </div>
+            <div className="text-box" id="page-six-box">zoom in icon</div>
+            <div className="text-box" id="key-box"> tip: you can hold down control and scroll to zoom in/out </div>
         
         </div>
 )

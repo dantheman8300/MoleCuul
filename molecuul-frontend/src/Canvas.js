@@ -135,6 +135,13 @@ function Canvas (props) {
   });
 
   const handleZoomOut = event => {
+    
+          
+    // console.log("rot ", props.openTutorial)
+    // console.log(props.curInd)
+    if(props.openTutorial && props.curInd === 5){
+      props.increaseCurInd()
+    }
     addDataIntoCache('State', 'https://localhost:300', scale - .2);
     setScale(scale - .2);
     updateAllCoord(scale - .2);
@@ -143,6 +150,13 @@ function Canvas (props) {
   }
 
   const handleZoomIn = event => {
+    
+
+    // console.log("rot ", props.openTutorial)
+    // console.log(props.curInd)
+    if(props.openTutorial && props.curInd === 6){
+      props.increaseCurInd()
+    }
     addDataIntoCache('State', 'https://localhost:300', scale + .2);
     setScale(scale +.2);
     updateAllCoord(scale + .2);
@@ -153,6 +167,11 @@ function Canvas (props) {
 
   const handleTrash = event => {
     // Remove all elements in the molecule
+        // console.log("rot ", props.openTutorial)
+    // console.log(props.curInd)
+    // if(props.openTutorial && props.curInd === 6){
+    //   props.increaseCurInd()
+    // }
     deleteCache('Molecule');
     deleteCache('State');
     setCenter({x: 0, y: 0});
@@ -174,6 +193,11 @@ function Canvas (props) {
   }
 
   const handleHome = event => {
+        // console.log("rot ", props.openTutorial)
+    // console.log(props.curInd)
+    if(props.openTutorial && props.curInd === 7){
+      props.increaseCurInd()
+    }
     let elemDict = elements;
     Object.entries(elements).map(([key, value]) => {
       elemDict[key].point = {x: value.point.x + center.x, y: value.point.y + center.y}
@@ -184,6 +208,10 @@ function Canvas (props) {
   }
 
   const handleCanvasMove = (event) => {
+    
+    if(props.openTutorial && props.curInd === 4){
+        props.increaseCurInd()
+    }
     setFocusMsg(false)
     if(event.ctrlKey) {
       if(event.deltaY > 0) {
@@ -434,6 +462,12 @@ function Canvas (props) {
   const checkStructure = () => {
     console.log('checking structure')
     console.log(elements)
+
+  // console.log("rot ", props.openTutorial)
+  // console.log(props.curInd)
+  if(props.openTutorial && props.curInd === 8){
+    props.increaseCurInd()
+  }
     
     setFocusMsg(false)
 
@@ -495,6 +529,11 @@ function Canvas (props) {
   }
 
   const displayMoleculeErrors = () => {
+    // console.log("rot ", props.openTutorial)
+                // console.log(props.curInd)
+    if(props.openTutorial && props.curInd === 9){
+      props.increaseCurInd()
+    }
     if (displayErrors) {
       setDisplayErrors(false);
     } else {
@@ -505,6 +544,9 @@ function Canvas (props) {
   }
 
   const handleHover = (id) => {
+    if(props.openTutorial && props.curInd === 10){
+      props.increaseCurInd()
+  }
     setHoveredElement(id);
   }
 
@@ -532,6 +574,12 @@ function Canvas (props) {
       }
       onDragOver={
         (e) => {
+          
+                // console.log("rot ", props.openTutorial)
+                // console.log(props.curInd)
+                if(props.openTutorial && props.curInd === 3){
+                    props.increaseCurInd()
+                }
           e.stopPropagation();
           e.preventDefault();
         }

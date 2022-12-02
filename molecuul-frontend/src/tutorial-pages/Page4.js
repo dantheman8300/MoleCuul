@@ -1,5 +1,4 @@
 import React from "react";
-import Arrow from "../Arrow";
 
 function PageFour (props) {
 
@@ -8,12 +7,7 @@ function PageFour (props) {
 
     return (
         <div className="pages">
-            <div className='page-two-arrow'>
-                <Arrow/>
-            </div>
-
-            <div className="text-box" id="page-four-box">zoom out icon</div>
-            <div className="text-box"> tip: you can hold down control and scroll to zoom in/out </div>
+            <div className="text-box" id="page-three-box">scroll to move canvas around</div>
         
         </div>
 )
