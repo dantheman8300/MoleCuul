@@ -12,7 +12,6 @@ import './Tutorial.css'
 function Tutorial(props) {
 
     const [isHover, setHover] = useState(false)
-    const [curInd, setCurInd] = useState(0)
     
     const closeText = () => {
         if(isHover) return 'x'
@@ -26,25 +25,6 @@ function Tutorial(props) {
     }
 
 
-    const increaseCurInd = () => {
-        if(curInd + 1 > 3) {
-            setCurInd(0)
-        }
-        else {  
-            setCurInd(curInd + 1)
-            console.log(curInd)
-        }
-    }
-
-    const decreaseCurInd = () => {
-        if(curInd  - 1 < 0) {
-            setCurInd(3)
-        }
-        else {  
-            
-        setCurInd(curInd - 1)
-        }
-    }
 
 
     return (
@@ -54,11 +34,11 @@ function Tutorial(props) {
                 <button className="close" onMouseEnter={handleHover} onMouseLeave={handleHover} onClick={props.handleTutorial}>{closeText()}</button>
                 <button className="dir" onClick={increaseCurInd}>next</button> */}
 
-                <img className="close" src={leftArrow} onClick={decreaseCurInd} />
+                <img className="close" src={leftArrow} onClick={props.decreaseCurInd} />
                 <img className="close" src={appleX} onMouseEnter={handleHover} onMouseLeave={handleHover} onClick={props.handleTutorial} />
-                <img className="close" src={rightArrow} onClick={increaseCurInd} />
+                <img className="close" src={rightArrow} onClick={props.increaseCurInd} />
             </div>
-            <TutorialPages index={curInd}/>
+            <TutorialPages index={props.index} increaseCurInd={props.increaseCurInd}/>
 
         </div>
     )

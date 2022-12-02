@@ -1,12 +1,20 @@
 import React from "react";
 import Arrow from "../Arrow";
 
-function PageOne () {
+
+
+function PageZero (props) {
+
+
+
     return (
-        <div id='page-one'>
-            <Arrow  />
+        <div className="pages">
+            <div className='page-zero-arrow'><Arrow/></div>
+            <div className="text-box" id="page-zero-box">click here to open the tile menu</div>
+
         </div>
-    )
+)
+
 }
 
-export default PageOne;
+export default PageZero;

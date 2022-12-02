@@ -5,7 +5,6 @@ import FreeBuildPage from "./FreeBuildPage.js";
 import Canvas from "./Canvas";
 import Header from "./Header";
 import './Tutorial.css';
-
 import Tutorial from './Tutorial';
 
 function App() {
@@ -18,7 +17,34 @@ function App() {
 
 
 
+
+    
+    const [curInd, setCurInd] = useState(0)
+    const increaseCurInd = () => {
+        if(curInd + 1 > 12) {
+            setCurInd(0)
+        }
+        else {  
+            setCurInd(curInd + 1)
+            console.log(curInd)
+        }
+    }
+
+    const decreaseCurInd = () => {
+        if(curInd  - 1 < 0) {
+            setCurInd(12)
+        }
+        else {  
+            
+        setCurInd(curInd - 1)
+        }
+    }
+
     // const [rotation, setRotation] = React.useState(0);
+
+
+
+
 
 
     const handleElementDragStart = (elementInfo) => {
@@ -64,15 +90,17 @@ function App() {
                     handleDragStart={handleElementDragStart}
                     handleDragEnd={handleElementDragEnd}
                     // handleRotation={handleElementRotation}
+                    openTutorial={openTutorial}
+                    curInd={curInd} increaseCurInd={increaseCurInd}
                 />
             }
             canvas = {<Canvas selectedElement={selectedElement} hover={hover} 
-            handleDragStart={handleElementDragStart} handleDragEnd={handleElementDragEnd} handleTutorial={handleTutorial}/>}
+            handleDragStart={handleElementDragStart} handleDragEnd={handleElementDragEnd} handleTutorial={handleTutorial} />}
             header = {<Header />}
             
             />
             
-         {openTutorial && <Tutorial handleTutorial={handleTutorial}/>}
+         {openTutorial && <Tutorial handleTutorial={handleTutorial} index={curInd} increaseCurInd={increaseCurInd} decreaseCurInd={decreaseCurInd}/>}
 
         </div>
     )

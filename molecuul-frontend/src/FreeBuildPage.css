@@ -1,7 +1,7 @@
 .page {
   display: grid;
   grid-template-columns: 150px auto;
-  grid-template-rows: 65px auto;
+  grid-template-rows: 60px auto;
 
   overflow: hidden;
 
@@ -14,9 +14,8 @@
 }
 
 .header {
-  grid-column-start: 1;
+  grid-column-start: 2;
   grid-row-start: 1;
-  grid-column: span 3;
   /* background: #CAF0F6; */
 
   border-bottom: 2.5px solid #495879;
@@ -27,7 +26,10 @@
 
 .sidebar-section {
   grid-column-start: 1;
-  grid-row-start: span 2;
+  grid-row-start: 1;
+  
+  grid-row-end: span 3;
+
 /*   
   border-bottom: 3px solid black;
   border-left: 3px solid black; */
@@ -39,9 +41,7 @@
 
 .builder {
   grid-column-start: 2;
-  grid-row-start: 2;
-  grid-column: span 2;
-  grid-row: span 2;
+  grid-row-start: span 2;
   /* background-color: #A9C9DD; */
 
   /* border-bottom: 3px solid black;

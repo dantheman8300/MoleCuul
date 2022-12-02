@@ -41,17 +41,19 @@ function IconBox (props) {
     <div>
       <div className="iconBox">
         <div className='iconRow'>
-          <InstructionTile handleTutorial={props.handleTutorial}/>
+        <InstructionTile handleTutorial={props.handleTutorial}/>
           <img src={appleMinus} alt='minus icon' className='icon' onClick={props.zoomOutHandler}/>
           <img src={applePlus} alt='plus icon' className='icon' onClick={props.zoomInHandler}/>  
           <img src={appleTrash} alt='trash icon' className='icon' onClick={props.trashHandler}/>  
           <img src={appleHouse} alt='home icon' className='icon' onClick={props.homeHandler}/>
-          {props.moleculeStatus == 0 && <img src={appleQuestion} alt='Search icon' className='icon' onClick={props.structureChecker}/>}
-          {props.moleculeStatus == 1 && <img src={appleCheck} alt='Check icon' className='icon'/>}
-          {props.moleculeStatus == -1 && <img src={appleX} alt='X icon' className='icon' onClick={props.displayErrors}/>}
+          {props.moleculeStatus === 0 && <img src={appleQuestion} alt='Search icon' className='icon' onClick={props.structureChecker}/>}
+          {props.moleculeStatus === 1 && <img src={appleCheck} alt='Check icon' className='icon'/>}
+          {props.moleculeStatus === -1 && <img src={appleX} alt='X icon' className='icon' onClick={props.displayErrors}/>}
           {/* {horseButtons} */}
           
           <img src={appleHorse} alt='horse icon' className='icon' onClick={props.handleHorseClick}/> 
+          
+
           
         </div>
       </div>
@@ -66,7 +68,7 @@ function Canvas (props) {
   const [mouseX, setMouseX] = useState(500);
   const [mouseY, setMouseY] = useState(200);
   const [center, setCenter] = useState({x: 500, y: 200});
-  const [dragStart, setDragStart] = useState({x: 0, y: 0});
+  // const [dragStart, setDragStart] = useState({x: 0, y: 0});
   const [moleculeStatus, setMoleculeStatus] = useState(0);
   const [moleculeErrors, setMoleculeErrors] = useState([]);
   const [displayErrors, setDisplayErrors] = useState(false);
@@ -419,7 +421,7 @@ function Canvas (props) {
   return (
     <div 
       className="canvas" 
-      // onWheel={handleCanvasMove}
+      onWheel={handleCanvasMove}
       onDrop={
         (e) => {
           // console.log(`dropped the element: ${props.selectedElement}`);
@@ -462,7 +464,7 @@ function Canvas (props) {
 
       </div>
     
-      {focusMsg && <div className='instruction-info' id='focusMsg'><h2>Quit horsin' around, get back to work! <img className="smileyFaceHorse" src={smileyFace} /></h2></div>}
+      {focusMsg && <div className='instruction-info' id='focusMsg'><h2>Quit horsin' around, get back to work! <img className="smileyFaceHorse" src={smileyFace} alt="emoji smiley face"/></h2></div>}
     </div>
   );
 }

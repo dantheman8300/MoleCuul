@@ -1,7 +1,6 @@
-import React, {useEffect} from "react";
+import React from "react";
 import ConfigMenuTile from "./ConfigMenuTile";
 import ConfigMenuTiles from "./ConfigMenuTiles";
-import axios from 'axios';
 
 function ConfigurationMenu(props) {
 
@@ -15,11 +14,17 @@ function ConfigurationMenu(props) {
         if(images.length === 1) return true;
         else return false;
     })();
+
+    const checkTutorial = event => {
+        if(props.openTutorial && props.curInd === 1) {
+            props.increaseCurInd()
+        }
+    }
     
     return (
         <div>
-            {singleConfig && <div className="configurationMenu-single"><ConfigMenuTile config={images} symbol={symbol} handleDragStart={props.handleDragStart} handleDragEnd={props.handleDragEnd}/> </ div>}
-            {!singleConfig && <div className="configurationMenu"><ConfigMenuTiles configs={images} symbol={symbol} handleDragStart={props.handleDragStart} handleDragEnd={props.handleDragEnd}/> </ div>}
+            {singleConfig && <div className="configurationMenu-single" ><ConfigMenuTile config={images} symbol={symbol} handleDragStart={props.handleDragStart} handleDragEnd={props.handleDragEnd} /> </ div>}
+            {!singleConfig && <div className="configurationMenu" onScroll={checkTutorial}><ConfigMenuTiles configs={images} symbol={symbol} handleDragStart={props.handleDragStart} handleDragEnd={props.handleDragEnd}/> </ div>}
         </div>
     )
 }
