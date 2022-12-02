@@ -28,5 +28,8 @@ jobs:
         cache: 'npm'
         cache-dependency-path: molecuul-backend/package-lock.json
     - run: npm ci
+      working-directory: ./molecuul-backend
     - run: npm run build --if-present
-    - run: npm test --if-present
+      working-directory: ./molecuul-backend
+    - run: npm test --if-present 
+      working-directory: ./molecuul-backend

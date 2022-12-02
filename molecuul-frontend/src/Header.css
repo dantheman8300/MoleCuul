@@ -1,0 +1,36 @@
+@font-face {
+  font-family: 'Roboto';
+  src: url("./fonts/Roboto-Regular.ttf");
+}
+
+.Header {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  margin: 0px;
+  padding: 0px;
+
+  background-color: #CAF0F6;
+
+  overflow: visible;
+  z-index: -2;
+}
+
+.Header-title {
+  position: absolute;
+  width: 100%;
+  height: auto;
+  text-align: center;
+  align-self: center;
+  justify-self: center;
+  /* margin-left: 70px; */
+  color: #495879;
+  font-family: Roboto;
+  margin: 10px 0px 10px -80px;
+}
+
+.microscope {
+  width: 30px;
+}
+
+

@@ -4,7 +4,7 @@ const cors = require('cors');
 const userServices = require('./models/user-services');
 
 const app = express();
-const port = 5000;
+const port = 5001;
 
 app.use(cors());
 app.use(express.json());
@@ -14,8 +14,8 @@ app.get('/', (req, res) => {
 });
 
 app.get('/elements', async (req, res) => {
-    const name = req.query['elemName'];
-    const symbol = req.query['elemSymbol'];
+    const name = req.query['name'];
+    const symbol = req.query['symbol'];
     try {
         const result = await userServices.getElements(name, symbol);
         res.send({elements: result});         
