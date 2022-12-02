@@ -436,7 +436,7 @@ function Canvas (props) {
   }
 
   const handleAddElement = (element, neighbors, point) => {
-    if(props.openTutorial && props.curInd === 11){
+    if(props.openTutorial && props.curInd === 8){
       props.increaseCurInd()
   }
     // Set molecule status to 0 (not checked)
@@ -474,7 +474,7 @@ function Canvas (props) {
 
   // console.log("rot ", props.openTutorial)
   // console.log(props.curInd)
-  if(props.openTutorial && props.curInd === 8){
+  if(props.openTutorial && props.curInd === 9){
     props.increaseCurInd()
   }
     
@@ -544,7 +544,7 @@ function Canvas (props) {
   const displayMoleculeErrors = () => {
     console.log("rot ", props.openTutorial)
                 console.log(props.curInd)
-    if(props.openTutorial && props.curInd === 10){
+    if(props.openTutorial && props.curInd === 11){
       props.increaseCurInd()
     }
     if (displayErrors) {
@@ -557,7 +557,7 @@ function Canvas (props) {
   }
 
   const handleHover = (id) => {
-    if(props.openTutorial && props.curInd === 9){
+    if(props.openTutorial && props.curInd === 10){
       props.increaseCurInd()
   }
     setHoveredElement(id);

@@ -13,7 +13,7 @@ function PageThree (props) {
                 <Arrow/>
             </div>
 
-            <div className="text-box" id="page-three-box">click and drag an octagon to add it to the canvas </div>
+            <div className="text-box" id="page-three-box">drag an octagon to add it to the canvas </div>
             <BondKey />
         
         </div>

@@ -15,32 +15,9 @@ app.get('/', (req, res) => {
 
 app.get('/elements', async (req, res) => {
     const name = req.query['name'];
-    const symbol = req.query['symbol'];
     try {
-        const result = await userServices.getElements(name, symbol);
+        const result = await userServices.getElements(name);
         res.send({elements: result});         
-    } catch (error) {
-        console.log(error);
-        res.status(500).send('An error ocurred in the server.');
-    }
-});
-
-app.get('/electron_config', async (req, res) => {
-    const config_id = req.query['config_id'];
-    try {
-        const result = await userServices.getElectronConfig(config_id);
-        res.send({electron_config: result});         
-    } catch (error) {
-        console.log(error);
-        res.status(500).send('An error ocurred in the server.');
-    }
-});
-
-app.get('/element_image', async (req, res) => {
-    const element = req.query['element'];
-    try {
-        const result = await userServices.getElementImage(element);
-        res.send({element_image: result});         
     } catch (error) {
         console.log(error);
         res.status(500).send('An error ocurred in the server.');
@@ -75,16 +52,6 @@ app.delete('/elements', async (req, res) => {
         res.status(500).end();
 });
 
-app.delete('/users/:id', async (req, res) => {
-    const id = req.params['id'];
-    const result = await userServices.deleteUser(id);
-    if (result === undefined || result === null)
-        res.status(404).send('Resource not found.');
-    else {
-        res.send({users_list: result});
-    }
-});
-
 // Used to remove a user from the user list
 app.delete('/elements/:id', (req, res) => {
 
@@ -101,7 +68,8 @@ app.delete('/elements/:id', (req, res) => {
     }
   });
 
-
-app.listen(process.env.PORT || port, () => {
-    console.log("REST API is listening.");
+  app.listen(process.env.PORT || port, () => {
+    if (process.env.PORT) {
+      console.log(`REST API is listening on port: ${process.env.PORT}.`);
+    } else console.log(`REST API is listening on port: ${port}.`);
   });
