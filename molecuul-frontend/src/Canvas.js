@@ -471,7 +471,7 @@ function Canvas (props) {
 
         // Check if the lStructure of the neighbor matches the lStructure of the element
         // Note: Check to make sure the error isn't already in the list from the neighbor's side or should it be?
-        if (neighbor !== undefined && neighbor !== null && element.lStructure[pos] !== elements[neighbor].lStructure[(pos + 4) % 8]) {
+        if (neighbor !== undefined && neighbor !== null && element.lStructure[pos] !== elements[neighbor].lStructure[(pos + 4) % 8] && element.lStructure[pos] !== 0) {
           errors.push({
             errorMessage: 'Invalid Bond',
             errorSpecificMessage: `Element, ${NAMES[element.elementName]}, has an invalid bond in ${POSITIONS[pos]} position`,
