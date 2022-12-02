@@ -8,9 +8,12 @@ function PageEleven (props) {
 
     return (
         <div className="pages">
-            
-            <div className="text-box" id="page-nine-box">try adding a few more tiles </div>
 
+            <div className='page-eight-arrow'>
+                <Arrow/>
+            </div>
+            <div className="text-box" id="page-eight-box">click on the x again to close the error box</div>
+        
         </div>
 )
 
