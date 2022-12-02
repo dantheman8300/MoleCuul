@@ -12,9 +12,9 @@
 [Figma](https://www.figma.com/file/9NGrI4G5viBJrBtN48aiTy/MoleCuul-Web-Interface?t=nQaA5YCxFzoJf6L9-1)
 
 ## Development environment setup
-1. Nagivate to backend directory
+1. Nagivate to backend directory - run `cd molecuul-backend`
 2. Run `npm install`
-3. Create .env file containing the following:
+3. Create .env file in the  molecuul-backend directory containing the following:
     ```
     MONGO_USER=
     MONGO_PWD=
