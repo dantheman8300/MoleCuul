@@ -27,6 +27,7 @@ function Tutorial(props) {
 
 
 
+
     return (
         <div className="tutorialScreen" style={{width: window.innerWidth, height: window.innerHeight}}>
             <div className="tutorialBox">
@@ -35,7 +36,7 @@ function Tutorial(props) {
                 <button className="dir" onClick={increaseCurInd}>next</button> */}
 
                 <img className="close" src={leftArrow} onClick={props.decreaseCurInd} />
-                <img className="close" src={appleX} onMouseEnter={handleHover} onMouseLeave={handleHover} onClick={props.handleTutorial} />
+                <img className="close" src={appleX} onMouseEnter={handleHover} onMouseLeave={handleHover} onClick={props.handleTutorial}/>
                 <img className="close" src={rightArrow} onClick={props.increaseCurInd} />
             </div>
             <TutorialPages index={props.index} increaseCurInd={props.increaseCurInd}/>

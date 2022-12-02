@@ -1,5 +1,6 @@
 import React from "react";
 import Arrow from "../Arrow";
+import BondKey from "./BondKey";
 
 function PageThree (props) {
 
@@ -8,13 +9,12 @@ function PageThree (props) {
 
     return (
         <div className="pages">
-            <div className='page-two-arrow'>
+            <div className='page-one-arrow'>
                 <Arrow/>
             </div>
 
-            <div className="text-box" id="page-three-box">drag and drop</div>
-            
-            <div className="text-box"> key box </div>
+            <div className="text-box" id="page-three-box">click and drag an octagon to add it to the canvas </div>
+            <BondKey />
         
         </div>
 )

@@ -1,4 +1,5 @@
 import React from "react";
+import Arrow from "../Arrow";
 
 function PageTen (props) {
 
@@ -7,12 +8,14 @@ function PageTen (props) {
     return (
         <div className="pages">
 
-            <div className="text-box" id="page-ten-box">try adding a few more tiles </div>
-            <div className="text-box"> swipe away to delete an individual tile </div>
-            <div className="text-box"> hold and drag to move tiles on the molecule</div>
+            <div className='page-eight-arrow'>
+                <Arrow/>
+            </div>
+            <div className="text-box" id="page-eight-box">click on the x again to close the error box</div>
         
         </div>
-)
+
+    )
 
 }
 

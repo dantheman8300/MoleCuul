@@ -1,6 +1,8 @@
 import React from "react";
 import Arrow from "../Arrow";
+import appleCheck from "../icons/check-mark-button_2705 2.png";
 
+import appleX from "../icons/cross-mark_274c.png";
 function PageEight (props) {
 
 
@@ -8,12 +10,14 @@ function PageEight (props) {
 
     return (
         <div className="pages">
-            <div className='page-two-arrow'>
+            <div className='page-eight-arrow'>
                 <Arrow/>
             </div>
 
-            <div className="text-box" id="page-eight-box">x means you molecule is incorrect</div>
-            <div className="text-box"> click on the x to see your errors</div>
+            <div className="text-box" id="page-eight-box">validate icon - check to see if your molecule is valid</div>
+            <div className="text-box" id="check-box"> key: 
+            <div className="check-row"><img src={appleCheck} alt="check box" className="tut-icon"/> valid</div>
+            <div className="check-row"><img src={appleX} alt="x" className="tut-icon"/> invalid</div></div>
         
         </div>
 )

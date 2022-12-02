@@ -4,6 +4,11 @@ import PageOne from "./tutorial-pages/Page1";
 import PageTen from "./tutorial-pages/Page10";
 import PageEleven from "./tutorial-pages/Page11";
 import PageTwelve from "./tutorial-pages/page12";
+import PageThirteen from "./tutorial-pages/page13";
+import PageFourteen from "./tutorial-pages/page14";
+import PageFifteen from "./tutorial-pages/page15";
+import PageSixteen from "./tutorial-pages/Page16";
+import PageSeventeen from "./tutorial-pages/page17";
 import PageTwo from "./tutorial-pages/Page2";
 import PageThree from "./tutorial-pages/Page3";
 import PageFour from "./tutorial-pages/Page4";
@@ -26,7 +31,7 @@ function TutorialPages(props) {
     console.log(pageNum)
     
     const loadPage = (num) => {
-        console.log("here ", pageNum)
+        // console.log("here ", pageNum)
         switch (num ) {
             case 0:
                 return (
@@ -79,6 +84,22 @@ function TutorialPages(props) {
             case 12:
                 return (
                     <PageTwelve />
+                )
+            case 13:
+                return (
+                    <PageThirteen />
+                )
+            case 14:
+                return (
+                    <PageFourteen />
+                )
+            case 15:
+                return (
+                    <PageFifteen />
+                )
+            case 16:
+                return (
+                    <PageSixteen />
                 )
             default:
                 break;

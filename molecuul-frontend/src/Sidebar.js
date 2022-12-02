@@ -46,7 +46,7 @@ function Sidebar (props) {
             isOpen.map((item, index) => {
                 // console.log(ind + "   " + index)
                 if (ind === index) {
-                    console.log(ind + " hi  " + !item)
+                    // console.log(ind + " hi  " + !item)
                     if(props.openTutorial && props.curInd === 0 && !item === true) {
                         props.increaseCurInd()
                     }

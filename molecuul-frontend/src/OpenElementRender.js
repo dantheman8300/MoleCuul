@@ -12,7 +12,7 @@ function OpenElementRender(props) {
     const scale = props.scale;
     const posX = props.point.x;
     const posY = props.point.y;
-    const bondPos = props.pos;
+    const neighbors = props.neighbors;
     const rotation = props.selectedElement.rotation;
 
     // const handleDragOver = (e) => {
@@ -28,10 +28,8 @@ function OpenElementRender(props) {
     }
 
     const handleDrop = (e) => {
-        (e.currentTarget.src = hollowElement)
-        console.log(`parent: ${elementId}`);
-        console.log(`bond position: ${bondPos}`);
-        props.handleAddElement(elementId, bondPos, props.point);
+        // (e.currentTarget.src = hollowElement)
+        props.handleAddElement(props.selectedElement, neighbors, props.point);
         props.handleDragEnd();
         e.stopPropagation();
         e.preventDefault();
@@ -39,7 +37,7 @@ function OpenElementRender(props) {
 
     return (
         <div
-            onDragExit={handleDragLeave}
+            onDragLeave={handleDragLeave}
             onDragOver={handleDragEnter}
             onDrop={handleDrop}
             width={scale * 50} 

@@ -8,12 +8,12 @@ function PageSeven (props) {
 
     return (
         <div className="pages">
-            <div className='page-two-arrow'>
+            <div className='page-seven-arrow'>
                 <Arrow/>
             </div>
 
-            <div className="text-box" id="page-seven-box">validate icon - check to see if your molecule is valid</div>
-            <div className="text-box"> key : check when correct, x when incorrect</div>
+            <div className="text-box" id="page-seven-box">home icon: puts molecule back into its original position on canvas</div>
+            <div className="text-box" id='key-box'>hint if you can't find your molecule, try pressing the home button </div>
         
         </div>
 )

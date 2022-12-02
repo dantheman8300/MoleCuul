@@ -35,23 +35,37 @@ function ElementRender(props) {
         <div 
         draggable
         onDragStart={
-        () => {
-            setShowElement(false);
-            const elementInfo = {
-                id: id,
-                name: symbol,
-                lStructure: lStructure,
-                source: image,
-                rotation: rotation,
-                point: props.point
-            };
-            props.handleDragStart(elementInfo);
+            () => {
+                // setShowElement(false);
+                const elementInfo = {
+                    id: id,
+                    name: symbol,
+                    lStructure: lStructure,
+                    source: image,
+                    rotation: rotation,
+                    point: props.point
+                };
+                props.handleDragStart(elementInfo);
+            }
         }
+        onDrag={
+            () => {
+                setShowElement(false);
+                // const elementInfo = {
+                //     id: id,
+                //     name: symbol,
+                //     lStructure: lStructure,
+                //     source: image,
+                //     rotation: rotation,
+                //     point: props.point
+                // };
+                // props.handleDragStart(elementInfo);
+            }
         }
         onDragEnd={
-        () => {
-            props.handleDragEnd(elementId);
-        }
+            () => {
+                props.handleDragEnd(elementId);
+            }
         }
         onMouseOver={
             () => {
@@ -70,12 +84,13 @@ function ElementRender(props) {
         }
         onClick={
             () => {
-                // console.log("rot ", props.openTutorial)
-                // console.log(props.curInd)
-                // if(props.openTutorial && props.curInd === 9){
-                //     props.increaseCurInd()
-                // }
+                console.log("rot ", props.openTutorial)
+                console.log(props.curInd)
+                if(props.openTutorial && props.curInd === 12){
+                    props.increaseCurInd()
+                }
                 props.updateElement(id, rotateLStructure(1), rotation + 1, null, null);
+                props.handleErrorReset();
             }
         }
         style={{position: 'absolute', top: posY, left: posX, zIndex: (showElement ? 4 : -1)}}>

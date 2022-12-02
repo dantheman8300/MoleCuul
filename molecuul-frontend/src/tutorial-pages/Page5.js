@@ -8,12 +8,12 @@ function PageFive (props) {
 
     return (
         <div className="pages">
-            <div className='page-two-arrow'>
+            <div className='page-five-arrow'>
                 <Arrow/>
             </div>
 
-            <div className="text-box" id="page-five-box">zoom in icon</div>
-            <div className="text-box"> tip: you can hold down control and scroll to zoom in/out </div>
+            <div className="text-box" id="page-five-box">zoom out icon</div>
+            <div className="text-box" id="key-box"> tip: you can hold down control and scroll to zoom in/out </div>
         
         </div>
 )

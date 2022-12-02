@@ -1,20 +1,22 @@
 import React from "react";
 import Arrow from "../Arrow";
 
-function PageTwelve (props) {
+function PageThirteen (props) {
 
 
     
 
     return (
         <div className="pages">
+
             
+            <div className="text-box" id="page-nine-box">drag a canvas octagon to move it</div>
+
             
-            <div className="text-box" id="page-nine-box"> click a canvas octagon to rotate it</div>
         
         </div>
 )
 
 }
 
-export default PageTwelve;
+export default PageThirteen;
