@@ -3,15 +3,6 @@ const dotenv = require("dotenv");
 const userModel = require("./user");
 const configModel = require("./elementconfig");
 const imageModel = require("./elementimage");
-<<<<<<< HEAD
-const quizModel = require("./quizzes");
-
-dotenv.config({
-  path: ".env",
-});
-
-=======
->>>>>>> a4adf2d7aa6f7ffd1649fb3c2b147e1b566a1450
 mongoose.set("debug", true);
 
 // mongoose
