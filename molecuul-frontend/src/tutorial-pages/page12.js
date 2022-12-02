@@ -9,10 +9,8 @@ function PageTwelve (props) {
     return (
         <div className="pages">
             
-            <div className="text-box" id="page-ten-box">try adding a few more tiles </div>
-            <div className="text-box"> swipe away to delete an individual tile </div>
-            <div className="text-box"> hold and drag to move tiles on the molecule</div>
-        
+            
+            <div className="text-box" id="page-nine-box"> click a canvas octagon to rotate it</div>
         
         </div>
 )

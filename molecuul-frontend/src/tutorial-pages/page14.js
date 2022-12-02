@@ -8,13 +8,11 @@ function PageFourteen (props) {
 
     return (
         <div className="pages">
-            {/* point at x */}
-            <div className='page-twelve-arrow'>
-                <Arrow/>
-            </div>
-
-            <div className="text-box" id="page-twelve-box">tutorial complete, click here to exit</div>
-            <div className="text-box">get building!</div>
+        <div className='page-fourteen-arrow'>
+            <Arrow/>
+        </div>
+        
+         <div className="text-box" id="page-fourteen-box">drag an octagon over the trash can to delete it</div>
         
         </div>
 )

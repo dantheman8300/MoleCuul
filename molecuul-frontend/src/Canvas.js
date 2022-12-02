@@ -172,6 +172,9 @@ function Canvas (props) {
     // if(props.openTutorial && props.curInd === 6){
     //   props.increaseCurInd()
     // }
+    if(props.openTutorial && props.curInd === 15){
+      props.increaseCurInd()
+  }
     deleteCache('Molecule');
     deleteCache('State');
     setCenter({x: 0, y: 0});
@@ -184,6 +187,9 @@ function Canvas (props) {
   }
 
   const handleDeleteDrop = event => {
+    if(props.openTutorial && props.curInd === 14){
+      props.increaseCurInd()
+  }
     if(props.selectedElement !== null) {
       event.stopPropagation();
       event.preventDefault();  
@@ -430,6 +436,9 @@ function Canvas (props) {
   }
 
   const handleAddElement = (element, neighbors, point) => {
+    if(props.openTutorial && props.curInd === 11){
+      props.increaseCurInd()
+  }
     // Set molecule status to 0 (not checked)
     setMoleculeStatus(0);
     setMoleculeErrors([]); // Clear molecule errors
@@ -533,9 +542,9 @@ function Canvas (props) {
   }
 
   const displayMoleculeErrors = () => {
-    // console.log("rot ", props.openTutorial)
-                // console.log(props.curInd)
-    if(props.openTutorial && props.curInd === 9){
+    console.log("rot ", props.openTutorial)
+                console.log(props.curInd)
+    if(props.openTutorial && props.curInd === 10){
       props.increaseCurInd()
     }
     if (displayErrors) {
@@ -548,7 +557,7 @@ function Canvas (props) {
   }
 
   const handleHover = (id) => {
-    if(props.openTutorial && props.curInd === 10){
+    if(props.openTutorial && props.curInd === 9){
       props.increaseCurInd()
   }
     setHoveredElement(id);
@@ -635,6 +644,9 @@ function Molecule(props) {
   var coord = {};
   
   const handleDragStart = (elementInfo) => {
+    if(props.openTutorial && props.curInd === 13){
+      props.increaseCurInd()
+    }
     setAdjustElement(elementInfo.id);
     props.handleDragStart(elementInfo);
   }

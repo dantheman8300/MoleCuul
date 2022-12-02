@@ -8,13 +8,12 @@ function PageFifteen (props) {
 
     return (
         <div className="pages">
-            {/* point at x */}
-            <div className='page-twelve-arrow'>
-                <Arrow/>
-            </div>
-
-            <div className="text-box" id="page-twelve-box">tutorial complete, click here to exit</div>
-            <div className="text-box">get building!</div>
+        <div className='page-fourteen-arrow'>
+            <Arrow/>
+        </div>
+        
+         <div className="text-box" id="page-fourteen-box">trash icon - clears molecule from page</div>
+        <div className="text-box" id='key-box'>can't add elements to the page? try hitting the trash icon and start over</div> 
         
         </div>
 )

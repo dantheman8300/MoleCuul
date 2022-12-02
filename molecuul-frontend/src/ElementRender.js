@@ -70,11 +70,11 @@ function ElementRender(props) {
         }
         onClick={
             () => {
-                // console.log("rot ", props.openTutorial)
-                // console.log(props.curInd)
-                // if(props.openTutorial && props.curInd === 9){
-                //     props.increaseCurInd()
-                // }
+                console.log("rot ", props.openTutorial)
+                console.log(props.curInd)
+                if(props.openTutorial && props.curInd === 12){
+                    props.increaseCurInd()
+                }
                 props.updateElement(id, rotateLStructure(1), rotation + 1, null, null);
                 props.handleErrorReset();
             }

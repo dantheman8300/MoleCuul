@@ -1,4 +1,5 @@
 import React from "react";
+import Arrow from "../Arrow";
 
 function PageTen (props) {
 
@@ -7,7 +8,10 @@ function PageTen (props) {
     return (
         <div className="pages">
 
-            <div className="text-box" id="page-nine-box">hover over each octagon to see each error</div>
+            <div className='page-eight-arrow'>
+                <Arrow/>
+            </div>
+            <div className="text-box" id="page-eight-box">click on the x again to close the error box</div>
         
         </div>
 
