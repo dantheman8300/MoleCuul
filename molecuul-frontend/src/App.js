@@ -14,6 +14,8 @@ function App() {
     const [hover, setHover] = useState(false);
     
     const [openTutorial, setTutorial] = useState(false);
+    
+  const [focusMsg, setFocusMsg] = useState(false);
 
 
 
@@ -96,11 +98,13 @@ function App() {
                     // handleRotation={handleElementRotation}
                     openTutorial={openTutorial}
                     curInd={curInd} increaseCurInd={increaseCurInd}
+                    setFocusMsg={setFocusMsg} focusMsg={focusMsg}
                 />
             }
             canvas = {<Canvas selectedElement={selectedElement} hover={hover} 
             handleDragStart={handleElementDragStart} handleDragEnd={handleElementDragEnd} handleTutorial={handleTutorial} openTutorial={openTutorial}
-            curInd={curInd} increaseCurInd={increaseCurInd}/>}
+            curInd={curInd} increaseCurInd={increaseCurInd} 
+            setFocusMsg={setFocusMsg} focusMsg={focusMsg}/>}
             header = {<Header />}
             
             />

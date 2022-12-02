@@ -86,9 +86,11 @@ function ElementRender(props) {
             () => {
                 console.log("rot ", props.openTutorial)
                 console.log(props.curInd)
+                
                 if(props.openTutorial && props.curInd === 12){
                     props.increaseCurInd()
                 }
+                // props.setFocusMsg(false)
                 props.updateElement(id, rotateLStructure(1), rotation + 1, null, null);
                 props.handleErrorReset();
             }
