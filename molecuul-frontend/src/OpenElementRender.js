@@ -21,25 +21,18 @@ function OpenElementRender(props) {
 
     const handleDragEnter = (e) => {
         setHover(true);
+        props.handleElementMove([props.point, neighbors]);
     }
 
     const handleDragLeave = (e) => {
         setHover(false);
-    }
-
-    const handleDrop = (e) => {
-        (e.currentTarget.src = hollowElement)
-        props.handleAddElement(props.selectedElement, neighbors, props.point);
-        props.handleDragEnd();
-        e.stopPropagation();
-        e.preventDefault();
+        props.handleElementMove([{x:-100, y:-100}, [...Array(8)]]);
     }
 
     return (
         <div
-            onDragExit={handleDragLeave}
+            onDragLeave={handleDragLeave}
             onDragOver={handleDragEnter}
-            onDrop={handleDrop}
             width={scale * 50} 
             height={scale * 50} 
             style={{position: 'absolute', top: posY, left: posX, zIndex: 2}}>

@@ -334,21 +334,20 @@ function Canvas (props) {
     let elemDict = {};
 
     let element = elements[id];
-
+    
     // Updates element's lStructure if lStructure is updated
     if(lStructure !== null && rotation !== null) {
       element.lStructure = lStructure;
       element.rotation = rotation;
     }
-    
-    // Updates element's neigbors if neighbors is updated
-    if(neighbors !== null) {
-      element.neighbors = neighbors;
-    }
 
     // Updates element's position if position is updated
     if(point !== null) {
       element.point = point;
+    }
+
+    if(point.x === -100) {
+      element.point = {x: window.event.clientX - (190), y: window.event.clientY - (100)};
     }
 
       // Add back elements to dict except updated one
@@ -360,6 +359,29 @@ function Canvas (props) {
 
     // Adds updated element to new element dictionary
     elemDict[id] = element;
+
+
+    // Updates element's neigbors if neighbors is updated
+    if(neighbors !== null) {
+      element.neighbors = neighbors;
+
+      // Creates new element dictionary
+      elemDict = {};
+
+      // Add updated element to bond element neighbor list
+      Object.entries(elements).map(([key, value]) => {
+        for(let i = 0; i < element.neighbors.length; i++) {
+          if(parseInt(key) === element.neighbors[i]) {
+            value.neighbors[(i + 4) % 8] = id;
+          }
+        }
+        if(parseInt(key) !== id) {
+          elemDict[key] = value;
+        }
+      });
+      
+      elemDict[id] = element;
+  }
 
     setElements(elemDict);
     addDataIntoCache('Molecule', 'https://localhost:300', elemDict);
@@ -581,6 +603,7 @@ function Canvas (props) {
 
 function Molecule(props) {
   const [adjustElement, setAdjustElement] = useState(null);
+  const [moveInfo, setMoveInfo] = useState([{x:-100, y:-100}, [...Array(8)]]);
   var coord = {};
   
   const handleDragStart = (elementInfo) => {
@@ -590,7 +613,11 @@ function Molecule(props) {
 
   const handleDragEnd = (id) => {
     setAdjustElement(null);
-    props.handleRemoveElement(id);
+    props.updateElement(id, null, null, moveInfo[1], moveInfo[0]);
+  }
+
+  const handleElementMove = (newElementInfo) => {
+    setMoveInfo(newElementInfo);
   }
 
   // Draws the current molecule according to the data in canvas
@@ -600,6 +627,7 @@ function Molecule(props) {
     return <ElementRender
     key={key} 
     element={value} 
+    allElements={props.elements}
     point={value.point}
     scale={props.scale}
     handleDragStart={handleDragStart} 
@@ -655,7 +683,7 @@ function Molecule(props) {
             scale={props.scale}
             neighbors={pointX[point.x][point.y]}
             handleAddElement={props.handleAddElement}
-            handleDragEnd={props.handleDragEnd} />);
+            handleElementMove={handleElementMove} />);
         }
       }
     }

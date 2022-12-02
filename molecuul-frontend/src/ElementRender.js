@@ -6,6 +6,7 @@ import { pushRotate } from 'react-burger-menu';
 /* Element tile rendered on canvas */
 function ElementRender(props) {
     const [showElement, setShowElement] = useState(true);
+    const allElements = props.allElements;
     const id = props.element.id;
     const image = props.element.source;
     const symbol = props.element.elementName;
@@ -34,7 +35,7 @@ function ElementRender(props) {
     return (
         <div 
         draggable
-        onDragStart={
+        onDrag={
         () => {
             setShowElement(false);
             const elementInfo = {
@@ -45,11 +46,23 @@ function ElementRender(props) {
                 rotation: rotation,
                 point: props.point
             };
+            // Remove all neighbors' associations with this node
+            for(let i = 0; i < props.element.neighbors.length; i++) {
+                if(props.element.neighbors[i] !== undefined || props.element.neighbors[i] !== null) {
+                    let newNeighbors = allElements[props.element.neighbors[i]].neighbors;
+                    let removeId = newNeighbors.findIndex(id);
+                    newNeighbors[removeId] = undefined;
+                    props.updateElement(id, null, null, newNeighbors, null);        
+                }
+            }
+            // Remove all known neighbors in this node
+            props.updateElement(id, null, null, [...Array(8)], null);
             props.handleDragStart(elementInfo);
         }
         }
-        onDragEnd={
+        onDrop={
         () => {
+            setShowElement(true);
             props.handleDragEnd(elementId);
         }
         }
