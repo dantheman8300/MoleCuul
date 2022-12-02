@@ -80,6 +80,8 @@ function TutorialPages(props) {
                 return (
                     <PageTwelve />
                 )
+            default:
+                break;
         }
     }
 
