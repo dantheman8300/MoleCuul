@@ -77,7 +77,7 @@ test("Testing DB Query -- Nitrogen", async () => {
   expect(result[0].atomicNum).toBe(7);
 });
 
-test("Testing DB Query -- failure", async () => {
+test("Testing DB Query -- no element exists", async () => {
   let result = await userServices.getElements("NotAnElement");
 
   expect(result).toStrictEqual([]);

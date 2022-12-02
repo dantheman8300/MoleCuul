@@ -34,13 +34,12 @@ mongoose
       useUnifiedTopology: true,
     }
   )
-  
+
   async function getElements(name) {
     let result;
     if (name === undefined) {
       result = await userModel.find();
-      console.log("result " + result);
-    } else if (name) {
+    } else {
       result = await findElementByName(name);
     }
     return result;
