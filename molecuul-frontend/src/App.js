@@ -17,11 +17,11 @@ function App() {
     const handleElementDragStart = (elementInfo) => {
         console.log(`Drag started for ${elementInfo}`);
         setSelectedElement(elementInfo);
-        setHover(!hover);
+        setHover(true);
     }
 
     const handleElementDragEnd = () => {
-        setHover(!hover);
+        setHover(false);
         setSelectedElement(null);
     }
 

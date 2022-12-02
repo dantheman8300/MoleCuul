@@ -6,6 +6,7 @@ import { pushRotate } from 'react-burger-menu';
 /* Element tile rendered on canvas */
 function ElementRender(props) {
     const [showElement, setShowElement] = useState(true);
+    const id = props.element.id;
     const image = props.element.source;
     const symbol = props.element.elementName;
     const elementId = props.element.id;
@@ -13,11 +14,22 @@ function ElementRender(props) {
     const posX = props.point.x;
     const posY = props.point.y;
     const rotation = props.element.rotation;
+    const lStructure = props.element.lStructure;
 
     const elementStyle = {
         position: "relative",
         alignSelf: "center",
     }
+
+    const rotateLStructure = (rotation) => {
+        let originalLStructure = lStructure;
+        let rotatedLStructure = [];
+        for (let i = 0; i < originalLStructure.length; i++) {
+            rotatedLStructure.push(originalLStructure[(8 - (rotation % 8) + i) % 8]);
+        }
+        return rotatedLStructure;
+    }
+
 
     return (
         <div 
@@ -26,11 +38,12 @@ function ElementRender(props) {
         () => {
             setShowElement(false);
             const elementInfo = {
-                id: props.element.id,
+                id: id,
                 name: symbol,
-                lStructure: props.element.lStructure,
+                lStructure: lStructure,
                 source: image,
-                rotation: rotation
+                rotation: rotation,
+                point: props.point
             };
             props.handleDragStart(elementInfo);
         }
@@ -42,10 +55,11 @@ function ElementRender(props) {
         }
         onMouseOver={
             () => {
-                console.log(`Element ${props.element.id} with ${props.element.elementName}`);
-                console.log(`       lStructure ${props.element.lStructure}`);
+                console.log(`Element ${id} with ${symbol}`);
+                console.log(`       lStructure ${lStructure}`);
                 console.log(`       Neighbors ${props.element.neighbors}`);
                 console.log(`       Parent ${props.element.parent}`);
+                console.log(`       Point (${posX}, ${posY})`);
                 props.handleMouseOver(elementId);
             }
         }
@@ -54,7 +68,12 @@ function ElementRender(props) {
                 props.handleMouseOut(elementId);
             }
         }
-        style={{position: 'absolute', top: posY, left: posX, zIndex: 4}}>
+        onClick={
+            () => {
+                props.updateElement(id, rotateLStructure(1), rotation + 1, null, null);
+            }
+        }
+        style={{position: 'absolute', top: posY, left: posX, zIndex: (showElement ? 4 : -1)}}>
             <ElementImage image={image} scale={scale} symbol={symbol} rotation={rotation}/>
         </div>
     )

@@ -33,7 +33,46 @@ const NAMES = {
   'Cl': 'Chlorine'
 }
 
-
+function findRelativeCoord(pos, parent, scale) {
+  var x = parent.x;
+  var y = parent.y;
+  switch(pos) {
+    case 0:
+      x = parent.x;
+      y = parent.y - (scale * 50);
+      break;
+    case 1:
+      x = parent.x + (Math.sqrt(2)/2)*(scale * 50);
+      y = parent.y - (Math.sqrt(2)/2)*(scale * 50);
+      break;
+    case 2:
+      x = parent.x + (scale * 50);
+      y = parent.y;
+      break;
+    case 3:
+      x = parent.x + (Math.sqrt(2)/2)*(scale * 50);
+      y = parent.y + (Math.sqrt(2)/2)*(scale * 50);
+      break;
+    case 4:
+      x = parent.x;
+      y = parent.y + (scale * 50);
+      break;
+    case 5:
+      x = parent.x - (Math.sqrt(2)/2)*(scale * 50);
+      y = parent.y + (Math.sqrt(2)/2)*(scale * 50);
+      break;
+    case 6:
+      x = parent.x - (scale * 50);
+      y = parent.y;
+      break;
+    case 7:
+      x = parent.x - (Math.sqrt(2)/2)*(scale * 50);
+      y = parent.y - (Math.sqrt(2)/2)*(scale * 50);
+      break;
+    default:
+  }
+  return {x: x, y: y};
+}
 
 function IconBox (props) {
 
@@ -44,11 +83,11 @@ function IconBox (props) {
           <InstructionTile handleTutorial={props.handleTutorial}/>
           <img src={appleMinus} alt='minus icon' className='icon' onClick={props.zoomOutHandler}/>
           <img src={applePlus} alt='plus icon' className='icon' onClick={props.zoomInHandler}/>  
-          <img src={appleTrash} alt='trash icon' className='icon' onClick={props.trashHandler}/>  
+          <img src={appleTrash} alt='trash icon' className='icon' onClick={props.trashHandler} onDrop={props.deleteDropHandler}/>  
           <img src={appleHouse} alt='home icon' className='icon' onClick={props.homeHandler}/>
-          {props.moleculeStatus == 0 && <img src={appleQuestion} alt='Search icon' className='icon' onClick={props.structureChecker}/>}
-          {props.moleculeStatus == 1 && <img src={appleCheck} alt='Check icon' className='icon'/>}
-          {props.moleculeStatus == -1 && <img src={appleX} alt='X icon' className='icon' onClick={props.displayErrors}/>}
+          {props.moleculeStatus === 0 && <img src={appleQuestion} alt='Search icon' className='icon' onClick={props.structureChecker}/>}
+          {props.moleculeStatus === 1 && <img src={appleCheck} alt='Check icon' className='icon'/>}
+          {props.moleculeStatus === -1 && <img src={appleX} alt='X icon' className='icon' onClick={props.displayErrors}/>}
           {/* {horseButtons} */}
           
           <img src={appleHorse} alt='horse icon' className='icon' onClick={props.handleHorseClick}/> 
@@ -65,7 +104,7 @@ function Canvas (props) {
   const [elements, setElements] = useState({});
   const [mouseX, setMouseX] = useState(500);
   const [mouseY, setMouseY] = useState(200);
-  const [center, setCenter] = useState({x: 500, y: 200});
+  const [center, setCenter] = useState({x: 0, y: 0});
   const [dragStart, setDragStart] = useState({x: 0, y: 0});
   const [moleculeStatus, setMoleculeStatus] = useState(0);
   const [moleculeErrors, setMoleculeErrors] = useState([]);
@@ -102,6 +141,7 @@ function Canvas (props) {
   const handleZoomOut = event => {
     addDataIntoCache('State', 'https://localhost:300', scale - .2);
     setScale(scale - .2);
+    updateAllCoord(scale - .2);
     console.log(`zooming out, ${scale}`)
     setFocusMsg(false)
   }
@@ -109,6 +149,7 @@ function Canvas (props) {
   const handleZoomIn = event => {
     addDataIntoCache('State', 'https://localhost:300', scale + .2);
     setScale(scale +.2);
+    updateAllCoord(scale + .2);
     console.log(`zooming in, ${scale}`)
     setFocusMsg(false)
     
@@ -118,7 +159,7 @@ function Canvas (props) {
     // Remove all elements in the molecule
     deleteCache('Molecule');
     deleteCache('State');
-    setCenter({x: 500, y: 200});
+    setCenter({x: 0, y: 0});
     setElements({});
     setMoleculeStatus(0);
     setMoleculeErrors([]);
@@ -127,34 +168,26 @@ function Canvas (props) {
     idGen = 0;
   }
 
-  const handleHome = event => {
-    setCenter({x: 500, y: 200});
-    setFocusMsg(false)
+  const handleDeleteDrop = event => {
+    if(props.selectedElement !== null) {
+      event.stopPropagation();
+      event.preventDefault();  
+      handleRemoveElement(props.selectedElement.id);
+      props.handleDragEnd();
+    }
   }
 
-  // const handleDragStart = (event) => {
-  //   var e = window.event;
-
-  //   var posX = e.clientX;
-  //   var posY = e.clientY;
-
-  //   setDragStart({x: posX, y: posY});
-  // }
-
-  
-  // const handleDragEnd = (event) => {
-  //   var e = window.event;
-
-  //   var posX = e.clientX - dragStart.x;
-  //   var posY = e.clientY - dragStart.y;
-
-  //   setCenter({x: center.x + posX, y: center.y + posY});
-  //   handleDrop();
-  // }
-
+  const handleHome = event => {
+    let elemDict = elements;
+    Object.entries(elements).map(([key, value]) => {
+      elemDict[key].point = {x: value.point.x + center.x, y: value.point.y + center.y}
+    });
+    setElements(elemDict);
+    setCenter({x: 0, y: 0});
+    setFocusMsg(false);
+  }
 
   const handleCanvasMove = (event) => {
-    setCenter({x: center.x - event.deltaX, y: center.y - event.deltaY});
     setFocusMsg(false)
     if(event.ctrlKey) {
       if(event.deltaY > 0) {
@@ -165,20 +198,22 @@ function Canvas (props) {
       }
     }
     else {
-      setCenter({x: center.x - event.deltaX, y: center.y - event.deltaY});
-      
+      setCenter({x: center.x + event.deltaX, y: center.y + event.deltaY});
+      let elemDict = elements;
+      Object.entries(elements).map(([key, value]) => {
+        elemDict[key].point = {x: value.point.x - event.deltaX, y: value.point.y - event.deltaY}
+      });
+      setElements(elemDict);
     }
   }
 
   const handleDrop = (event) => {
-    if(Object.keys(elements).length === 0 && props.selectedElement !== null) {
+    if(props.selectedElement !== null) {
+      console.log(`Adding new element without a point`)
       var e = window.event;
-      setCenter({x: e.clientX - (190), y: e.clientY - (100)});
-      console.log(`Center at x:${center.x}, y:${center.y}`)
-      handleAddElement(undefined, undefined);
-      setFocusMsg(false)
-      
-      
+      handleAddElement(undefined, undefined, {x: e.clientX - (190), y: e.clientY - (100)});
+      setFocusMsg(false);
+      props.handleDragEnd();
     }
   }
 
@@ -267,16 +302,76 @@ function Canvas (props) {
     addDataIntoCache('Molecule', 'https://localhost:300', newElementDict);
   }
 
+  function updateAllCoord(scale) {
+    let remainder = Object.values(elements);
+    let visited = [];
+    while(remainder.length) {
+      console.log(`Elements not explored: ${remainder.length}`);
+      if(!(visited.length)) {
+        visited.push(remainder.pop());
+      }
+      let curr_mol = visited[0];
+      visited = visited.slice(1);
+      
+      for(let i = 0; i < curr_mol.neighbors.length; i++) {
+        for(let j = 0; j < remainder.length; j++) {
+          if(curr_mol.neighbors[i] === remainder[j].id) {
+            visited.push(remainder[j]);
+            updateElement(remainder[j].id, null, null, null, findRelativeCoord(i, curr_mol.point, scale));
+            remainder.splice(j, 1);
+          }
+        }
+      }
+    }
+    
+
+
+  }
+
+
+  function updateElement(id, lStructure, rotation, neighbors, point) {
+    // Creates new element dictionary
+    let elemDict = {};
+
+    let element = elements[id];
+
+    // Updates element's lStructure if lStructure is updated
+    if(lStructure !== null && rotation !== null) {
+      element.lStructure = lStructure;
+      element.rotation = rotation;
+    }
+    
+    // Updates element's neigbors if neighbors is updated
+    if(neighbors !== null) {
+      element.neighbors = neighbors;
+    }
+
+    // Updates element's position if position is updated
+    if(point !== null) {
+      element.point = point;
+    }
+
+      // Add back elements to dict except updated one
+      Object.entries(elements).map(([key, value]) => {
+        if(parseInt(key) !== id) {
+          elemDict[key] = value;
+        }
+      });
+
+    // Adds updated element to new element dictionary
+    elemDict[id] = element;
+
+    setElements(elemDict);
+    addDataIntoCache('Molecule', 'https://localhost:300', elemDict);
+  }
 
   /* Adds element into molecule model using its name, lewis structure,
   * the element it is bonded to, and the position of that bond.
   * NOTE: Position is indicated by an array index. 0 -> 3 where 
   * 0 is the top position moving clockwise.
   */
-  function addElement(elementName, source, lStructure, bondedElemId, pos, rotation) {
+  function addElement(elementName, source, lStructure, bondedElemId, pos, rotation, point) {
     // console.log(`rotation: ${rotation}`)
-
-    // pos = (pos + 4) % 8; 
 
     // Creates an empty element
     const element = {
@@ -287,6 +382,7 @@ function Canvas (props) {
       neighbors: [...Array(8)], 
       parent: bondedElemId,
       rotation: rotation,
+      point: point
     };
 
     idGen += 1;
@@ -314,7 +410,7 @@ function Canvas (props) {
     addDataIntoCache('Molecule', 'https://localhost:300', elemDict);
   }
 
-  const handleAddElement = (bondId, posId) => {
+  const handleAddElement = (bondId, posId, point) => {
     // Set molecule status to 0 (not checked)
     setMoleculeStatus(0);
     setMoleculeErrors([]); // Clear molecule errors
@@ -323,7 +419,7 @@ function Canvas (props) {
     // console.log('adding element')
     // display add element params
     // console.log(`name: ${props.selectedElement.name}, name: ${props.selectedElement.lStructure}, bondId: ${bondId}, posId: ${posId}`)
-    addElement(props.selectedElement.name, props.selectedElement.source, props.selectedElement.lStructure, bondId, (posId + 4) % 8, props.selectedElement.rotation);
+    addElement(props.selectedElement.name, props.selectedElement.source, props.selectedElement.lStructure, bondId, (posId + 4) % 8, props.selectedElement.rotation, point);
     setFocusMsg(false)
   }
 
@@ -441,8 +537,8 @@ function Canvas (props) {
     >
       <IconBox 
         zoomInHandler={handleZoomIn} zoomOutHandler={handleZoomOut}
-        trashHandler={handleTrash} homeHandler={handleHome}
-        structureChecker={checkStructure} moleculeStatus={moleculeStatus} 
+        trashHandler={handleTrash} deleteDropHandler={handleDeleteDrop}
+        homeHandler={handleHome} structureChecker={checkStructure} moleculeStatus={moleculeStatus} 
         moleculeErrors={moleculeErrors} displayErrors={displayMoleculeErrors}
         handleHorseClick={handleHorseClick} handleTutorial={handleTutorial}
       />
@@ -459,7 +555,9 @@ function Canvas (props) {
           handleAddElement={handleAddElement}
           handleRemoveElement={handleRemoveElement}
           handleDragStart={props.handleDragStart} 
+          handleDrop={handleDrop}
           handleDragEnd={props.handleDragEnd}
+          updateElement={updateElement}
           handleHover={handleHover}
           handleOutHover={handleOutHover}
           horseBtns={horseBtns}
@@ -477,47 +575,6 @@ function Canvas (props) {
 function Molecule(props) {
   const [adjustElement, setAdjustElement] = useState(null);
   var coord = {};
-
-  function findRelativeCoord(pos, parent) {
-    var x = parent.x;
-    var y = parent.y;
-    switch(pos) {
-      case 0:
-        x = parent.x;
-        y = parent.y - (props.scale * 50);
-        break;
-      case 1:
-        x = parent.x + (Math.sqrt(2)/2)*(props.scale * 50);
-        y = parent.y - (Math.sqrt(2)/2)*(props.scale * 50);
-        break;
-      case 2:
-        x = parent.x + (props.scale * 50);
-        y = parent.y;
-        break;
-      case 3:
-        x = parent.x + (Math.sqrt(2)/2)*(props.scale * 50);
-        y = parent.y + (Math.sqrt(2)/2)*(props.scale * 50);
-        break;
-      case 4:
-        x = parent.x;
-        y = parent.y + (props.scale * 50);
-        break;
-      case 5:
-        x = parent.x - (Math.sqrt(2)/2)*(props.scale * 50);
-        y = parent.y + (Math.sqrt(2)/2)*(props.scale * 50);
-        break;
-      case 6:
-        x = parent.x - (props.scale * 50);
-        y = parent.y;
-        break;
-      case 7:
-        x = parent.x - (Math.sqrt(2)/2)*(props.scale * 50);
-        y = parent.y - (Math.sqrt(2)/2)*(props.scale * 50);
-        break;
-      default:
-    }
-    return {x: x, y: y};
-  }
 
   function findRelativePos(parent, id) {
     let point = props.center;
@@ -543,18 +600,17 @@ function Molecule(props) {
 
   const handleDragEnd = (id) => {
     setAdjustElement(null);
-    props.handleDragEnd();
     props.handleRemoveElement(id);
   }
 
   // Draws the current molecule according to the data in canvas
   const elementDisplay = Object.entries(props.elements).map(([key, value]) => {
-    if(adjustElement === parseInt(key)) {
-      coord[key] = {x:-1000, y:-1000};
-    }
-    else {
-      coord[key] = (findRelativePos(props.elements[value.parent], parseInt(key)));
-    }
+    // if(parseInt(key) !== adjustElement) {
+      coord[key] = value.point;
+    // }
+    // else {
+    //   coord[key] = {x: -1000, y:-1000};
+    // }
     idGen = parseInt(key) + 1;
     
     return <ElementRender
@@ -565,9 +621,8 @@ function Molecule(props) {
     handleDragStart={handleDragStart} 
     handleDragEnd={handleDragEnd}
     handleMouseOver={props.handleHover}
-    handleMouseOut={props.handleOutHover}/>
-  
-    
+    handleMouseOut={props.handleOutHover}
+    updateElement={props.updateElement}/>
   });
 
 
@@ -576,21 +631,22 @@ function Molecule(props) {
     for(let j = 0; j < Object.entries(props.elements).length; j++) {
       let keys = Object.keys(props.elements);
       for(let k = 0; k < props.elements[keys[j]].lStructure.length; k++) {
-        // console.log(`Element neighbor ${props.elements[keys[j]].neighbors[k]}`);
         if(((props.elements[keys[j]].lStructure[k] > 0) &&
           (props.elements[keys[j]].lStructure[k] < 4)) && 
           ((props.elements[keys[j]].neighbors[k] === undefined) ||
           (props.elements[keys[j]].neighbors[k] === null) ||
           (props.elements[keys[j]].neighbors[k] === adjustElement)) && 
           (parseInt(keys[j]) !== adjustElement)) {
+          console.log(`Element key ${keys[j]}`);
           elementDisplay.push(<OpenElementRender 
             key={`Hollow of ${keys[j]} at position ${k}`}
             element={props.elements[keys[j]]} 
             selectedElement={props.selectedElement}
-            point={findRelativeCoord(k, coord[keys[j]])}
+            point={findRelativeCoord(k, props.elements[keys[j]].point, props.scale)}
             scale={props.scale}
             pos={k}
-            handleAddElement={props.handleAddElement} />);
+            handleAddElement={props.handleAddElement}
+            handleDragEnd={props.handleDragEnd} />);
         }
       }
     }

@@ -31,12 +31,15 @@ function OpenElementRender(props) {
         (e.currentTarget.src = hollowElement)
         console.log(`parent: ${elementId}`);
         console.log(`bond position: ${bondPos}`);
-        props.handleAddElement(elementId, bondPos);
+        props.handleAddElement(elementId, bondPos, props.point);
+        props.handleDragEnd();
+        e.stopPropagation();
+        e.preventDefault();
     }
 
     return (
         <div
-            onDragLeave={handleDragLeave}
+            onDragExit={handleDragLeave}
             onDragOver={handleDragEnter}
             onDrop={handleDrop}
             width={scale * 50} 

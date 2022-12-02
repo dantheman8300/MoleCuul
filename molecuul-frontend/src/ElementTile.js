@@ -48,7 +48,7 @@ function ElementTile(props) {
         let originalLStructure = props.image.lStructure;
         let rotatedLStructure = [];
         for (let i = 0; i < originalLStructure.length; i++) {
-            rotatedLStructure.push(originalLStructure[Math.abs((i - rotation) % 8)]);
+            rotatedLStructure.push(originalLStructure[(8 - (rotation % 8) + i) % 8]);
         }
         return rotatedLStructure;
     }
