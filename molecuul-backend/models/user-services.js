@@ -3,12 +3,15 @@ const dotenv = require("dotenv");
 const userModel = require("./user");
 const configModel = require("./elementconfig");
 const imageModel = require("./elementimage");
+<<<<<<< HEAD
 const quizModel = require("./quizzes");
 
 dotenv.config({
   path: ".env",
 });
 
+=======
+>>>>>>> a4adf2d7aa6f7ffd1649fb3c2b147e1b566a1450
 mongoose.set("debug", true);
 
 // mongoose
@@ -54,14 +57,6 @@ mongoose
     let result;
     if (config_id === undefined) {
       result = await configModel.find();
-    }
-    return result;
-  }
-
-  async function getQuizzes(question) {
-    let result;
-    if (question === undefined) {
-      result = await quizModel.find();
     }
     return result;
   }
@@ -140,5 +135,3 @@ exports.addElement = addElement;
 exports.deleteElement = deleteElement;
 exports.getElectronConfig = getElectronConfig;
 exports.getElementImage = getElementImage;
-exports.findQuizById = findQuizById;
-exports.getQuizzes = getQuizzes;
