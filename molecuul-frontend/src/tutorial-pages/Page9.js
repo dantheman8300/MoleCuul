@@ -1,16 +1,11 @@
 import React from "react";
-
 import Arrow from "../Arrow";
-
 import appleCheck from "../icons/check-mark-button_2705 2.png";
-
 import appleX from "../icons/cross-mark_274c.png";
 
+
+// tutorial page 9: validate icon click (canvas)
 function PageNine (props) {
-
-
-    
-
     return (
         
         <div className="pages">
