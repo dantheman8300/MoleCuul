@@ -31,6 +31,9 @@ function ElementTile(props) {
     }
 
     const handleRotation = (rotator) => {
+        if(props.openTutorial && props.curInd === 2){
+            props.increaseCurInd()
+        }
         console.log(`Starting rotation: ${rotation}`);
         console.log(`Rotation changed with rotator ${rotator}`);
         console.log(`lStructure before rotation: ${lStructure}`);
@@ -48,7 +51,7 @@ function ElementTile(props) {
         let originalLStructure = props.image.lStructure;
         let rotatedLStructure = [];
         for (let i = 0; i < originalLStructure.length; i++) {
-            rotatedLStructure.push(originalLStructure[Math.abs((i - rotation) % 8)]);
+            rotatedLStructure.push(originalLStructure[(8 - (rotation % 8) + i) % 8]);
         }
         return rotatedLStructure;
     }

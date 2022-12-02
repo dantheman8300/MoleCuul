@@ -138,6 +138,7 @@
 .element-render {
   position: relative;
   align-self: center;
+  cursor: move;
 }
 
 .element-render:hover {

@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import ConfigurationMenu from "./ConfigurationMenu";
 
 /* square element on sidebar */
@@ -24,7 +24,7 @@ function ElementTool (props) {
         <div className='ElementTool'>
             <img id='elem-square' src={require(`./images/${image}.svg`)} alt='element tile' onClick={handleClick}  />
             {/* {console.log("info  ", octInfo)} */}
-            {isOpen && <ConfigurationMenu info={octInfo} handleDragStart={props.handleDragStart} handleDragEnd={props.handleDragEnd}/>}
+            {isOpen && <ConfigurationMenu openTutorial={props.openTutorial} curInd={props.curInd} increaseCurInd={props.increaseCurInd} info={octInfo} handleDragStart={props.handleDragStart} handleDragEnd={props.handleDragEnd}/>}
         </div>
     )
 }

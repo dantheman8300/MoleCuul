@@ -24,6 +24,31 @@ app.get('/elements', async (req, res) => {
     }
 });
 
+<<<<<<< HEAD
+=======
+app.get('/electron_config', async (req, res) => {
+    const config_id = req.query['config_id'];
+    try {
+        const result = await userServices.getElectronConfig(config_id);
+        res.send({electron_config: result});         
+    } catch (error) {
+        console.log(error);
+        res.status(500).send('An error ocurred in the server.');
+    }
+});
+
+app.get('/element_image', async (req, res) => {
+    const element = req.query['element'];
+    try {
+        const result = await userServices.getElementImage(element);
+        res.send({element_image: result});         
+    } catch (error) {
+        console.log(error);
+        res.status(500).send('An error ocurred in the server.');
+    }
+});
+
+>>>>>>> d55a0a7de94c08d6bcf1bb795e8a09586fc77182
 app.get('/elements/:id', async (req, res) => {
     const id = req.params['id'];
     const result = await userServices.findElementById(id);

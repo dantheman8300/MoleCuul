@@ -41,14 +41,15 @@ function Sidebar (props) {
 
     //  console.log("after usestate   " ,  isOpen)
     const handleChange = (ind) => {
-        // console.log("isOpen   " + isOpen)
         // setOpen[ind](current => !current)
-
         setOpen(
             isOpen.map((item, index) => {
                 // console.log(ind + "   " + index)
                 if (ind === index) {
-                    // console.log(ind + "   " + !item)
+                    // console.log(ind + " hi  " + !item)
+                    if(props.openTutorial && props.curInd === 0 && !item === true) {
+                        props.increaseCurInd()
+                    }
                     return !item;
                 }
                 else { 
@@ -57,6 +58,8 @@ function Sidebar (props) {
                 }
             })
         )
+        
+        console.log("isOpen   " + isOpen)
     }
 
 
@@ -64,23 +67,24 @@ function Sidebar (props) {
         return (
             <div key={`Element tool: ` + index}>
                 {/* {console.log(item)} */}
-                <ElementTool key={index} info={item} index={index} handleDragStart={props.handleDragStart} handleDragEnd={props.handleDragEnd} handleChange={handleChange} isOpen={isOpen[index]} />
+                <ElementTool key={index} info={item} index={index} handleDragStart={props.handleDragStart} handleDragEnd={props.handleDragEnd} handleChange={handleChange} isOpen={isOpen[index]} 
+                    openTutorial={props.openTutorial} curInd={props.curInd} increaseCurInd={props.increaseCurInd}/>
             </div>
         )
     });
 
    
 
-    function seeElementConfigs() {
-        for (let i = 0; i < elements.length; i++) {
-            for (const property in elements[i].configs[0]) {
-                // console.log(property);
-            }
-            // for (let j = 0; j < elements[i].cfgs.length; j++) {
-            //     console.log(elements[i].cfgs[j].imagefile);
-            // }
-        }
-    }
+    // function seeElementConfigs() {
+    //     for (let i = 0; i < elements.length; i++) {
+    //         for (const property in elements[i].configs[0]) {
+    //             // console.log(property);
+    //         }
+    //         // for (let j = 0; j < elements[i].cfgs.length; j++) {
+    //         //     console.log(elements[i].cfgs[j].imagefile);
+    //         // }
+    //     }
+    // }
 
 
     

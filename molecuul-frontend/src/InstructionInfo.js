@@ -1,4 +1,7 @@
 import React from "react";
+import sparkle from './icons/sparkles_2728.png';
+import smileyFace from './icons/smiling-face_263a-fe0f.png';
+import './InstructionInfo.css'
 
 function InstructionInfo(props) {
     const handleClick = event => {
@@ -7,13 +10,12 @@ function InstructionInfo(props) {
 
     return (
         <div className="instruction-info">
-            <h1>Welcome to Molecuul!</h1>
-            <b className="subtitle">A simulator for students by students</b>
-            <p className="body1">- Use this simulator to help develop your basic understanding of molecules and bonds</p> 
-            <p className="body2">- Start by clicking an element tile on the left</p>
+            <h1 style={{textAlign:"center"}}><img className="sparkle" src={sparkle} /> Welcome to Molecuul! <img className="sparkle" src={sparkle} /></h1>
+            <p className="subtitle"><b><i>A simulator for students by students</i></b></p>
+            <p className="body2">- Use this simulator to help develop your basic understanding of molecules and bonds</p> 
             <p className="body2">- Lost? <button className="btn" onClick={handleClick}>click here for tutorial</button> </p>
 
-            <p className="end-text">enjoy :) - Anthony Bui, Tyler Herzog, Daniel Leavitt, and Emelia Ortiz</p>
+            <p className="end-text">enjoy! <img className="smileyFace" src={smileyFace} /> - Anthony Bui, Tyler Herzog, Daniel Leavitt, and Emelia Ortiz</p>
         </div>
     )
 

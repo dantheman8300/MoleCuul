@@ -1,6 +1,11 @@
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const userModel = require("./user");
+<<<<<<< HEAD
+=======
+const configModel = require("./elementconfig");
+const imageModel = require("./elementimage");
+>>>>>>> d55a0a7de94c08d6bcf1bb795e8a09586fc77182
 
 dotenv.config({
   path: ".env",
@@ -46,8 +51,40 @@ mongoose
   }
 
 
+<<<<<<< HEAD
 async function findElementByName(name) {
   return await userModel.find({name : name});
+=======
+  async function getElementImage(element) {
+    let result;
+    if (element === undefined) {
+      result = await imageModel.find();
+    }
+    return result;
+  }
+
+// async function getUsers(elemName, job) {
+//   let result;
+//   if (elemName === undefined && job === undefined) {
+//     result = await userModel.find();
+//   } else if (elemName && !job) {
+//     result = await findElementByName(elemName);
+//   } else if (job && !elemName) {
+//     result = await findUserByJob(job);
+//   } else if (elemName && job) {
+//     result = await findUserByNameAndJob(elemName, job);
+//   }
+//   return result;
+// }
+
+async function findElementById(id) {
+  try {
+    return await userModel.findById(id);
+  } catch (error) {
+    console.log(error);
+    return undefined;
+  }
+>>>>>>> d55a0a7de94c08d6bcf1bb795e8a09586fc77182
 }
 
 async function disconnectDB() {
@@ -56,5 +93,13 @@ async function disconnectDB() {
 }
 
 exports.getElements = getElements;
+<<<<<<< HEAD
 exports.findElementByName = findElementByName;
 exports.disconnectDB = disconnectDB;
+=======
+exports.findElementById = findElementById;
+exports.addElement = addElement;
+exports.deleteElement = deleteElement;
+exports.getElectronConfig = getElectronConfig;
+exports.getElementImage = getElementImage;
+>>>>>>> d55a0a7de94c08d6bcf1bb795e8a09586fc77182
