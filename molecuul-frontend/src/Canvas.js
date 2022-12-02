@@ -211,7 +211,7 @@ function Canvas (props) {
     if(props.selectedElement !== null) {
       console.log(`Adding new element without a point`)
       var e = window.event;
-      handleAddElement(undefined, undefined, {x: e.clientX - (190), y: e.clientY - (100)});
+      handleAddElement(props.selectedElement, [...Array(8)], {x: e.clientX - (190), y: e.clientY - (100)});
       setFocusMsg(false);
       props.handleDragEnd();
     }
@@ -370,7 +370,7 @@ function Canvas (props) {
   * NOTE: Position is indicated by an array index. 0 -> 3 where 
   * 0 is the top position moving clockwise.
   */
-  function addElement(elementName, source, lStructure, bondedElemId, pos, rotation, point) {
+  function addElement(elementName, source, lStructure, neighbors, rotation, point) {
     // console.log(`rotation: ${rotation}`)
 
     // Creates an empty element
@@ -379,8 +379,7 @@ function Canvas (props) {
       elementName: elementName,
       source: source, 
       lStructure: lStructure, 
-      neighbors: [...Array(8)], 
-      parent: bondedElemId,
+      neighbors: neighbors,
       rotation: rotation,
       point: point
     };
@@ -390,27 +389,23 @@ function Canvas (props) {
     // Creates new element dictionary
     let elemDict = {};
 
-    // Updates element's parent if parent exists
-    if(element.parent !== null) {
-      element.neighbors[pos] = bondedElemId;
-
-      // Add new element to bond element neighbor list
-      Object.entries(elements).map(([key, value]) => {
-        if(parseInt(key) === bondedElemId) {
-          value.neighbors[(pos + 4) % 8] = element.id;
+    // Add new element to bond element neighbor list
+    Object.entries(elements).map(([key, value]) => {
+      for(let i = 0; i < element.neighbors.length; i++) {
+        if(parseInt(key) === element.neighbors[i]) {
+          value.neighbors[(i + 4) % 8] = element.id;
         }
-        elemDict[key] = value;
-      });
-    }
+      }
+      elemDict[key] = value;
+    });
 
-    // Adds element to new element dictionary
     elemDict[element.id] = element;
 
     setElements(elemDict);
     addDataIntoCache('Molecule', 'https://localhost:300', elemDict);
   }
 
-  const handleAddElement = (bondId, posId, point) => {
+  const handleAddElement = (element, neighbors, point) => {
     // Set molecule status to 0 (not checked)
     setMoleculeStatus(0);
     setMoleculeErrors([]); // Clear molecule errors
@@ -419,8 +414,12 @@ function Canvas (props) {
     // console.log('adding element')
     // display add element params
     // console.log(`name: ${props.selectedElement.name}, name: ${props.selectedElement.lStructure}, bondId: ${bondId}, posId: ${posId}`)
-    addElement(props.selectedElement.name, props.selectedElement.source, props.selectedElement.lStructure, bondId, (posId + 4) % 8, props.selectedElement.rotation, point);
+    addElement(element.name, element.source, element.lStructure, neighbors, element.rotation, point);
     setFocusMsg(false)
+  }
+
+  const handleMultiElementAdd = () => {
+
   }
 
   const handleRemoveElement = (id) => {
@@ -583,23 +582,6 @@ function Canvas (props) {
 function Molecule(props) {
   const [adjustElement, setAdjustElement] = useState(null);
   var coord = {};
-
-  function findRelativePos(parent, id) {
-    let point = props.center;
-    // Find out if element is child of root
-    if(parent !== undefined) {
-      let pos;
-      // Finds the relative position of the element in regards to the parent
-      for(let i = 0; i < parent.neighbors.length; i++) {
-        if(parent.neighbors[i] === id) {
-          pos = i;
-        }
-      }
-      
-      point = findRelativeCoord(pos, coord[parent.id]);
-    }
-    return point;
-  }
   
   const handleDragStart = (elementInfo) => {
     setAdjustElement(elementInfo.id);
@@ -613,18 +595,12 @@ function Molecule(props) {
 
   // Draws the current molecule according to the data in canvas
   const elementDisplay = Object.entries(props.elements).map(([key, value]) => {
-    // if(parseInt(key) !== adjustElement) {
-      coord[key] = value.point;
-    // }
-    // else {
-    //   coord[key] = {x: -1000, y:-1000};
-    // }
     idGen = parseInt(key) + 1;
     
     return <ElementRender
     key={key} 
     element={value} 
-    point={coord[key]}
+    point={value.point}
     scale={props.scale}
     handleDragStart={handleDragStart} 
     handleDragEnd={handleDragEnd}
@@ -636,6 +612,7 @@ function Molecule(props) {
 
 
   if(props.hover) {
+    let pointX = {};
     // Adds hollow elements showing where elements can be placed
     for(let j = 0; j < Object.entries(props.elements).length; j++) {
       let keys = Object.keys(props.elements);
@@ -646,14 +623,37 @@ function Molecule(props) {
           (props.elements[keys[j]].neighbors[k] === null) ||
           (props.elements[keys[j]].neighbors[k] === adjustElement)) && 
           (parseInt(keys[j]) !== adjustElement)) {
-          console.log(`Element key ${keys[j]}`);
+          let point = findRelativeCoord(k, props.elements[keys[j]].point, props.scale);
+
+          if(pointX[point.x] !== undefined) {
+            if(pointX[point.x][point.y] !== undefined) {
+              let neighbor = pointX[point.x][point.y];
+              neighbor[(k + 4) % 8] = parseInt(keys[j]);
+              pointX[point.x][point.y] = neighbor;
+            }
+            else {
+              let pointY = pointX[point.x];
+              let neighbor = [...Array(8)];
+              neighbor[(k + 4) % 8] = parseInt(keys[j]);
+              pointY[point.y] = neighbor;
+             
+            }
+          }
+          else {
+            let pointY = {};
+            let neighbor = [...Array(8)];
+            neighbor[(k + 4) % 8] = parseInt(keys[j]);
+            pointY[point.y] = neighbor;
+            pointX[point.x] = pointY;
+          }
+          
           elementDisplay.push(<OpenElementRender 
             key={`Hollow of ${keys[j]} at position ${k}`}
             element={props.elements[keys[j]]} 
             selectedElement={props.selectedElement}
-            point={findRelativeCoord(k, props.elements[keys[j]].point, props.scale)}
+            point={point}
             scale={props.scale}
-            pos={k}
+            neighbors={pointX[point.x][point.y]}
             handleAddElement={props.handleAddElement}
             handleDragEnd={props.handleDragEnd} />);
         }
