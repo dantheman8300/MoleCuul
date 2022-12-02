@@ -532,9 +532,9 @@ function Canvas (props) {
     } else {
       setMoleculeStatus(-1);
       setMoleculeErrors(errors);
+      setDisplayErrors(true);
     }
 
-    setDisplayErrors(true);
 
 
     console.log(errors);

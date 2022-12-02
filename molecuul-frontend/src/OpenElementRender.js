@@ -28,7 +28,7 @@ function OpenElementRender(props) {
     }
 
     const handleDrop = (e) => {
-        (e.currentTarget.src = hollowElement)
+        // (e.currentTarget.src = hollowElement)
         props.handleAddElement(props.selectedElement, neighbors, props.point);
         props.handleDragEnd();
         e.stopPropagation();
@@ -37,7 +37,7 @@ function OpenElementRender(props) {
 
     return (
         <div
-            onDragExit={handleDragLeave}
+            onDragLeave={handleDragLeave}
             onDragOver={handleDragEnter}
             onDrop={handleDrop}
             width={scale * 50} 
