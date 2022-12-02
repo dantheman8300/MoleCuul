@@ -22,9 +22,11 @@
     MONGO_CLUSTER=
     ```
 4. Run `npm run dev` to start backend server
-5. Navigate to frontend directory
-6. Run `npm install`
-7. Run `npm start` to run frontend server
+5. Open a new terminal
+6. Navigate to frontend directory - run `cd molecuul-frontend`
+7. Run `npm install`
+8. Run `npm start` to run frontend server
+9. Navigate to http://localhost:3000
 
 ## Diagrams
 
