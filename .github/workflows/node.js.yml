@@ -39,6 +39,7 @@ jobs:
         MONGO_CLUSTER: ${{ secrets.MONGO_CLUSTER }}
         MONGO_DB:  ${{ secrets.MONGO_DB }}
     - name: Run For Coverage
+      working-directory: ./molecuul-backend
       env: 
         MONGO_USER: ${{ secrets.MONGO_USER }}
         MONGO_PWD: ${{ secrets.MONGO_PWD }}
