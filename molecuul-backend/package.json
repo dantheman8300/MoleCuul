@@ -4,10 +4,7 @@
     "description": "",
     "main": "backend.test.js",
     "scripts": {
-<<<<<<< HEAD
         "test": "jest --detectOpenHandles",
-=======
->>>>>>> d55a0a7de94c08d6bcf1bb795e8a09586fc77182
         "dev": "nodemon backend.js",
         "start": "node backend.js",
         "coverage": "jest --collectCoverage --detectOpenHandles"
