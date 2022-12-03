@@ -87,13 +87,8 @@ function IconBox (props) {
           <img src={appleHouse} alt='home icon' className='icon' onClick={props.homeHandler}/>
           {props.moleculeStatus === 0 && <img src={appleQuestion} alt='Search icon' className='icon' onClick={props.structureChecker}/>}
           {props.moleculeStatus === 1 && <img src={appleCheck} alt='Check icon' className='icon'/>}
-          {props.moleculeStatus === -1 && <img src={appleX} alt='X icon' className='icon' onClick={props.displayErrors}/>}
-          {/* {horseButtons} */}
-          
+          {props.moleculeStatus === -1 && <img src={appleX} alt='X icon' className='icon' onClick={props.displayErrors}/>}       
           <img src={appleHorse} alt='horse icon' className='icon' onClick={props.handleHorseClick}/> 
-          
-
-          
         </div>
       </div>
     </div>
@@ -546,6 +541,7 @@ function Canvas (props) {
   }
 
   const displayMoleculeErrors = () => {
+    props.setFocusMsg(false)
     console.log("rot ", props.openTutorial)
                 console.log(props.curInd)
     if(props.openTutorial && props.curInd === 11){
