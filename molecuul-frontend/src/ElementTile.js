@@ -31,6 +31,7 @@ function ElementTile(props) {
     }
 
     const handleRotation = (rotator) => {
+        props.setFocusMsg(false)
         if(props.openTutorial && props.curInd === 2){
             props.increaseCurInd()
         }

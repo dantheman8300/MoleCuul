@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import ElementTile from './ElementTile';
 
 var idGen = 0;
 
@@ -8,8 +7,7 @@ const Element = (id, name, lStructure, neighbors) => { return {id: id, name: nam
 
 function Molecule() {
     const [elements, setElements] = useState([]);
-
-
+	
 /* Removes a single element at specified id from molecule and updates
  * neighboring elements
  */

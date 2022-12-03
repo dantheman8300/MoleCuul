@@ -1,8 +1,6 @@
-import React, {useState, useEffect} from 'react';
+import React from 'react';
 import { slide as Menu } from "react-burger-menu";
-import Sidebar from "./Sidebar";
 import './HamburgerMenu.css';
-
 
 
 function HamburgerMenu (props) {

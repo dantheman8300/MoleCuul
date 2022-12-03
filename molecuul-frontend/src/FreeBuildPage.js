@@ -1,8 +1,6 @@
 import React from "react";
 import './FreeBuildPage.css'
 
-
-
 function FreeBuildPage (props) {
 
   return (

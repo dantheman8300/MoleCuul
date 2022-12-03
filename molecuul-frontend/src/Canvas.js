@@ -80,20 +80,15 @@ function IconBox (props) {
     <div>
       <div className="iconBox">
         <div className='iconRow'>
-        <InstructionTile handleTutorial={props.handleTutorial}/>
+        <InstructionTile handleTutorial={props.handleTutorial} setFocusMsg={props.setFocusMsg}/>
           <img src={appleMinus} alt='minus icon' className='icon' onClick={props.zoomOutHandler}/>
           <img src={applePlus} alt='plus icon' className='icon' onClick={props.zoomInHandler}/>  
           <img src={appleTrash} alt='trash icon' className='icon' onClick={props.trashHandler} onDrop={props.deleteDropHandler}/>  
           <img src={appleHouse} alt='home icon' className='icon' onClick={props.homeHandler}/>
           {props.moleculeStatus === 0 && <img src={appleQuestion} alt='Search icon' className='icon' onClick={props.structureChecker}/>}
           {props.moleculeStatus === 1 && <img src={appleCheck} alt='Check icon' className='icon'/>}
-          {props.moleculeStatus === -1 && <img src={appleX} alt='X icon' className='icon' onClick={props.displayErrors}/>}
-          {/* {horseButtons} */}
-          
+          {props.moleculeStatus === -1 && <img src={appleX} alt='X icon' className='icon' onClick={props.displayErrors}/>}       
           <img src={appleHorse} alt='horse icon' className='icon' onClick={props.handleHorseClick}/> 
-          
-
-          
         </div>
       </div>
     </div>
@@ -104,21 +99,17 @@ function Canvas (props) {
 
   const [scale, setScale] = useState(1);
   const [elements, setElements] = useState({});
-  const [mouseX, setMouseX] = useState(500);
-  const [mouseY, setMouseY] = useState(200);
   const [center, setCenter] = useState({x: 0, y: 0});
-  const [dragStart, setDragStart] = useState({x: 0, y: 0});
   const [moleculeStatus, setMoleculeStatus] = useState(0);
   const [moleculeErrors, setMoleculeErrors] = useState([]);
   const [displayErrors, setDisplayErrors] = useState(false);
   const [hoveredElement, setHoveredElement] = useState(undefined);
   const [horseBtns, setHorseBtns] = useState([]);
-  const [focusMsg, setFocusMsg] = useState(false);
   
   const handleHorseClick = (e) => {
     setHorseBtns ( horseBtns.concat(<img src={appleHorse} alt='horse icon' className='horse' onClick={handleHorseClick} style={{top: (Math.random() * window.innerHeight), left: (Math.random() * window.innerWidth)}}/>))
     if(horseBtns.length > 10){
-      setFocusMsg(true)
+      props.setFocusMsg(true)
     }
   }
 
@@ -127,7 +118,6 @@ function Canvas (props) {
 
   useEffect(() => {
     if (!cacheLoaded.current) {
-      // console.log(`Loading molecule from cache`);
       getElementFromCache('Molecule', 'https://localhost:300');
       getStateFromCache('State', 'https://localhost:300')
       cacheLoaded.current = true;
@@ -135,10 +125,6 @@ function Canvas (props) {
   });
 
   const handleZoomOut = event => {
-    
-          
-    // console.log("rot ", props.openTutorial)
-    // console.log(props.curInd)
     if(props.openTutorial && props.curInd === 5){
       props.increaseCurInd()
     }
@@ -146,14 +132,10 @@ function Canvas (props) {
     setScale(scale - .2);
     updateAllCoord(scale - .2);
     console.log(`zooming out, ${scale}`)
-    setFocusMsg(false)
+    props.setFocusMsg(false)
   }
 
   const handleZoomIn = event => {
-    
-
-    // console.log("rot ", props.openTutorial)
-    // console.log(props.curInd)
     if(props.openTutorial && props.curInd === 6){
       props.increaseCurInd()
     }
@@ -161,17 +143,11 @@ function Canvas (props) {
     setScale(scale +.2);
     updateAllCoord(scale + .2);
     console.log(`zooming in, ${scale}`)
-    setFocusMsg(false)
+    props.setFocusMsg(false)
     
   }
 
   const handleTrash = event => {
-    // Remove all elements in the molecule
-        // console.log("rot ", props.openTutorial)
-    // console.log(props.curInd)
-    // if(props.openTutorial && props.curInd === 6){
-    //   props.increaseCurInd()
-    // }
     if(props.openTutorial && props.curInd === 15){
       props.increaseCurInd()
   }
@@ -182,11 +158,13 @@ function Canvas (props) {
     setMoleculeStatus(0);
     setMoleculeErrors([]);
     setDisplayErrors(false);
-    setFocusMsg(false)
+    props.setFocusMsg(false)
     idGen = 0;
   }
 
   const handleDeleteDrop = event => {
+    
+    props.setFocusMsg(false)
     if(props.openTutorial && props.curInd === 14){
       props.increaseCurInd()
   }
@@ -199,26 +177,27 @@ function Canvas (props) {
   }
 
   const handleHome = event => {
-        // console.log("rot ", props.openTutorial)
-    // console.log(props.curInd)
     if(props.openTutorial && props.curInd === 7){
       props.increaseCurInd()
     }
     let elemDict = elements;
     Object.entries(elements).map(([key, value]) => {
       elemDict[key].point = {x: value.point.x + center.x, y: value.point.y + center.y}
+      return null;
     });
     setElements(elemDict);
     setCenter({x: 0, y: 0});
-    setFocusMsg(false);
+    props.setFocusMsg(false);
   }
 
   const handleCanvasMove = (event) => {
     
+    props.setFocusMsg(false)
+    
     if(props.openTutorial && props.curInd === 4){
         props.increaseCurInd()
     }
-    setFocusMsg(false)
+    props.setFocusMsg(false)
     if(event.ctrlKey) {
       if(event.deltaY > 0) {
         handleZoomIn();
@@ -232,6 +211,7 @@ function Canvas (props) {
       let elemDict = elements;
       Object.entries(elements).map(([key, value]) => {
         elemDict[key].point = {x: value.point.x - event.deltaX, y: value.point.y - event.deltaY}
+        return null;
       });
       setElements(elemDict);
     }
@@ -242,12 +222,13 @@ function Canvas (props) {
       console.log(`Adding new element without a point`)
       var e = window.event;
       handleAddElement(props.selectedElement, [...Array(8)], {x: e.clientX - (190), y: e.clientY - (100)});
-      setFocusMsg(false);
+      props.setFocusMsg(false);
       props.handleDragEnd();
     }
   }
 
   const addDataIntoCache = (cacheName, url, response) => {
+    
     deleteCache(cacheName);
     // Converting our response into Actual Response form
     const data = new Response(JSON.stringify(response));
@@ -386,6 +367,7 @@ function Canvas (props) {
         if(parseInt(key) !== id) {
           elemDict[key] = value;
         }
+        return null;
       });
 
     // Adds updated element to new element dictionary
@@ -401,7 +383,6 @@ function Canvas (props) {
   * 0 is the top position moving clockwise.
   */
   function addElement(elementName, source, lStructure, neighbors, rotation, point) {
-    // console.log(`rotation: ${rotation}`)
 
     // Creates an empty element
     const element = {
@@ -427,6 +408,7 @@ function Canvas (props) {
         }
       }
       elemDict[key] = value;
+      return null;
     });
 
     elemDict[element.id] = element;
@@ -444,16 +426,11 @@ function Canvas (props) {
     setMoleculeErrors([]); // Clear molecule errors
     setDisplayErrors(false); // Hide error display
 
-    // console.log('adding element')
     // display add element params
-    // console.log(`name: ${props.selectedElement.name}, name: ${props.selectedElement.lStructure}, bondId: ${bondId}, posId: ${posId}`)
     addElement(element.name, element.source, element.lStructure, neighbors, element.rotation, point);
-    setFocusMsg(false)
+    props.setFocusMsg(false)
   }
 
-  const handleMultiElementAdd = () => {
-
-  }
 
   const handleRemoveElement = (id) => {
     // Set molecule status to 0 (not checked)
@@ -461,24 +438,22 @@ function Canvas (props) {
     setMoleculeErrors([]); // Clear molecule errors
     setDisplayErrors(false); // Hide error display
 
-    // console.log(`removing element ${id}`)
+
     removeElement(id);
-    setFocusMsg(false)
+    props.setFocusMsg(false)
   }
 
-  // console.log(`Elements are ${Object.entries(elements)}`);
 
   const checkStructure = () => {
     console.log('checking structure')
     console.log(elements)
 
-  // console.log("rot ", props.openTutorial)
-  // console.log(props.curInd)
+
   if(props.openTutorial && props.curInd === 9){
     props.increaseCurInd()
   }
     
-    setFocusMsg(false)
+  props.setFocusMsg(false)
 
     let errors = [];
 
@@ -524,6 +499,7 @@ function Canvas (props) {
           });
         }
       }
+      return null;
     });
 
     if (errors.length === 0) {
@@ -542,6 +518,7 @@ function Canvas (props) {
   }
 
   const displayMoleculeErrors = () => {
+    props.setFocusMsg(false)
     console.log("rot ", props.openTutorial)
                 console.log(props.curInd)
     if(props.openTutorial && props.curInd === 11){
@@ -572,7 +549,7 @@ function Canvas (props) {
     setMoleculeStatus(0);
     setMoleculeErrors([]); // Clear molecule errors
     setDisplayErrors(false); // Hide error display
-    setFocusMsg(false)
+    props.setFocusMsg(false)
   }
 
   return (
@@ -581,15 +558,12 @@ function Canvas (props) {
       onWheel={handleCanvasMove}
       onDrop={
         (e) => {
-          // console.log(`dropped the element: ${props.selectedElement}`);
           handleDrop();
         }
       }
       onDragOver={
         (e) => {
           
-                // console.log("rot ", props.openTutorial)
-                // console.log(props.curInd)
                 if(props.openTutorial && props.curInd === 3){
                     props.increaseCurInd()
                 }
@@ -604,14 +578,13 @@ function Canvas (props) {
         homeHandler={handleHome} structureChecker={checkStructure} moleculeStatus={moleculeStatus} 
         moleculeErrors={moleculeErrors} displayErrors={displayMoleculeErrors}
         handleHorseClick={handleHorseClick} handleTutorial={props.handleTutorial}
+        setFocusMsg={props.setFocusMsg}
       />
       {displayErrors && <ErrorBox errors={moleculeErrors} elementId={hoveredElement} />}
       <div >
         <Molecule 
           scale={scale} 
           elements={elements} 
-          mouseX={mouseX} 
-          mouseY={mouseY}
           center={center}
           hover={props.hover}
           selectedElement={props.selectedElement}
@@ -634,14 +607,14 @@ function Canvas (props) {
 
       </div>
     
-      {focusMsg && <div className='instruction-info' id='focusMsg'><h2>Quit horsin' around, get back to work! <img className="smileyFaceHorse" src={smileyFace} alt="emoji smiley face"/></h2></div>}
+      {props.focusMsg && <div className='instruction-info' id='focusMsg'><h2>Quit horsin' around, get back to work! <img className="smileyFaceHorse" src={smileyFace} alt="emoji smiley face"/></h2></div>}
     </div>
   );
 }
 
 function Molecule(props) {
   const [adjustElement, setAdjustElement] = useState(null);
-  var coord = {};
+
   
   const handleDragStart = (elementInfo) => {
     if(props.openTutorial && props.curInd === 13){

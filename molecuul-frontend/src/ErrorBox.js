@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import "./ErrorBox.css";
 
 function ErrorBox (props) {
@@ -7,7 +7,7 @@ function ErrorBox (props) {
     console.log(key, error);
     const errorMessage = error.errorSpecificMessage || error.message;
     return (
-        <li className="error-message">{errorMessage}</li>
+        <li className="error-message" key={key}>{errorMessage}</li>
     );
   });
 
@@ -20,8 +20,11 @@ function ErrorBox (props) {
       if (error.id === id) {
         const errorMessage = error.errorSpecificMessage || error.message;
         return (
-            <li className="error-message">{errorMessage}</li>
+            <li className="error-message" key={key}>{errorMessage}</li>
         );
+      }
+      else {
+        return null
       }
     });
 
@@ -32,8 +35,8 @@ function ErrorBox (props) {
   return (
     <div className="error-box">
       <ol>
-        {(props.elementId == undefined) && allErrors}
-        {(props.elementId != undefined) && specificError(props.elementId)}
+        {(props.elementId === undefined) && allErrors}
+        {(props.elementId !== undefined) && specificError(props.elementId)}
       </ol>
     </div>
   )
