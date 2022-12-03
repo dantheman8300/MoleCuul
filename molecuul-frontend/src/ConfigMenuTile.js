@@ -9,7 +9,7 @@ function ConfigMenuTile(props) {
     const tile = props.config.map((image, index) =>{
         return (
             <ElementTile key={index} image={image} symbol={symbol} handleDragStart={props.handleDragStart} handleDragEnd={props.handleDragEnd}
-            openTutorial={props.openTutorial} curInd={props.curInd} increaseCurInd={props.increaseCurInd}/>
+            openTutorial={props.openTutorial} curInd={props.curInd} increaseCurInd={props.increaseCurInd} setFocusMsg={props.setFocusMsg}/>
         )
     })
 
