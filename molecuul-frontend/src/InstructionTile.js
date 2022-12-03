@@ -5,11 +5,16 @@ function InstructionTile(props) {
     const [isOpen, setOpen] = useState(false);
     const handleClick = event => {
         setOpen(current => !current);
+                
+        props.setFocusMsg(false);
     }
 
     const tutorialClick = event => {
         handleClick();
         props.handleTutorial();
+                
+        props.setFocusMsg(false);
+
     }
 
 

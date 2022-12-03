@@ -80,20 +80,15 @@ function IconBox (props) {
     <div>
       <div className="iconBox">
         <div className='iconRow'>
-        <InstructionTile handleTutorial={props.handleTutorial}/>
+        <InstructionTile handleTutorial={props.handleTutorial} setFocusMsg={props.setFocusMsg}/>
           <img src={appleMinus} alt='minus icon' className='icon' onClick={props.zoomOutHandler}/>
           <img src={applePlus} alt='plus icon' className='icon' onClick={props.zoomInHandler}/>  
           <img src={appleTrash} alt='trash icon' className='icon' onClick={props.trashHandler} onDrop={props.deleteDropHandler}/>  
           <img src={appleHouse} alt='home icon' className='icon' onClick={props.homeHandler}/>
           {props.moleculeStatus === 0 && <img src={appleQuestion} alt='Search icon' className='icon' onClick={props.structureChecker}/>}
           {props.moleculeStatus === 1 && <img src={appleCheck} alt='Check icon' className='icon'/>}
-          {props.moleculeStatus === -1 && <img src={appleX} alt='X icon' className='icon' onClick={props.displayErrors}/>}
-          {/* {horseButtons} */}
-          
+          {props.moleculeStatus === -1 && <img src={appleX} alt='X icon' className='icon' onClick={props.displayErrors}/>}       
           <img src={appleHorse} alt='horse icon' className='icon' onClick={props.handleHorseClick}/> 
-          
-
-          
         </div>
       </div>
     </div>
@@ -113,12 +108,11 @@ function Canvas (props) {
   const [displayErrors, setDisplayErrors] = useState(false);
   const [hoveredElement, setHoveredElement] = useState(undefined);
   const [horseBtns, setHorseBtns] = useState([]);
-  const [focusMsg, setFocusMsg] = useState(false);
   
   const handleHorseClick = (e) => {
     setHorseBtns ( horseBtns.concat(<img src={appleHorse} alt='horse icon' className='horse' onClick={handleHorseClick} style={{top: (Math.random() * window.innerHeight), left: (Math.random() * window.innerWidth)}}/>))
     if(horseBtns.length > 10){
-      setFocusMsg(true)
+      props.setFocusMsg(true)
     }
   }
 
@@ -146,7 +140,7 @@ function Canvas (props) {
     setScale(scale - .2);
     updateAllCoord(scale - .2);
     console.log(`zooming out, ${scale}`)
-    setFocusMsg(false)
+    props.setFocusMsg(false)
   }
 
   const handleZoomIn = event => {
@@ -161,7 +155,7 @@ function Canvas (props) {
     setScale(scale +.2);
     updateAllCoord(scale + .2);
     console.log(`zooming in, ${scale}`)
-    setFocusMsg(false)
+    props.setFocusMsg(false)
     
   }
 
@@ -182,11 +176,13 @@ function Canvas (props) {
     setMoleculeStatus(0);
     setMoleculeErrors([]);
     setDisplayErrors(false);
-    setFocusMsg(false)
+    props.setFocusMsg(false)
     idGen = 0;
   }
 
   const handleDeleteDrop = event => {
+    
+    props.setFocusMsg(false)
     if(props.openTutorial && props.curInd === 14){
       props.increaseCurInd()
   }
@@ -210,15 +206,17 @@ function Canvas (props) {
     });
     setElements(elemDict);
     setCenter({x: 0, y: 0});
-    setFocusMsg(false);
+    props.setFocusMsg(false);
   }
 
   const handleCanvasMove = (event) => {
     
+    props.setFocusMsg(false)
+    
     if(props.openTutorial && props.curInd === 4){
         props.increaseCurInd()
     }
-    setFocusMsg(false)
+    props.setFocusMsg(false)
     if(event.ctrlKey) {
       if(event.deltaY > 0) {
         handleZoomIn();
@@ -242,12 +240,13 @@ function Canvas (props) {
       console.log(`Adding new element without a point`)
       var e = window.event;
       handleAddElement(props.selectedElement, [...Array(8)], {x: e.clientX - (190), y: e.clientY - (100)});
-      setFocusMsg(false);
+      props.setFocusMsg(false);
       props.handleDragEnd();
     }
   }
 
   const addDataIntoCache = (cacheName, url, response) => {
+    
     deleteCache(cacheName);
     // Converting our response into Actual Response form
     const data = new Response(JSON.stringify(response));
@@ -448,7 +447,7 @@ function Canvas (props) {
     // display add element params
     // console.log(`name: ${props.selectedElement.name}, name: ${props.selectedElement.lStructure}, bondId: ${bondId}, posId: ${posId}`)
     addElement(element.name, element.source, element.lStructure, neighbors, element.rotation, point);
-    setFocusMsg(false)
+    props.setFocusMsg(false)
   }
 
   const handleMultiElementAdd = () => {
@@ -463,7 +462,7 @@ function Canvas (props) {
 
     // console.log(`removing element ${id}`)
     removeElement(id);
-    setFocusMsg(false)
+    props.setFocusMsg(false)
   }
 
   // console.log(`Elements are ${Object.entries(elements)}`);
@@ -478,7 +477,7 @@ function Canvas (props) {
     props.increaseCurInd()
   }
     
-    setFocusMsg(false)
+  props.setFocusMsg(false)
 
     let errors = [];
 
@@ -542,6 +541,7 @@ function Canvas (props) {
   }
 
   const displayMoleculeErrors = () => {
+    props.setFocusMsg(false)
     console.log("rot ", props.openTutorial)
                 console.log(props.curInd)
     if(props.openTutorial && props.curInd === 11){
@@ -572,7 +572,7 @@ function Canvas (props) {
     setMoleculeStatus(0);
     setMoleculeErrors([]); // Clear molecule errors
     setDisplayErrors(false); // Hide error display
-    setFocusMsg(false)
+    props.setFocusMsg(false)
   }
 
   return (
@@ -604,6 +604,7 @@ function Canvas (props) {
         homeHandler={handleHome} structureChecker={checkStructure} moleculeStatus={moleculeStatus} 
         moleculeErrors={moleculeErrors} displayErrors={displayMoleculeErrors}
         handleHorseClick={handleHorseClick} handleTutorial={props.handleTutorial}
+        setFocusMsg={props.setFocusMsg}
       />
       {displayErrors && <ErrorBox errors={moleculeErrors} elementId={hoveredElement} />}
       <div >
@@ -634,7 +635,7 @@ function Canvas (props) {
 
       </div>
     
-      {focusMsg && <div className='instruction-info' id='focusMsg'><h2>Quit horsin' around, get back to work! <img className="smileyFaceHorse" src={smileyFace} alt="emoji smiley face"/></h2></div>}
+      {props.focusMsg && <div className='instruction-info' id='focusMsg'><h2>Quit horsin' around, get back to work! <img className="smileyFaceHorse" src={smileyFace} alt="emoji smiley face"/></h2></div>}
     </div>
   );
 }

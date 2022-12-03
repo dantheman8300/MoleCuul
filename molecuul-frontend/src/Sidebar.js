@@ -50,11 +50,16 @@ function Sidebar (props) {
                     if(props.openTutorial && props.curInd === 0 && !item === true) {
                         props.increaseCurInd()
                     }
+                    props.setFocusMsg(false)
                     return !item;
+                    
                 }
                 else { 
                     // props.handleRotation(0);
+                    
+                    props.setFocusMsg(false)
                     return false;
+                    
                 }
             })
         )
@@ -68,7 +73,8 @@ function Sidebar (props) {
             <div key={`Element tool: ` + index}>
                 {/* {console.log(item)} */}
                 <ElementTool key={index} info={item} index={index} handleDragStart={props.handleDragStart} handleDragEnd={props.handleDragEnd} handleChange={handleChange} isOpen={isOpen[index]} 
-                    openTutorial={props.openTutorial} curInd={props.curInd} increaseCurInd={props.increaseCurInd}/>
+                    openTutorial={props.openTutorial} curInd={props.curInd} increaseCurInd={props.increaseCurInd} 
+                    setFocusMsg={props.setFocusMsg} />
             </div>
         )
     });
