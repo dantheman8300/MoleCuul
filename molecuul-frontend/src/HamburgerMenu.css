@@ -74,14 +74,6 @@ button span {
   background: rgb(169, 169, 169);
 }
 
-/* .bm-menu-wrap {
-  visibility: hidden;
-}
-
-.bm-menu-wrap.open {
-  visibility: visible;
-} */
-
 .bm-cross-button {
   padding:2em;
   height: 24px;

@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useState} from 'react';
 import ConfigurationMenu from "./ConfigurationMenu";
 
 /* square element on sidebar */
@@ -22,7 +22,6 @@ function ElementTools (props) {
     return (
         <div>
             {tools}
-            {/* <img id='elem-square' src={require(`./images/${image}.svg`)} alt='element tile' onClick={handleClick} /> */}
             {isOpen && <ConfigurationMenu info={octInfo}/>}
         </div>
     )

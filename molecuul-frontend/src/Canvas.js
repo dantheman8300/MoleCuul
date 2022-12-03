@@ -99,10 +99,7 @@ function Canvas (props) {
 
   const [scale, setScale] = useState(1);
   const [elements, setElements] = useState({});
-  const [mouseX, setMouseX] = useState(500);
-  const [mouseY, setMouseY] = useState(200);
   const [center, setCenter] = useState({x: 0, y: 0});
-  const [dragStart, setDragStart] = useState({x: 0, y: 0});
   const [moleculeStatus, setMoleculeStatus] = useState(0);
   const [moleculeErrors, setMoleculeErrors] = useState([]);
   const [displayErrors, setDisplayErrors] = useState(false);
@@ -121,7 +118,6 @@ function Canvas (props) {
 
   useEffect(() => {
     if (!cacheLoaded.current) {
-      // console.log(`Loading molecule from cache`);
       getElementFromCache('Molecule', 'https://localhost:300');
       getStateFromCache('State', 'https://localhost:300')
       cacheLoaded.current = true;
@@ -129,10 +125,6 @@ function Canvas (props) {
   });
 
   const handleZoomOut = event => {
-    
-          
-    // console.log("rot ", props.openTutorial)
-    // console.log(props.curInd)
     if(props.openTutorial && props.curInd === 5){
       props.increaseCurInd()
     }
@@ -144,10 +136,6 @@ function Canvas (props) {
   }
 
   const handleZoomIn = event => {
-    
-
-    // console.log("rot ", props.openTutorial)
-    // console.log(props.curInd)
     if(props.openTutorial && props.curInd === 6){
       props.increaseCurInd()
     }
@@ -160,12 +148,6 @@ function Canvas (props) {
   }
 
   const handleTrash = event => {
-    // Remove all elements in the molecule
-        // console.log("rot ", props.openTutorial)
-    // console.log(props.curInd)
-    // if(props.openTutorial && props.curInd === 6){
-    //   props.increaseCurInd()
-    // }
     if(props.openTutorial && props.curInd === 15){
       props.increaseCurInd()
   }
@@ -195,14 +177,13 @@ function Canvas (props) {
   }
 
   const handleHome = event => {
-        // console.log("rot ", props.openTutorial)
-    // console.log(props.curInd)
     if(props.openTutorial && props.curInd === 7){
       props.increaseCurInd()
     }
     let elemDict = elements;
     Object.entries(elements).map(([key, value]) => {
       elemDict[key].point = {x: value.point.x + center.x, y: value.point.y + center.y}
+      return null;
     });
     setElements(elemDict);
     setCenter({x: 0, y: 0});
@@ -230,6 +211,7 @@ function Canvas (props) {
       let elemDict = elements;
       Object.entries(elements).map(([key, value]) => {
         elemDict[key].point = {x: value.point.x - event.deltaX, y: value.point.y - event.deltaY}
+        return null;
       });
       setElements(elemDict);
     }
@@ -385,6 +367,7 @@ function Canvas (props) {
         if(parseInt(key) !== id) {
           elemDict[key] = value;
         }
+        return null;
       });
 
     // Adds updated element to new element dictionary
@@ -400,7 +383,6 @@ function Canvas (props) {
   * 0 is the top position moving clockwise.
   */
   function addElement(elementName, source, lStructure, neighbors, rotation, point) {
-    // console.log(`rotation: ${rotation}`)
 
     // Creates an empty element
     const element = {
@@ -426,6 +408,7 @@ function Canvas (props) {
         }
       }
       elemDict[key] = value;
+      return null;
     });
 
     elemDict[element.id] = element;
@@ -443,16 +426,11 @@ function Canvas (props) {
     setMoleculeErrors([]); // Clear molecule errors
     setDisplayErrors(false); // Hide error display
 
-    // console.log('adding element')
     // display add element params
-    // console.log(`name: ${props.selectedElement.name}, name: ${props.selectedElement.lStructure}, bondId: ${bondId}, posId: ${posId}`)
     addElement(element.name, element.source, element.lStructure, neighbors, element.rotation, point);
     props.setFocusMsg(false)
   }
 
-  const handleMultiElementAdd = () => {
-
-  }
 
   const handleRemoveElement = (id) => {
     // Set molecule status to 0 (not checked)
@@ -460,19 +438,17 @@ function Canvas (props) {
     setMoleculeErrors([]); // Clear molecule errors
     setDisplayErrors(false); // Hide error display
 
-    // console.log(`removing element ${id}`)
+
     removeElement(id);
     props.setFocusMsg(false)
   }
 
-  // console.log(`Elements are ${Object.entries(elements)}`);
 
   const checkStructure = () => {
     console.log('checking structure')
     console.log(elements)
 
-  // console.log("rot ", props.openTutorial)
-  // console.log(props.curInd)
+
   if(props.openTutorial && props.curInd === 9){
     props.increaseCurInd()
   }
@@ -523,6 +499,7 @@ function Canvas (props) {
           });
         }
       }
+      return null;
     });
 
     if (errors.length === 0) {
@@ -581,15 +558,12 @@ function Canvas (props) {
       onWheel={handleCanvasMove}
       onDrop={
         (e) => {
-          // console.log(`dropped the element: ${props.selectedElement}`);
           handleDrop();
         }
       }
       onDragOver={
         (e) => {
           
-                // console.log("rot ", props.openTutorial)
-                // console.log(props.curInd)
                 if(props.openTutorial && props.curInd === 3){
                     props.increaseCurInd()
                 }
@@ -611,8 +585,6 @@ function Canvas (props) {
         <Molecule 
           scale={scale} 
           elements={elements} 
-          mouseX={mouseX} 
-          mouseY={mouseY}
           center={center}
           hover={props.hover}
           selectedElement={props.selectedElement}
@@ -642,7 +614,7 @@ function Canvas (props) {
 
 function Molecule(props) {
   const [adjustElement, setAdjustElement] = useState(null);
-  var coord = {};
+
   
   const handleDragStart = (elementInfo) => {
     if(props.openTutorial && props.curInd === 13){

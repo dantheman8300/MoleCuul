@@ -1,7 +1,5 @@
 import React, {useState} from 'react';
 import ElementImage from './ElementImage';
-import hollowElementHighlight from './images/oct-border.svg';
-import { pushRotate } from 'react-burger-menu';
 
 /* Element tile rendered on canvas */
 function ElementRender(props) {
@@ -16,10 +14,7 @@ function ElementRender(props) {
     const rotation = props.element.rotation;
     const lStructure = props.element.lStructure;
 
-    const elementStyle = {
-        position: "relative",
-        alignSelf: "center",
-    }
+
 
     const rotateLStructure = (rotation) => {
         let originalLStructure = lStructure;
@@ -36,7 +31,6 @@ function ElementRender(props) {
         draggable
         onDragStart={
             () => {
-                // setShowElement(false);
                 const elementInfo = {
                     id: id,
                     name: symbol,
@@ -51,15 +45,6 @@ function ElementRender(props) {
         onDrag={
             () => {
                 setShowElement(false);
-                // const elementInfo = {
-                //     id: id,
-                //     name: symbol,
-                //     lStructure: lStructure,
-                //     source: image,
-                //     rotation: rotation,
-                //     point: props.point
-                // };
-                // props.handleDragStart(elementInfo);
             }
         }
         onDragEnd={
@@ -90,7 +75,6 @@ function ElementRender(props) {
                 if(props.openTutorial && props.curInd === 12){
                     props.increaseCurInd()
                 }
-                // props.setFocusMsg(false)
                 props.updateElement(id, rotateLStructure(1), rotation + 1, null, null);
                 props.handleErrorReset();
             }

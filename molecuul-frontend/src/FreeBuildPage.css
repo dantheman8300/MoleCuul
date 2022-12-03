@@ -16,8 +16,6 @@
 .header {
   grid-column-start: 2;
   grid-row-start: 1;
-  /* background: #CAF0F6; */
-
   border-bottom: 2.5px solid #495879;
 
   overflow: hidden;
@@ -30,9 +28,6 @@
   
   grid-row-end: span 3;
 
-/*   
-  border-bottom: 3px solid black;
-  border-left: 3px solid black; */
   border-right: 2px solid #495879; 
   
   align-items: center ;
@@ -42,8 +37,4 @@
 .builder {
   grid-column-start: 2;
   grid-row-start: span 2;
-  /* background-color: #A9C9DD; */
-
-  /* border-bottom: 3px solid black;
-  border-right: 3px solid black; */
 }

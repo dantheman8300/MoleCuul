@@ -17,14 +17,10 @@ function InstructionTile(props) {
 
     }
 
-
-
     return (
         <div className="instruction-tile">
             <img className="icon" src={infoIcon} alt='icon info' onClick={handleClick}/>
             {isOpen && <InstructionInfo clickTutorial={tutorialClick}/>}
-            
-
         </div>
     )
 }

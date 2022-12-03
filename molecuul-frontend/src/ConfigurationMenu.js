@@ -4,8 +4,6 @@ import ConfigMenuTiles from "./ConfigMenuTiles";
 
 function ConfigurationMenu(props) {
 
-    // console.log("props.info.cfgs");
-        // console.log(props.info.cfgs);
     
     const images = props.info.cfgs;
     const symbol = props.info.symbol;

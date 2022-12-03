@@ -1,14 +1,6 @@
 import React from "react";
 import PageZero from "./tutorial-pages/Page0";
 import PageOne from "./tutorial-pages/Page1";
-import PageTen from "./tutorial-pages/Page10";
-import PageEleven from "./tutorial-pages/Page11";
-import PageTwelve from "./tutorial-pages/page12";
-import PageThirteen from "./tutorial-pages/page13";
-import PageFourteen from "./tutorial-pages/page14";
-import PageFifteen from "./tutorial-pages/page15";
-import PageSixteen from "./tutorial-pages/Page16";
-import PageSeventeen from "./tutorial-pages/page17";
 import PageTwo from "./tutorial-pages/Page2";
 import PageThree from "./tutorial-pages/Page3";
 import PageFour from "./tutorial-pages/Page4";
@@ -17,22 +9,19 @@ import PageSix from "./tutorial-pages/Page6";
 import PageSeven from "./tutorial-pages/Page7";
 import PageEight from "./tutorial-pages/Page8";
 import PageNine from "./tutorial-pages/Page9";
+import PageTen from "./tutorial-pages/Page10";
+import PageEleven from "./tutorial-pages/Page11";
+import PageTwelve from "./tutorial-pages/page12";
+import PageThirteen from "./tutorial-pages/page13";
+import PageFourteen from "./tutorial-pages/page14";
+import PageFifteen from "./tutorial-pages/page15";
+import PageSixteen from "./tutorial-pages/Page16";
 
-
+// tutorial pages - switches through which page is open
 function TutorialPages(props) {
-    const pageNum = props.index;
-
-
-
-
-
-
-
-    console.log(pageNum)
-    
+    const pageNum = props.index;    
     const loadPage = (num) => {
-        // console.log("here ", pageNum)
-        switch (num ) {
+        switch (num) {
             case 0:
                 return (
                     <PageZero />
@@ -110,9 +99,7 @@ function TutorialPages(props) {
         <div >
             {loadPage(pageNum)}
         </div>
-
     )
-
 }
 
 export default TutorialPages;
